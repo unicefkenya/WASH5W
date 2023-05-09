@@ -1,0 +1,47 @@
+# Default values for the Microservice's Helm Chart.
+# This is a YAML-formatted file.
+
+# MICROSERVICE
+# ----------------------------------------------------------------------------------------
+microservice:
+
+  # Ingress
+  ingress:
+    name: administrativeHierarchies
+    class: traefik
+    rules:
+      host: cloud.miles.co.ke
+      http:
+        path: /api/v1/administrativeHierarchies
+        backend:
+          service:
+            name: administrativeHierarchies
+            port:
+              number: 80
+
+  # Service
+  service:
+    name: administrativeHierarchies
+    port:
+      default: 80
+      target: 8080
+
+  # Deployment
+  deployment:
+    name: administrativeHierarchies
+
+  # Application / Application Replicas
+  application:
+    name: administrativeHierarchies
+    version: 0.0.1
+    image:
+      id: cloud.miles.co.ke:5043/administrativeHierarchies
+      tag: 0.0.1
+      pull:
+        policy: Always
+        secret: regcred
+    environment:
+      postgres:
+        host: bitnami-postgres-postgresql
+    replicas: 1
+

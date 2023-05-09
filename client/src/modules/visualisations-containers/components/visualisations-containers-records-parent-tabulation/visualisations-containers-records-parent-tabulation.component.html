@@ -1,0 +1,60 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="d-flex bd-highlight">
+        <div class="w-100 bd-highlight">
+            <sb-search placeholder="Search containers" (searched)="onSearchTermChange($event)"></sb-search>
+        </div>
+        <div class="flex-shrink-1 bd-highlight">
+            <sb-loading-animation type="bars"></sb-loading-animation>
+        </div>
+    </div>
+
+
+    <ng-container
+        *ngFor="let visualisationContainer of visualisationsContainersDataService.topLevelVisualisationContainers$| async">
+
+        <sb-visualisations-containers-records-tabulation
+            *ngIf="visualisationContainer.data?.typeId == 1 || visualisationContainer.data?.typeId == 2"
+            [container]="visualisationContainer"
+            [nestedVisualisationContainers]="getNestedVisualisationContainers(visualisationContainer.id)">
+        </sb-visualisations-containers-records-tabulation>
+        
+        <sb-visualisations-containers-records-tabulation *ngIf="visualisationContainer.data?.typeId == 3"
+            [container]="visualisationContainer">
+        </sb-visualisations-containers-records-tabulation>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="mt-3 mb-3 p-0 ">
+        </div>
+
+    </ng-container>
+
+
+    <div class="d-flex justify-content-end mt-4">
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Visualisation Containers Creation Tools">
+            <div class="btn-group mr-1" role="group" aria-label="Creation Tools">
+                <button type="button" title="Add Page Group" class="btn btn-button-bg-color-1"
+                    (click)="onAddVisualisationContainer(1)">
+                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Group
+                </button>
+                <button type="button" title="Add Page" class="btn btn-button-bg-color-1"
+                    (click)="onAddVisualisationContainer(2)">
+                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Page
+                </button>
+            </div>
+        </div>
+    </div>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

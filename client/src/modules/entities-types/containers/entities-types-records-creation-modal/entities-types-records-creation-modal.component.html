@@ -1,0 +1,113 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-entities-types-records-creation [contextId]="contextId" 
+            (loadedStandalonePage)="onLoadStandalonePage()"
+            (loadedFirstPage)="onLoadFirstPage()" (loadedNestedPage)="onLoadNestedPage()"
+            (loadedLastPage)="onLoadLastPage()" (succeeded)="onSucceeded()" (failed)="onFailed($event)">
+        </sb-entities-types-records-creation>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Saving Overlay -->
+            <sb-message-overlay *ngSwitchCase="'saving'" activity="creating" status="saving"></sb-message-overlay>
+
+            <!-- Saving Suceeded Overlay -->
+            <sb-message-overlay *ngSwitchCase="'succeeded'" activity="creating" status="succeeded"></sb-message-overlay>
+
+            <!-- Saving Failed Overlay -->
+            <sb-message-overlay *ngSwitchCase="'failed'" activity="creating" status="failed"></sb-message-overlay>
+
+            <!-- Saving Re-Trial Delay Overlay -->
+            <sb-countdown-overlay *ngSwitchCase="'retrying'" crosshead="Retrying in" (completed)="onSave()">
+            </sb-countdown-overlay>
+
+            <!-- Done Overlay -->
+            <sb-message-overlay *ngSwitchCase="'done'" activity="creating" status="done"></sb-message-overlay>
+
+        </ngContainer>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Standalone Page State Buttons -->
+            <ng-container *ngSwitchCase="'standalone'">
+                <sb-button action="save" entity="Entity Type" (save)="onSave()"></sb-button>
+            </ng-container>
+
+
+            <!-- First Page State Buttons -->
+            <ng-container *ngSwitchCase="'first'">
+                <sb-button action="next" entity="Entity Type" (next)="onNext()"></sb-button>
+            </ng-container>
+
+
+            <!-- Nested Page State Buttons -->
+            <ng-container *ngSwitchCase="'nested'">
+                <sb-button action="previous" entity="Entity Type" (previous)="onPrevious()"></sb-button>
+                <sb-button action="next" entity="Entity Type" (next)="onNext()"></sb-button>
+            </ng-container>
+
+
+            <!-- Last Page State Buttons -->
+            <ng-container *ngSwitchCase="'last'">
+                <sb-button action="previous" entity="Entity Type" (previous)="onPrevious()"></sb-button>
+                <sb-button action="save" entity="Entity Type" (save)="onSave()"></sb-button>
+            </ng-container>
+
+
+            <!-- Invalid State Buttons -->
+            <ng-container *ngSwitchCase="'invalid'">
+                <sb-button *ngIf="previous != 'standalone'" action="previous" entity="Entity Type"
+                    (previous)="onPrevious()"></sb-button>
+                <sb-button action="save" entity="Entity Type" (save)="onSave()"></sb-button>
+            </ng-container>
+
+
+            <!-- Saving State Buttons -->
+            <ng-container *ngSwitchCase="'saving'">
+                <sb-button *ngIf="previous != 'standalone'" action="previous" entity="Entity Type" disabled="true">
+                </sb-button>
+                <sb-button action="save" entity="Entity Type" disabled="true"></sb-button>
+            </ng-container>
+
+
+            <!-- Succeeded State Buttons -->
+            <ng-container *ngSwitchCase="'succeeded'">
+                <sb-button action="yes" entity="Entity Type" guarded="false" (yes)="onContinue()"></sb-button>
+                <sb-button action="no" entity="Entity Type" guarded="false" (no)="onQuit()"></sb-button>
+            </ng-container>
+
+
+            <!-- Failed State Buttons -->
+            <ng-container *ngSwitchCase="'failed'">
+                <sb-button action="yes" entity="Entity Type" (yes)="onRetry()"></sb-button>
+                <sb-button action="no" entity="Entity Type" guarded="false" (no)="onQuit()"></sb-button>
+            </ng-container>
+
+
+            <!-- Retrying State Buttons -->
+            <ng-container *ngSwitchCase="'retrying'">
+                <sb-button action="yes" entity="Entity Type" disabled="true"></sb-button>
+                <sb-button action="no" entity="Entity Type" disabled="true"></sb-button>
+            </ng-container>
+
+
+            <!-- Done Buttons -->
+            <ng-container *ngSwitchCase="'done'">
+                <sb-button action="done" entity="Entity Type" guarded="false" (done)="onDone()"></sb-button>
+            </ng-container>
+
+        </ngContainer>
+
+    </ng-container>
+
+</sb-modal>

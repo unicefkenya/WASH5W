@@ -1,0 +1,33 @@
+
+// Light theme for header
+
+.header-light {
+
+  /*height: 200px;*/
+
+  background-color: $config-page-header-bg-color-900;
+
+  .header-title {
+    color: $gray-dark-500;
+  }
+
+  .header-subtitle {
+    color: $gray-dark-500;
+  }  
+}
+
+
+// Dark theme for header
+
+.header-dark {
+
+  background-color: $gray-light-300;
+
+  .header-title {
+    color: $gray-dark-900;
+  }
+  
+  .header-subtitle {
+    color: $gray-dark-500;
+  }   
+}

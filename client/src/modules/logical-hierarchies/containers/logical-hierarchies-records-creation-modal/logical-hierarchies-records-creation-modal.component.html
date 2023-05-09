@@ -1,0 +1,86 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-logical-hierarchies-records-creation [scheme]="scheme" [commissioner]="commissioner"
+            [structures]="structures" 
+            (openedSubsidiaryLogicalElementSelector)="onOpenSubsidiaryLogicalElementSelector()"
+            (closedSubsidiaryLogicalElementSelector)="onCloseSubsidiaryLogicalElementSelector()"
+            (succeeded)="onSucceeded()" (failed)="onFailed($event)">
+        </sb-logical-hierarchies-records-creation>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Saving Overlay -->
+            <sb-message-overlay *ngSwitchCase="'saving'" activity="creating" status="saving"></sb-message-overlay>
+
+            <!-- Saving Suceeded Overlay -->
+            <sb-message-overlay *ngSwitchCase="'succeeded'" activity="creating" status="succeeded"></sb-message-overlay>
+
+            <!-- Saving Failed Overlay -->
+            <sb-message-overlay *ngSwitchCase="'failed'" activity="creating" status="failed"></sb-message-overlay>
+
+            <!-- Saving Re-Trial Delay Overlay -->
+            <sb-countdown-overlay *ngSwitchCase="'retrying'" crosshead="Retrying in" (completed)="onSave()">
+            </sb-countdown-overlay>
+
+            <!-- Done Overlay -->
+            <sb-message-overlay *ngSwitchCase="'done'" activity="creating" status="done"></sb-message-overlay>
+
+        </ngContainer>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Ready State Buttons -->
+            <sb-button *ngSwitchCase="'ready'" action="save" entity="Logical Hierarchy" (save)="onSave()">
+            </sb-button>
+
+            <!-- Invalid  State Buttons -->
+            <sb-button *ngSwitchCase="'invalid'" action="save" entity="Logical Hierarchy" (save)="onSave()">
+            </sb-button>
+
+            <!-- Saving State Buttons -->
+            <sb-button *ngSwitchCase="'saving'" action="save" entity="Logical Hierarchy" disabled="true">
+            </sb-button>
+
+            <!-- Succeeded State Buttons -->
+            <sb-button *ngSwitchCase="'succeeded'" action="yes" entity="Logical Hierarchy" guarded="false"
+                (yes)="onContinue()"></sb-button>
+            <sb-button *ngSwitchCase="'succeeded'" action="no" entity="Logical Hierarchy" guarded="false"
+                (no)="onQuit()"></sb-button>
+
+            <!-- Failed State Buttons -->
+            <sb-button *ngSwitchCase="'failed'" action="yes" entity="Logical Hierarchy" (yes)="onRetry()">
+            </sb-button>
+            <sb-button *ngSwitchCase="'failed'" action="no" entity="Logical Hierarchy" guarded="false"
+                (no)="onQuit()"></sb-button>
+
+            <!-- Retrying State Buttons -->
+            <sb-button *ngSwitchCase="'retrying'" action="yes" entity="Logical Hierarchy" disabled="true">
+            </sb-button>
+            <sb-button *ngSwitchCase="'retrying'" action="no" entity="Logical Hierarchy" disabled="true">
+            </sb-button>
+
+            <!-- Done Buttons -->
+            <sb-button *ngSwitchCase="'done'" action="done" entity="Logical Hierarchy" guarded="false"
+                (done)="onDone()"></sb-button>
+
+            <!-- Subsidiary Logical Elements Selections Buttons -->
+            <ng-container *ngSwitchCase="'subsidiary-units-selections'">
+                <sb-button action="previous" entity="Logical Hierarchy" tooltip="Load previous screen"
+                    guarded="false" (previous)="closeSubsidiaryLogicalElementSelector()"></sb-button>
+            </ng-container>
+
+        </ngContainer>
+
+    </ng-container>
+
+</sb-modal>

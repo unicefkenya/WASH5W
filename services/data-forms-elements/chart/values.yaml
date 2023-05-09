@@ -1,0 +1,47 @@
+# Default values for the Microservice's Helm Chart.
+# This is a YAML-formatted file.
+
+# MICROSERVICE
+# ----------------------------------------------------------------------------------------
+microservice:
+
+  # Ingress
+  ingress:
+    name: dataFormsElements
+    class: traefik
+    rules:
+      host: cloud.miles.co.ke
+      http:
+        path: /api/v1/dataFormsElements
+        backend:
+          service:
+            name: dataFormsElements
+            port:
+              number: 80
+
+  # Service
+  service:
+    name: dataFormsElements
+    port:
+      default: 80
+      target: 8080
+
+  # Deployment
+  deployment:
+    name: dataFormsElements
+
+  # Application / Application Replicas
+  application:
+    name: dataFormsElements
+    version: 0.0.1
+    image:
+      id: cloud.miles.co.ke:5043/dataFormsElements
+      tag: 0.0.1
+      pull:
+        policy: Always
+        secret: regcred
+    environment:
+      postgres:
+        host: bitnami-postgres-postgresql
+    replicas: 1
+

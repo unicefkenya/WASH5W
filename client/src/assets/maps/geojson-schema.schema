@@ -1,0 +1,135 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Welcome4",
+    "definitions": {
+        "Welcome4": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "features": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Feature"
+                    }
+                }
+            },
+            "required": [
+                "features",
+                "type"
+            ],
+            "title": "Welcome4"
+        },
+        "Feature": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/FeatureType"
+                },
+                "geometry": {
+                    "$ref": "#/definitions/Geometry"
+                },
+                "properties": {
+                    "$ref": "#/definitions/Properties"
+                }
+            },
+            "required": [
+                "geometry",
+                "properties",
+                "type"
+            ],
+            "title": "Feature"
+        },
+        "Geometry": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/GeometryType"
+                },
+                "coordinates": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Coordinate"
+                            }
+                        }
+                    }
+                }
+            },
+            "required": [
+                "coordinates",
+                "type"
+            ],
+            "title": "Geometry"
+        },
+        "Properties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "OBJECTID": {
+                    "type": "integer"
+                },
+                "Shape_Leng": {
+                    "type": "number"
+                },
+                "Shape_Area": {
+                    "type": "number"
+                },
+                "parent_id": {
+                    "type": "integer"
+                },
+                "party_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "OBJECTID",
+                "Shape_Area",
+                "Shape_Leng",
+                "name",
+                "parent_id",
+                "party_id"
+            ],
+            "title": "Properties"
+        },
+        "Coordinate": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                {
+                    "type": "number"
+                }
+            ],
+            "title": "Coordinate"
+        },
+        "GeometryType": {
+            "type": "string",
+            "enum": [
+                "Polygon",
+                "MultiPolygon"
+            ],
+            "title": "GeometryType"
+        },
+        "FeatureType": {
+            "type": "string",
+            "enum": [
+                "Feature"
+            ],
+            "title": "FeatureType"
+        }
+    }
+}

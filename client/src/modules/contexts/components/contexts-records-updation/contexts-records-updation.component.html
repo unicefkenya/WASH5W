@@ -1,0 +1,129 @@
+<!-- Display the data form -->
+<div class="card-body m-0 p-0">
+    <h5 class="card-title">Basic Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please enter the context's basic details</h6>    
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>
+    <form [formGroup]="contextsForm">
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter context's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="contextsForm.get('name')?.invalid && (contextsForm.get('name')?.dirty || contextsForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="contextsForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="contextsForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="contextsForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="contextsForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Abbreviation -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Abbreviation</label>
+                    </div>
+                    <input type="text" class="form-control" id="abbreviation" placeholder="Enter context's abbreviation"
+                        formControlName="abbreviation">
+                </div>
+                <div *ngIf="contextsForm.get('abbreviation')?.invalid && (contextsForm.get('abbreviation')?.dirty || contextsForm.get('abbreviation')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="contextsForm.get('abbreviation')?.errors.required">
+                        Abbreviation is required
+                    </div>
+                    <div *ngIf="contextsForm.get('abbreviation')?.errors.minlength">
+                        Abbreviation should be at least 2 characters long
+                    </div>
+                    <div *ngIf="contextsForm.get('abbreviation')?.errors.maxlength">
+                        Abbreviation should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="contextsForm.get('abbreviation')?.errors.exists">
+                        Abbreviation should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Timestep -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Cycles</label>
+                    </div>
+                    <select class="custom-select" id="timestep" formControlName="timestep"
+                        (change)="onTimestepChange()">
+                        <option [ngValue]="null" disabled class="text-muted">Select reporting cycle</option>
+                        <option *ngFor="let timestep of timestepsDataService.getTimesteps$() | async"
+                            [ngValue]="timestep.id">
+                            {{timestep.data?.name}}
+                        </option>
+                    </select>
+                </div>
+                <div *ngIf="contextsForm.get('timestep')?.invalid && (contextsForm.get('timestep')?.dirty || contextsForm.get('timestep')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="contextsForm.get('timestep')?.errors.required">
+                        Reporting Cycle is required
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h5 class="card-title mt-3">Additional Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Optionally enter the context's miscellaneous details</h6> 
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <!-- Description -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Description</label>
+                    </div>
+                    <textarea class="form-control" id="description" formControlName="description"></textarea>
+                </div>
+                <div *ngIf="contextsForm.get('description')?.invalid && (contextsForm.get('description')?.dirty || contextsForm.get('description')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="contextsForm.get('description')?.errors.maxlength">
+                        Description cannot be more than 500 characters long
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

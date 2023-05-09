@@ -1,0 +1,122 @@
+<!-- Display the organisation -->
+<form [formGroup]="organisationsForm">
+
+    <h5 class="card-title">Basic Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please enter the organisation's basic details</h6>
+
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>    
+
+    <!-- Type -->
+    <div class="d-flex flex-column bd-highlight">
+
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text">Type</label>
+                </div>
+                <select class="custom-select" id="typeId" formControlName="typeId">
+                    <option [ngValue]="null" disabled>Select organisation type</option>
+                    <option
+                        *ngFor="let organisationType of organisationsTypesDataService.organisationsTypes$ | async"
+                        [ngValue]="organisationType.id">
+                        {{organisationType.data?.name}}</option>
+                </select>
+            </div>
+            <div *ngIf="organisationsForm.get('typeId')?.invalid && (organisationsForm.get('typeId')?.dirty || organisationsForm.get('typeId')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="organisationsForm.get('typeId')?.errors.required">
+                    Type is required
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Name -->
+    <div class="d-flex flex-column bd-highlight">
+
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text">Name</label>
+                </div>
+                <input type="text" class="form-control" id="name" placeholder="Enter organisation's name"
+                    formControlName="name">
+            </div>
+            <div *ngIf="organisationsForm.get('name')?.invalid && (organisationsForm.get('name')?.dirty || organisationsForm.get('name')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="organisationsForm.get('name')?.errors.required">
+                    Name is required
+                </div>
+                <div *ngIf="organisationsForm.get('name')?.errors.minlength">
+                    Name should be at least 2 characters long
+                </div>
+                <div *ngIf="organisationsForm.get('name')?.errors.maxlength">
+                    Name should not be more than 250 characters long
+                </div>
+                <div *ngIf="organisationsForm.get('name')?.errors.exists">
+                    Name should be unique
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Abbreviation -->
+    <div class="d-flex flex-column bd-highlight">
+
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text">Abbreviation</label>
+                </div>
+                <input type="text" class="form-control" id="abbreviation" placeholder="Enter organisation's abbreviation"
+                    formControlName="abbreviation">
+            </div>
+            <div *ngIf="organisationsForm.get('abbreviation')?.invalid && (organisationsForm.get('abbreviation')?.dirty || organisationsForm.get('abbreviation')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="organisationsForm.get('abbreviation')?.errors.maxlength">
+                    Abbreviation cannot be more than 50 characters long
+                </div>
+                <div *ngIf="organisationsForm.get('abbreviation')?.errors.exists">
+                    Abbreviation should be unique
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <h5 class="card-title mt-3">Additional Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Optionally enter the organisation's miscellaneous details</h6> 
+
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>    
+    
+    <!-- Website -->
+    <div class="d-flex flex-column bd-highlight">
+
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text">Website</label>
+                </div>
+                <input type="text" class="form-control" id="website" placeholder="e.g. https://www.organisation.ext"
+                    formControlName="website">
+            </div>
+            <div *ngIf="organisationsForm.get('website')?.invalid && (organisationsForm.get('website')?.dirty || organisationsForm.get('website')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="organisationsForm.get('website')?.errors.pattern">
+                    Website should be a valid url.
+                </div>
+
+            </div>
+        </div>
+
+    </div>    
+
+</form>

@@ -1,0 +1,34 @@
+sb-modal(shadow='false')
+  ng-container(title='')
+    | {{title}}
+  ng-container(body='')
+    sb-data-forms-fields-records-deletion([id]='id', (succeeded)='onSucceeded()', (failed)='onFailed($event)')
+    ngcontainer([ngswitch]='(status$ | async)')
+      // Deletion Overlay
+      sb-message-overlay(*ngswitchcase="'deleting'", activity='deleting', status='deleting')
+      // Deletion Succeeded Overlay
+      sb-message-overlay(*ngswitchcase="'succeeded'", activity='deleting', status='succeeded')
+      // Deletion Failed Overlay
+      sb-message-overlay(*ngswitchcase="'failed'", activity='deleting', status='failed')
+      // Deletion Re-Trial Delay Overlay
+      sb-countdown-overlay(*ngswitchcase="'retrying'", crosshead='Retrying in', (completed)='onDelete()')
+      // Done Overlay
+      sb-message-overlay(*ngswitchcase="'done'", activity='deleting', status='done')
+  ng-container(footer='')
+    ngcontainer([ngswitch]='(status$ | async)')
+      // Ready State Buttons
+      sb-button(*ngswitchcase="'ready'", action='yes', entity='Data Form Element', (yes)='onDelete()')
+      sb-button(*ngswitchcase="'ready'", action='no', entity='Data Form Element', guarded='false', (no)='onQuit()')
+      // Deleting State Buttons
+      sb-button(*ngswitchcase="'deleting'", action='yes', entity='Data Form Element', disabled='true')
+      // Succeeded State Buttons
+      sb-button(*ngswitchcase="'succeeded'", action='yes', entity='Data Form Element', disabled='true')
+      sb-button(*ngswitchcase="'succeeded'", action='no', entity='Data Form Element', disabled='true')
+      // Failed State Buttons
+      sb-button(*ngswitchcase="'failed'", action='yes', entity='Data Form Element', (yes)='onRetry()')
+      sb-button(*ngswitchcase="'failed'", action='no', entity='Data Form Element', guarded='false', (no)='onQuit()')
+      // Retrying State Buttons
+      sb-button(*ngswitchcase="'retrying'", action='yes', entity='Data Form Element', disabled='true')
+      sb-button(*ngswitchcase="'retrying'", action='no', entity='Data Form Element', disabled='true')
+      // Done Buttons
+      sb-button(*ngswitchcase="'done'", action='done', entity='Data Form Element', guarded='false', (done)='onDone()')

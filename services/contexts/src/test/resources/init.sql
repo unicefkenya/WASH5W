@@ -1,0 +1,79 @@
+-- ------------------------------------------------------------
+-- Create Table
+-- ------------------------------------------------------------
+CREATE TABLE context (
+    id SERIAL UNIQUE PRIMARY KEY NOT NULL,
+    data JSONB DEFAULT '{}'::jsonb NOT NULL,
+    version INTEGER NOT NULL);
+
+
+-- ------------------------------------------------------------
+-- Add Version Initialization Trigger for all insert operations
+-- ------------------------------------------------------------
+CREATE OR REPLACE FUNCTION initializeContextVersion()
+RETURNS "trigger" AS '
+BEGIN
+  New.version:=1;
+  RETURN NEW;
+END
+'
+LANGUAGE 'plpgsql' VOLATILE;
+
+CREATE TRIGGER initializeContextVersionTrigger
+BEFORE INSERT
+ON context
+FOR EACH ROW
+EXECUTE PROCEDURE initializeContextVersion();
+
+
+-- ------------------------------------------------------------
+-- Add Version Update Trigger for all update operations
+-- ------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION incrementContextVersion()
+RETURNS "trigger" AS
+'
+BEGIN
+  New.version:=Old.version + 1;
+  RETURN NEW;
+END
+'
+LANGUAGE 'plpgsql' VOLATILE;
+
+CREATE TRIGGER incrementContextVersionTrigger
+BEFORE UPDATE
+ON context
+FOR EACH ROW
+EXECUTE PROCEDURE incrementContextVersion();
+
+-- ------------------------------------------------------------
+-- Add query estimates retrieval function
+-- See:
+-- https://abrisplatform.com/articles/effective-pagination-of-postgresql-data-in-the-user-interface/
+-- https://stackoverflow.com/questions/67282699/how-do-i-process-execution-plan-in-postgresql
+-- https://medium.com/geekculture/how-to-read-postgresql-query-plan-df4b158781a1
+-- ------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION getQueryEstimates(p_sql TEXT)
+RETURNS TEXT AS '
+DECLARE
+  query_result jsonb;
+  total_cost decimal;
+  output_rows integer;
+BEGIN
+  EXECUTE ''EXPLAIN (FORMAT JSON) '' || p_sql INTO query_result;
+  total_cost := query_result->0->''Plan''->''Total Cost'';
+  output_rows := query_result->0->''Plan''->''Plan Rows'';
+  RETURN CONCAT(''{"cost": '', total_cost, '', "rows": '', output_rows,''}'');
+END;
+'
+LANGUAGE 'plpgsql' VOLATILE;
+
+
+-- ------------------------------------------------------------
+-- Add Some dummy data
+-- ------------------------------------------------------------
+
+INSERT INTO context(data) VALUES('{"name":"First Context","abbreviation":"1st","description":"First Description","timestep":{"id":1,"name":"First"},"entitiesTypesIds":[1]}');
+INSERT INTO context(data) VALUES('{"name":"Second Context","abbreviation":"2nd","description":"Second Description","timestep":{"id":2,"name":"Second"},"entitiesTypesIds":[2]}');
+INSERT INTO context(data) VALUES('{"name":"Third Context","abbreviation":"3rd","description":"Third Description","timestep":{"id":3,"name":"Third"},"entitiesTypesIds":[3]}');

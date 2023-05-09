@@ -1,0 +1,69 @@
+<div class="card-body m-0 p-0">
+
+    <h5 class="card-title">Basic Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please enter the option's basic details</h6>
+
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>
+
+    <form [formGroup]="optionsForm">
+
+        <!-- Type -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Type</label>
+                    </div>
+                    <select class="custom-select" id="typeId" formControlName="typeId">
+                        <option [ngValue]="null" disabled>Select option's type</option>
+                        <option *ngFor="let optionType of optionsTypesDataService.optionsTypes$ | async"
+                            [ngValue]="optionType.id">
+                            {{optionType.data?.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="optionsForm.get('typeId')?.invalid && (optionsForm.get('typeId')?.dirty || optionsForm.get('typeId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="optionsForm.get('typeId')?.errors.required">
+                        Type is required
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter option's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="optionsForm.get('name')?.invalid && (optionsForm.get('name')?.dirty || optionsForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="optionsForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="optionsForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="optionsForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="optionsForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>

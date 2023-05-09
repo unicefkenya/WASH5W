@@ -1,0 +1,57 @@
+form
+  sb-search(placeholder='Search by quantitiesObservations names', (searched)='onSearchTermChange($event)')
+  sb-loading-animation
+  // For Small-Sized Devices Only
+  .row.d-md-none
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-sm-1.text-center.align-middle(scope='col') #
+            th.col-sm-9.text-left.align-middle(scope='col') Name
+            th.col-sm-2.text-center.align-middle(scope='col') Actions
+        ng-container(body='')
+          tr(*ngfor='let quantityObservation of quantitiesObservationsDataService.quantitiesObservations$ | async; index as i', [attr.data-index]='i')
+            td.text-center.align-middle
+              | {{i + 1 + getPaginationOffset()}}
+            td.text-left.align-middle
+              | {{quantityObservation.data?.name}}
+            td.text-center.align-middle
+              span.d-flex.flex-row-reverse
+                sb-button(action='delete', quantityObservation='QuantityObservation', id='{{quantityObservation.id}}', (delete)='onDeleteQuantityObservation($event)', tooltip='Delete {{quantityObservation.data?.name}}')
+                sb-button(action='update', quantityObservation='QuantityObservation', id='{{quantityObservation.id}}', (update)='onUpdateQuantityObservation($event)', tooltip='Update {{quantityObservation.data?.name}}')
+        ng-container(footer='')
+          tr
+            td.align-middle(scope='col', colspan='3')
+              span.d-flex.flex-row.flex-row-reverse
+                sb-button(action='add', quantityObservation='QuantityObservation', (add)='onAddQuantityObservation()')
+  // For Middle-Sized Devices Upwards
+  .row.d-none.d-md-block
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-md-1.text-center.align-middle(scope='col') #
+            th.col-md-5.text-left.align-middle(scope='col') Name
+            th.col-md-5.text-left.align-middle(scope='col') Plural
+            th.col-md-1.text-center.align-middle(scope='col') Actions
+        ng-container(body='')
+          tr(*ngfor='let quantityObservation of quantitiesObservationsDataService.quantitiesObservations$ | async; index as i', [attr.data-index]='i')
+            td.text-center.align-middle
+              | {{i + 1 + getPaginationOffset()}}
+            td.text-left.align-middle
+              | {{quantityObservation.data?.name}}
+            td.text-left.align-middle
+              | {{quantityObservation.data?.plural}}
+            td.text-center.align-middle
+              span.d-flex.flex-row-reverse
+                sb-button(action='delete', quantityObservation='QuantityObservation', id='{{quantityObservation.id}}', (delete)='onDeleteQuantityObservation($event)', tooltip='Delete {{quantityObservation.data?.name}}')
+                sb-button(action='update', quantityObservation='QuantityObservation', id='{{quantityObservation.id}}', (update)='onUpdateQuantityObservation($event)', tooltip='Update {{quantityObservation.data?.name}}')
+        ng-container(footer='')
+          tr
+            td.align-middle(scope='col', colspan='4')
+              span.d-flex.flex-row.flex-row-reverse
+                sb-button(action='add', quantityObservation='QuantityObservation', (add)='onAddQuantityObservation()')
+  .row
+    .col
+      sb-pagination((pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')

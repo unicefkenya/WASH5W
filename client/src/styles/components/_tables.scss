@@ -1,0 +1,102 @@
+// Global
+.w-10 {
+  width: 10% !important;
+}
+
+.w-80 {
+  width: 80% !important;
+}
+
+.table-wrapper {
+  border: 1px solid #dee2e6;
+  border-top: none;
+}
+
+table.filter {
+  background-color: $config-page-header-bg-color-900;
+}
+
+.table tbody > tr.nested.nested > td {
+  border-top: none;
+  border-right: none;
+  border-bottom: 1px solid lightblue;
+  border-left: none;
+}
+
+// Table Headers
+
+.table thead > tr > th, .table thead > tr > td {
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+/*th[sbSortable] {
+  cursor: pointer;
+}
+
+th[sbSortable]:hover {
+  color: $primary;
+}
+
+
+// Table Bodies
+
+.table-striped > tbody > tr:nth-child(odd) > td,tr.found {
+  background-color: $light;
+}
+
+
+// Table Footers
+
+tfoot > tr > td {
+  border-top: 1px solid #aaa !important;
+}
+*/
+
+table.collapsible-group {
+  font-size: 100%;
+
+  tr {
+    td {
+      background-color: white;
+      color: black;
+    }
+
+    &.borderless {
+      td {
+        border-top: none;
+      }
+    }
+  }
+
+  tr.title {
+    td {
+      text-transform: uppercase;
+      background-color: $config-page-header-bg-color-900;
+      color: black;
+      font-size: 14px;
+    }
+  }
+
+  table.collapsible-group {
+    tr.title {
+      td {
+        text-transform: uppercase;
+        background-color: $config-page-header-bg-color-900;
+        color: black;
+        font-size: 14px;
+      }
+    }
+
+    table.collapsible-group {
+      tr.title {
+        td {
+          text-transform: uppercase;
+          background-color: $config-page-header-bg-color-900;
+          color: black;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

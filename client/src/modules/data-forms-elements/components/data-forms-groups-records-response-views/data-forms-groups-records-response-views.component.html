@@ -1,0 +1,264 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <ng-container *ngIf="dataFormElementType?.id == 2 ; else nonRepeatGroup">
+
+        <ng-container *ngIf="getDataFormResponse(dataFormElement?.data.repeatabilityRule?.fieldId)?.value">
+
+            <ng-container
+                *ngFor='let count of counter(getDataFormResponse(dataFormElement?.data.repeatabilityRule?.fieldId)?.value); let i = index'>
+
+                <!--For Middle-Sized Devices Upwards-->
+                <div class="m-0 p-0 d-none d-md-block">
+
+                    <ng-container *ngIf="!(dataFormElement?.data.layoutId) || dataFormElement?.data.layoutId == 1">
+
+                        <div class="row data-form-group"
+                            [ngClass]="{'odd': odd, 'even': !odd, 'vertical': dataFormElement?.data.layoutId == 1, 'horizontal': dataFormElement?.data.layoutId == 2, 'nested': dataFormElement?.data.parentId }">
+                            <div *ngIf="dataFormElement?.data.titled" class="col-12 data-form-group-title">
+                                <h6>{{dataFormElement?.data.title}}</h6>
+                                <p *ngIf="dataFormElement?.data.described" (click)="toggleDescriptionCollapse()" [ngClass]="{'elastic': dataFormElement?.data.description.length > 200}">
+                                    <span *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[200])}}</span>
+                                    <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                                </p>
+                            </div>
+                            <div class="col-12 data-form-group-content">
+                                <ng-container
+                                    *ngFor="let nestedDataFormElement of getNestedDataFormElements(dataFormElement?.id)">
+
+                                    <ng-container
+                                        *ngIf="nestedDataFormElement.data?.categoryId == 1 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                        <sb-data-forms-groups-records-response-views
+                                            [dataFormElement]="nestedDataFormElement"
+                                            [nestedDataFormElements]="getNestedDataFormElements(nestedDataFormElement?.id)"
+                                            [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                        </sb-data-forms-groups-records-response-views>
+                                    </ng-container>
+
+                                    <ng-container
+                                        *ngIf="nestedDataFormElement.data?.categoryId == 2 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                        <sb-data-forms-fields-records-response-views
+                                            [dataFormField]="nestedDataFormElement"
+                                            [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                        </sb-data-forms-fields-records-response-views>
+                                    </ng-container>
+
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="dataFormElement?.data.layoutId == 2">
+
+                        <div class="row data-form-group"
+                            [ngClass]="{'odd': odd, 'even': !odd, 'vertical': dataFormElement?.data.layoutId == 1, 'horizontal': dataFormElement?.data.layoutId == 2, 'nested': dataFormElement?.data.parentId }">
+                            <div *ngIf="dataFormElement?.data.titled" class="col-3 data-form-group-title">
+                                <h6>{{dataFormElement?.data.title}}</h6>
+                                <p *ngIf="dataFormElement?.data.described" (click)="toggleDescriptionCollapse()" [ngClass]="{'elastic': dataFormElement?.data.description.length > 200}">
+                                    <span *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[200])}}</span>
+                                    <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                                </p>
+                            </div>
+                            <div class="data-form-group-content"
+                                [ngClass]="{'col-9': dataFormElement?.data.titled, 'col-12': !(dataFormElement?.data.titled)}">
+                                <ng-container
+                                    *ngFor="let nestedDataFormElement of getNestedDataFormElements(dataFormElement?.id)">
+
+                                    <ng-container
+                                        *ngIf="nestedDataFormElement.data?.categoryId == 1 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                        <sb-data-forms-groups-records-response-views
+                                            [dataFormElement]="nestedDataFormElement"
+                                            [nestedDataFormElements]="getNestedDataFormElements(nestedDataFormElement?.id)"
+                                            [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                        </sb-data-forms-groups-records-response-views>
+                                    </ng-container>
+
+                                    <ng-container
+                                        *ngIf="nestedDataFormElement.data?.categoryId == 2 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                        <sb-data-forms-fields-records-response-views
+                                            [dataFormField]="nestedDataFormElement"
+                                            [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                        </sb-data-forms-fields-records-response-views>
+                                    </ng-container>
+
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+
+                <!--For Small-Sized Devices Only-->
+                <div class="m-0 p-0 d-md-none">
+                    <div class="row data-form-group"
+                        [ngClass]="{'odd': odd, 'even': !odd, 'vertical': dataFormElement?.data.layoutId == 1, 'horizontal': dataFormElement?.data.layoutId == 2, 'nested': dataFormElement?.data.parentId }">
+                        <div *ngIf="dataFormElement?.data.titled" class="col-12 data-form-group-title">
+                            <h6>{{dataFormElement?.data.title}}</h6>
+                            <p *ngIf="dataFormElement?.data.described" (click)="toggleDescriptionCollapse()" [ngClass]="{'elastic': dataFormElement?.data.description.length > 100}">
+                                <span *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[100])}}</span>
+                                <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                            </p>
+                        </div>
+                        <div class="col-12 data-form-group-content">
+                            <ng-container
+                                *ngFor="let nestedDataFormElement of getNestedDataFormElements(dataFormElement?.id)">
+
+                                <ng-container
+                                    *ngIf="nestedDataFormElement.data?.categoryId == 1 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                    <sb-data-forms-groups-records-response-views
+                                        [dataFormElement]="nestedDataFormElement"
+                                        [nestedDataFormElements]="getNestedDataFormElements(nestedDataFormElement?.id)"
+                                        [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                    </sb-data-forms-groups-records-response-views>
+                                </ng-container>
+
+                                <ng-container
+                                    *ngIf="nestedDataFormElement.data?.categoryId == 2 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                    <sb-data-forms-fields-records-response-views
+                                        [dataFormField]="nestedDataFormElement"
+                                        [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                    </sb-data-forms-fields-records-response-views>
+                                </ng-container>
+
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+            </ng-container>
+
+        </ng-container>
+
+    </ng-container>
+
+    <ng-template #nonRepeatGroup>
+
+        <!--For Middle-Sized Devices Upwards-->
+        <div class="m-0 p-0 d-none d-md-block">
+
+            <ng-container *ngIf="!(dataFormElement?.data.layoutId) || dataFormElement?.data.layoutId == 1">
+
+                <div class="row data-form-group"
+                    [ngClass]="{'odd': odd, 'even': !odd, 'vertical': dataFormElement?.data.layoutId == 1, 'horizontal': dataFormElement?.data.layoutId == 2, 'nested': dataFormElement?.data.parentId }">
+                    <div *ngIf="dataFormElement?.data.titled" class="col-12 data-form-group-title">
+                        <h6>{{dataFormElement?.data.title}}</h6>
+                        <p *ngIf="dataFormElement?.data.described" (click)="toggleDescriptionCollapse()" [ngClass]="{'elastic': dataFormElement?.data.description.length > 200}">
+                            <span *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[200])}}</span>
+                            <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                        </p>
+                    </div>
+                    <div class="col-12 data-form-group-content">
+                        <ng-container
+                            *ngFor="let nestedDataFormElement of getNestedDataFormElements(dataFormElement?.id)">
+
+                            <ng-container
+                                *ngIf="nestedDataFormElement.data?.categoryId == 1 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                <sb-data-forms-groups-records-response-views [dataFormElement]="nestedDataFormElement"
+                                    [nestedDataFormElements]="getNestedDataFormElements(nestedDataFormElement?.id)"
+                                    [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                </sb-data-forms-groups-records-response-views>
+                            </ng-container>
+
+                            <ng-container
+                                *ngIf="nestedDataFormElement.data?.categoryId == 2 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                <sb-data-forms-fields-records-response-views
+                                    [dataFormField]="nestedDataFormElement"
+                                    [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                </sb-data-forms-fields-records-response-views>
+                            </ng-container>
+
+                        </ng-container>
+                    </div>
+                </div>
+
+            </ng-container>
+
+            <ng-container *ngIf="dataFormElement?.data.layoutId == 2">
+
+                <div class="row data-form-group"
+                    [ngClass]="{'odd': odd, 'even': !odd, 'vertical': dataFormElement?.data.layoutId == 1, 'horizontal': dataFormElement?.data.layoutId == 2, 'nested': dataFormElement?.data.parentId }">
+                    <div *ngIf="dataFormElement?.data.titled" class="col-3 data-form-group-title">
+                        <h6>{{dataFormElement?.data.title}}</h6>
+                        <p *ngIf="dataFormElement?.data.described" (click)="toggleDescriptionCollapse()" [ngClass]="{'elastic': dataFormElement?.data.description.length > 200}">
+                            <span *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[200])}}</span>
+                            <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                        </p>
+                    </div>
+                    <div class="data-form-group-content"
+                        [ngClass]="{'col-9': dataFormElement?.data.titled, 'col-12': !(dataFormElement?.data.titled)}">
+                        <ng-container
+                            *ngFor="let nestedDataFormElement of getNestedDataFormElements(dataFormElement?.id)">
+
+                            <ng-container
+                                *ngIf="nestedDataFormElement.data?.categoryId == 1 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                <sb-data-forms-groups-records-response-views [dataFormElement]="nestedDataFormElement"
+                                    [nestedDataFormElements]="getNestedDataFormElements(nestedDataFormElement?.id)"
+                                    [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                </sb-data-forms-groups-records-response-views>
+                            </ng-container>
+
+                            <ng-container
+                                *ngIf="nestedDataFormElement.data?.categoryId == 2 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                                <sb-data-forms-fields-records-response-views
+                                    [dataFormField]="nestedDataFormElement"
+                                    [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                                </sb-data-forms-fields-records-response-views>
+                            </ng-container>
+
+                        </ng-container>
+                    </div>
+                </div>
+
+            </ng-container>
+
+        </div>
+
+        <!--For Small-Sized Devices Only-->
+        <div class="m-0 p-0 d-md-none">
+            <div class="row data-form-group"
+                [ngClass]="{'odd': odd, 'even': !odd, 'vertical': dataFormElement?.data.layoutId == 1, 'horizontal': dataFormElement?.data.layoutId == 2, 'nested': dataFormElement?.data.parentId }">
+                <div class="col-12 data-form-group-title">
+                    <h6>{{dataFormElement?.data.title}}</h6>
+                    <p *ngIf="dataFormElement?.data.described" (click)="toggleDescriptionCollapse()" [ngClass]="{'elastic': dataFormElement?.data.description.length > 100}">
+                        <span *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[100])}}</span>
+                        <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                    </p>
+                </div>
+                <div class="col-12 data-form-group-content">
+                    <ng-container *ngFor="let nestedDataFormElement of getNestedDataFormElements(dataFormElement?.id)">
+
+                        <ng-container
+                            *ngIf="nestedDataFormElement.data?.categoryId == 1 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                            <sb-data-forms-groups-records-response-views [dataFormElement]="nestedDataFormElement"
+                                [nestedDataFormElements]="getNestedDataFormElements(nestedDataFormElement?.id)"
+                                [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                            </sb-data-forms-groups-records-response-views>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="nestedDataFormElement.data?.categoryId == 2 && dataFormsResponsesService.isRelevant(nestedDataFormElement.data?.conditionalRelevancyRule)">
+                            <sb-data-forms-fields-records-response-views
+                                [dataFormField]="nestedDataFormElement"
+                                [mode]="mode" [disabled]="disabled" [odd]="!odd">
+                            </sb-data-forms-fields-records-response-views>
+                        </ng-container>
+
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+    </ng-template>
+
+</ng-container>
+
+
+<ng-template #initialising>
+    <div class="d-flex justify-content-center m-1">
+
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

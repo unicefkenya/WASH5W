@@ -1,0 +1,47 @@
+# Default values for the Microservice's Helm Chart.
+# This is a YAML-formatted file.
+
+# MICROSERVICE
+# ----------------------------------------------------------------------------------------
+microservice:
+
+  # Ingress
+  ingress:
+    name: logicalSchemes
+    class: traefik
+    rules:
+      host: cloud.miles.co.ke
+      http:
+        path: /api/v1/logicalSchemes
+        backend:
+          service:
+            name: logicalSchemes
+            port:
+              number: 80
+
+  # Service
+  service:
+    name: logicalSchemes
+    port:
+      default: 80
+      target: 8080
+
+  # Deployment
+  deployment:
+    name: logicalSchemes
+
+  # Application / Application Replicas
+  application:
+    name: logicalSchemes
+    version: 0.0.1
+    image:
+      id: cloud.miles.co.ke:5043/logicalSchemes
+      tag: 0.0.1
+      pull:
+        policy: Always
+        secret: regcred
+    environment:
+      postgres:
+        host: bitnami-postgres-postgresql
+    replicas: 1
+

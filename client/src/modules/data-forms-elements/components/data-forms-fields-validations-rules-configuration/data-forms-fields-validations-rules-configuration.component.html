@@ -1,0 +1,112 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <form *ngIf='page == "validity"' [formGroup]="validationRuleForm" class="m-0 p-0">
+        <div class="d-flex flex-column bd-highlight">
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="operatorId">Constraint</label>
+                    </div>
+                    <select class="custom-select" id="operatorId" formControlName="operatorId"
+                        (change)="onValidationRuleOperatorChange()">
+                        <option [ngValue]="null">Select Constraint</option>
+                        <option *ngFor="let operator of getOperators$()| async" [ngValue]="operator.id">
+                            {{operator.data.constraint}}</option>
+                    </select>
+                </div>
+                <div *ngIf="errors.get('operator')" class="alert alert-danger mb-2" role="alert">
+                    {{errors.get('operator')}}
+                </div>
+
+            </div>
+            <div *ngIf="getValidationOperatorId()" class="bd-highlight">
+
+                <!-- Single Selection Field -->
+                <!-- Multiple Selection Field -->
+                <!-- Dropdown Field -->
+                <ng-container *ngIf="dataFormFieldTypeIdIsMemberOf([8,9,10]); else supported">
+
+                    <div class="alert alert-danger" role="alert">
+                        Validations unsupported
+                    </div>
+
+                </ng-container>
+
+                <!-- Other Fields -->
+                <ng-template #supported>
+
+                    <div class="input-group flex-nowrap mb-2">
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Value</span>
+                        </div>
+
+                        <!-- Greater-Than -->
+                        <!-- Greater-Than Or Equal To -->
+                        <!-- Less-Than -->
+                        <!-- Less-Than Or Equal To -->
+                        <!-- Equal To -->
+                        <!-- Not Equal To -->
+                        <ng-container *ngIf="operatorIdIsMemberOf([1, 2, 3, 4, 5, 6])">
+
+                            <ng-container [ngSwitch]="dataFormFieldTypeId">
+
+                                <!--Date-->
+                                <ng-container *ngSwitchCase="7">
+                                    <ng-container *ngTemplateOutlet="dateValue"></ng-container>
+                                </ng-container>
+
+                                <!--Integer-->
+                                <!--Decimal-->
+                                <ng-container *ngSwitchDefault>
+                                    <ng-container *ngTemplateOutlet="numericalValue"></ng-container>
+                                </ng-container>
+
+                            </ng-container>
+
+                        </ng-container>
+
+
+                        <!-- Minimum Characters -->
+                        <!-- Maximum Characters -->
+                        <!-- Maximum MB Size -->
+                        <ng-container *ngIf="operatorIdIsMemberOf([9,10,11])">
+                            <ng-container *ngTemplateOutlet="numericalValue"></ng-container>
+                        </ng-container>
+
+                    </div>
+
+                    <div *ngIf="errors.get('value')" class="alert alert-danger mb-2" role="alert">
+                        {{errors.get('value')}}
+                    </div>
+
+                </ng-template>
+
+
+            </div>
+        </div>
+
+        <ng-template #dateValue>
+            <input type="date" class="form-control" id="value" formControlName="value">
+        </ng-template>
+
+        <ng-template #numericalValue>
+            <input type="text" class="form-control" id="value" formControlName="value" placeholder="Enter value">
+        </ng-template>
+
+    </form>
+
+
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

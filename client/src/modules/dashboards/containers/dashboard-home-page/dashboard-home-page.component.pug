@@ -1,0 +1,9 @@
+sb-layout-main
+  ng-container(header)
+    sb-header(title='Dashboards', subtitle='The supported reporting structures')
+  ng-container(body')
+    sb-card
+      .card-header
+        | Dashboards List
+      .card-body
+        sb-dashboards-records-tabulation([pagesize]='6')

@@ -1,0 +1,15 @@
+<span [ngClass]='{"sb-nav-fixed": !static}'>
+    <sb-topnav></sb-topnav>
+    <div id="sidenav-layout">
+        <div id="sidenav-layout-nav">
+            <sb-side-nav [sideNavItems]="sideNavItems$ | async" [sideNavSections]="sideNavSections$ | async">
+            </sb-side-nav>
+        </div>
+        <div id="sidenav-layout-content">
+            <main>
+                <router-outlet></router-outlet>
+            </main>
+            <sb-footer></sb-footer>
+        </div>
+    </div>
+</span>

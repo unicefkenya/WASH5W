@@ -1,0 +1,13 @@
+@import "styles/variables.scss";
+
+.total-count {
+    background-color: $blue-light-100;
+    margin-top: 5px;
+    padding: 10px;
+    font-family: "Roboto";
+    font-size: 80%;
+    font-weight: normal;
+    letter-spacing: 0.075rem;
+    text-transform: uppercase;
+
+}

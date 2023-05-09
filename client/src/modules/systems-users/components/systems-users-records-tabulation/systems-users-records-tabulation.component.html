@@ -1,0 +1,139 @@
+<div class="d-flex bd-highlight">
+    <div class="w-100 bd-highlight">
+        <sb-search placeholder="Search by systems users names" (searched)="onSearchTermChange($event)"></sb-search>
+    </div>
+    <div class="flex-shrink-1 bd-highlight">
+        <sb-loading-animation type="bars"></sb-loading-animation>
+    </div>
+</div>
+
+<!--For Small-Sized Devices Only-->
+<div class="row d-md-none">
+    <div class="ml-3 mr-3 mb-0" style="width:100%"
+        *ngFor="let systemUser of systemsUsersDataService.systemsUsers$ | async; index as i">
+
+        <table class="table m-0 mb-1 collapsible-group" style="width:100%">
+            <tr class="title">
+                <td class="col-10 text-left align-middle">
+                    {{systemUser.data?.name}}
+                </td>
+                <td class="col-2 text-center align-middle">
+                    <span class="d-flex flex-row-reverse">
+                        <sb-button *ngIf="isExpanded(systemUser)" action="collapse" entity="System User"
+                            id="{{systemUser?.id}}" (collapse)="onCollapse(systemUser)"
+                            tooltip="Close to hide more details">
+                        </sb-button>
+                        <sb-button *ngIf="isCollapsed(systemUser)" action="expand" entity="System User"
+                            id="{{systemUser?.id}}" (expand)="onExpand(systemUser)"
+                            tooltip="Open to reveal more details">
+                        </sb-button>
+                        <sb-button action="delete" entity="System User" id="{{systemUser.id}}"
+                            (delete)="onDeleteSystemUser($event)" tooltip="Delete {{systemUser.data?.name}}">
+                        </sb-button>
+                        <sb-button action="update" entity="System User" id="{{systemUser.id}}"
+                            (update)="onUpdateSystemUser($event)" tooltip="Update {{systemUser.data?.name}}">
+                        </sb-button>
+                    </span>
+                </td>
+            </tr>
+            <tr *ngIf="systemUser && isExpanded(systemUser)">
+                <td colspan="2" class="text-center align-middle">
+                    <sb-systems-users-rights-records-tabulation [systemUserId]="systemUser.id">
+                    </sb-systems-users-rights-records-tabulation>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--For Middle-Sized Devices Upwards-->
+<div class="row d-none d-md-block">
+    <div class="ml-3 mr-3 mb-0" *ngFor="let systemUser of systemsUsersDataService.systemsUsers$ | async; index as i">
+
+        <table class="table m-0 mb-1 collapsible-group" style="width:100%">
+
+            <tr class="title">
+                <td class="col-1 pl-4 align-middle">
+                    {{i + 1 + paginationOffset}}
+                </td>
+                <td class="col-3 text-left align-middle">
+                    {{systemUser.data?.name}}
+                </td>
+                <td class="col-3 text-left align-middle">
+                    <span class="d-flex flex-column text-center">
+                        <span class="p-1">
+                            <fa-icon [icon]='["fas", "envelope"]' class="font-weight-bold light"></fa-icon>
+                        </span>
+                        <span class="p-1">
+                            {{systemUser.data?.email}}
+                        </span>
+                    </span>
+                </td>
+                <td class="col-2 text-center align-middle">
+                    <span class="d-flex flex-column text-center">
+                        <span class="p-1">
+                            <ng-container *ngIf="systemUser.data?.confirmed">
+                                <fa-icon [icon]='["fas", "check-circle"]' class="font-weight-bold"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngIf="!systemUser.data?.confirmed">
+                                <fa-icon [icon]='["fas", "times-circle"]' class="font-weight-bold text-danger">
+                                </fa-icon>
+                            </ng-container>
+                        </span>
+                        <span class="p-1">
+                            Confirmed
+                        </span>
+                    </span>
+                </td>
+                <td class="col-2 text-center align-middle">
+                    <span class="d-flex flex-column text-center">
+                        <span class="p-1">
+                            <ng-container *ngIf="systemUser.data?.enabled">
+                                <fa-icon [icon]='["fas", "check-circle"]' class="font-weight-bold"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngIf="!systemUser.data?.enabled">
+                                <fa-icon [icon]='["fas", "times-circle"]' class="font-weight-bold text-danger">
+                                </fa-icon>
+                            </ng-container>
+                        </span>
+                        <span class="p-1">
+                            Enabled
+                        </span>
+                    </span>
+                </td>
+                <td class="col-1 text-center align-middle">
+                    <span class="d-flex flex-row-reverse">
+                        <sb-button *ngIf="isExpanded(systemUser)" action="collapse" entity="System User"
+                            id="{{systemUser?.id}}" (collapse)="onCollapse(systemUser)"
+                            tooltip="Close to hide more details">
+                        </sb-button>
+                        <sb-button *ngIf="isCollapsed(systemUser)" action="expand" entity="System User"
+                            id="{{systemUser?.id}}" (expand)="onExpand(systemUser)"
+                            tooltip="Open to reveal more details">
+                        </sb-button>
+                        <sb-button action="delete" entity="System User" id="{{systemUser.id}}"
+                            (delete)="onDeleteSystemUser($event)" tooltip="Delete {{systemUser.data?.name}}">
+                        </sb-button>
+                        <sb-button action="update" entity="System User" id="{{systemUser.id}}"
+                            (update)="onUpdateSystemUser($event)" tooltip="Update {{systemUser.data?.name}}">
+                        </sb-button>
+                    </span>
+                </td>
+            </tr>
+            <tr *ngIf="isExpanded(systemUser)">
+                <td colspan="6" class="text-center align-middle">
+                    <sb-systems-users-rights-records-tabulation [systemUserId]="systemUser.id">
+                    </sb-systems-users-rights-records-tabulation>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col">
+        <sb-pagination (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+        </sb-pagination>
+    </div>
+</div>

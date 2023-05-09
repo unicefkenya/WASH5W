@@ -1,0 +1,21 @@
+<!-- Hide on screens smaller than md -->
+<div class="d-none d-md-block" *ngIf="false">
+    <div class="input-group mb-3">
+        <input class="form-control border-right-0 border" type="search" style="width: 88%;" [placeholder]="placeholder"
+            [value]="searchTerm" (keyup)="searchTerm=$event.target.value">
+        <span class="input-group-append">
+            <span class="input-group-text bg-transparent">
+                <fa-icon class="mr-1" [icon]='["fas", "search"]'></fa-icon>
+            </span>
+        </span>
+    </div>
+</div>
+
+<!-- Hide on screens wider than md -->
+<div class="d-md-none" *ngIf="false">
+    <input class="form-control mb-3" type="search" placeholder="Search"
+        [value]="searchTerm" (keyup)="searchTerm=$event.target.value">
+</div>
+
+<input class="form-control mb-3" type="search" [placeholder]="placeholder"
+[value]="searchTerm" (keyup)="searchTerm=$event.target.value">

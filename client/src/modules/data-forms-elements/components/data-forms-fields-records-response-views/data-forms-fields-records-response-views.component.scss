@@ -1,0 +1,19 @@
+@import 'styles/variables.scss';
+
+label.custom-control-label {
+    padding-top: 2px;
+}
+
+span.input-group-text{
+    min-width: 40px;
+    max-width: 40px;
+}
+
+span.input-group-text:hover {
+    cursor: pointer;
+}
+
+span.disabled {
+    pointer-events: none;
+    cursor: default;
+  }

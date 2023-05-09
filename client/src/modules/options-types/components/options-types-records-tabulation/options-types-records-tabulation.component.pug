@@ -1,0 +1,67 @@
+ngcontainer([ngswitch]='initialised')
+  // Display the data form if the component was successfully initialised
+  form(*ngswitchcase='initialised == true')
+    .d-flex.bd-highlight
+      .w-100.bd-highlight
+        sb-search(placeholder='Search by optionsTypes names', (searched)='onSearchTermChange($event)')
+      .flex-shrink-1.bd-highlight
+        sb-loading-animation
+    // For Small-Sized Devices Only
+    .row.d-md-none
+      .col
+        sb-table
+          ng-container(header='')
+            tr
+              th.col-sm-1.text-center.align-middle(scope='col') #
+              th.col-sm-9.text-left.align-middle(scope='col') Name
+              th.col-sm-2.text-center.align-middle(scope='col') Actions
+          ng-container(body='')
+            tr(*ngfor='let optionType of optionsTypesDataService.optionsTypes$ | async; index as i', [attr.data-index]='i')
+              td.text-center.align-middle
+                | {{i + 1 + getPaginationOffset()}}
+              td.text-left.align-middle
+                | {{optionType.data?.name}}
+              td.text-center.align-middle
+                span.d-flex.flex-row-reverse
+                  sb-button(action='delete', entity='OptionType', id='{{optionType.id}}', (delete)='onDeleteOptionType($event)', tooltip='Delete {{optionType.data?.name}}')
+                  sb-button(action='update', entity='OptionType', id='{{optionType.id}}', (update)='onUpdateOptionType($event)', tooltip='Update {{optionType.data?.name}}')
+          ng-container(footer='')
+            tr
+              td.align-middle(scope='col', colspan='3')
+                span.d-flex.flex-row.flex-row-reverse
+                  sb-button(action='add', entity='OptionType', (add)='onAddOptionType()')
+    // For Middle-Sized Devices Upwards
+    .row.d-none.d-md-block
+      .col
+        sb-table
+          ng-container(header='')
+            tr
+              th.col-md-1.text-center.align-middle(scope='col') #
+              th.col-md-5.text-left.align-middle(scope='col') Name
+              th.col-md-1.text-center.align-middle(scope='col') Actions
+          ng-container(body='')
+            tr(*ngfor='let optionType of optionsTypesDataService.optionsTypes$ | async; index as i', [attr.data-index]='i')
+              td.text-center.align-middle
+                | {{i + 1 + getPaginationOffset()}}
+              td.text-left.align-middle
+                | {{optionType.data?.name}}
+              td.text-center.align-middle
+                span.d-flex.flex-row-reverse
+                  sb-button(action='delete', entity='OptionType', id='{{optionType.id}}', (delete)='onDeleteOptionType($event)', tooltip='Delete {{optionType.data?.name}}')
+                  sb-button(action='update', entity='OptionType', id='{{optionType.id}}', (update)='onUpdateOptionType($event)', tooltip='Update {{optionType.data?.name}}')
+          ng-container(footer='')
+            tr
+              td.align-middle(scope='col', colspan='4')
+                span.d-flex.flex-row.flex-row-reverse
+                  sb-button(action='add', entity='OptionType', (add)='onAddOptionType()')
+    .row
+      .col
+        sb-pagination((pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')
+  // Display an error message if the component was not successfully initialised
+  .jumbotron(*ngswitchcase='initialised == false')
+    h1.display-4 Oops
+    p.lead We are sorry we cannot display the Options Types at this moment
+    hr.my-4
+    p Please try again in a little while
+  // Display a loading screen otherwise
+  sb-loading-animation(*ngswitchdefault='')

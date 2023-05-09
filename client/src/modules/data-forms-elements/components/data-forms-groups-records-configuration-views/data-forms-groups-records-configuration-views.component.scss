@@ -1,0 +1,73 @@
+@import 'styles/variables.scss';
+
+
+div.wrapper {
+    border: 1px solid #dee2e6;
+    border-top: none;
+}
+
+table {
+
+    tr {
+
+        td {
+
+            &.title {
+                text-transform: uppercase;
+                font-size: smaller;
+            }
+            
+
+            &.group {
+                text-transform: uppercase;
+                font-size: smaller;
+                background-color: #74c365;
+                color: white;
+            }
+        }
+    }
+
+    table {
+
+        tr {
+
+            &.title {
+                text-transform: uppercase;
+                font-size: smaller;
+            }            
+    
+            td {
+    
+                &.group {
+                   background-color: #90ee90;
+                    color: black;
+                }
+            }
+        }
+
+        table {
+
+            tr {
+
+                &.title {
+                    text-transform: uppercase;
+                    font-size: smaller;
+                }                
+        
+                td {
+        
+                    &.group {
+                        background-color: white;
+                        color: black;
+                    }
+                }
+            }
+        }
+    }
+}
+
+h6 {
+    font-family: "Roboto";
+    font-size: 90%;
+    letter-spacing: 0.075rem;
+}

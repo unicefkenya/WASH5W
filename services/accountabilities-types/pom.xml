@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ke.co.miles</groupId>
+  <artifactId>accountabilitiesTypes</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <name>accountabilitiesTypes</name>
+  <description>AccountabilitiesTypes Microservice</description>
+
+  <licenses>
+    <license>
+      <name>Mozilla Public License, Version 2.0</name>
+      <url>http://www.mozilla.org/MPL/2.0/index.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Second Mile</name>
+    <url>https://miles.co.ke</url>
+  </organization>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.5.5</version>
+    <relativePath/>
+  </parent>
+
+  <properties>
+    <davidmoten.guava.mini.version>0.1.4</davidmoten.guava.mini.version>
+    <davidmoten.rxjava2.jdbc.version>0.2.10</davidmoten.rxjava2.jdbc.version>
+    <java.version>11</java.version>
+    <spring.cloud.version>Greenwich.RELEASE</spring.cloud.version>
+    <springdoc.openapi.webflux.ui.version>1.6.8</springdoc.openapi.webflux.ui.version>
+    <testcontainers.version>1.17.1</testcontainers.version>
+    <skip.unit.tests>false</skip.unit.tests>
+    <skip.integration.tests>true</skip.integration.tests>
+  </properties>
+
+
+  <profiles>
+
+    <!-- Development Profile -->
+    <profile>
+      <id>dev</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>dev</value>
+        </property>
+      </activation>
+      <properties>
+        <skip.unit.tests>false</skip.unit.tests>
+        <skip.integration.tests>true</skip.integration.tests>
+      </properties>
+    </profile>
+
+    <!-- Test Profile -->
+    <profile>
+      <id>test</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>test</value>
+        </property>
+      </activation>
+      <properties>
+        <skip.unit.tests>true</skip.unit.tests>
+        <skip.integration.tests>false</skip.integration.tests>
+      </properties>
+    </profile>
+
+    <!-- Production Profile -->
+    <profile>
+      <id>prod</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>prod</value>
+        </property>
+      </activation>
+      <properties>
+        <skip.unit.tests>true</skip.unit.tests>
+        <skip.integration.tests>true</skip.integration.tests>
+      </properties>
+    </profile>
+  </profiles>
+
+
+  <dependencies>
+
+    <!-- spring framework-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
+
+    <!-- data -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.reactivex.rxjava2</groupId>
+      <artifactId>rxjava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.davidmoten</groupId>
+      <artifactId>rxjava2-jdbc</artifactId>
+      <version>${davidmoten.rxjava2.jdbc.version}</version>
+    </dependency>
+
+    <!-- api -->
+    <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-webflux-ui -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-webflux-ui</artifactId>
+      <version>${springdoc.openapi.webflux.ui.version}</version>
+    </dependency>
+
+    <!-- tests -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- utilities-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.github.davidmoten</groupId>
+      <artifactId>guava-mini</artifactId>
+      <version>${davidmoten.guava.mini.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring.cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <skip>${skip.integration.tests}</skip>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+            <configuration>
+              <skip>${skip.integration.tests}</skip>
+            </configuration>
+          </execution>
+        </executions>
+
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>${skip.unit.tests}</skipTests>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <skipTests>${skip.integration.tests}</skipTests>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-help-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

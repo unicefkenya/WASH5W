@@ -1,0 +1,31 @@
+@import "styles/variables.scss";
+
+.table>tbody>tr>td,
+.table>tbody>tr>th {
+
+    border-top: none;
+
+    &.none {
+        background-color: #ffffff;
+    }
+
+    &.first {
+        background-color: #ED2938;
+    }
+
+    &.second {
+        background-color: #B25F4A;
+    } 
+    
+    &.third {
+        background-color: #77945C;
+    }  
+    
+    &.fourth {
+        background-color: #3BCA6D;
+    } 
+    
+    &.fifth {
+        background-color: #00FF7F;
+    }
+}

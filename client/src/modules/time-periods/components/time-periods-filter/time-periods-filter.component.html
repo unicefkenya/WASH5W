@@ -1,0 +1,92 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <!-- Display the data form -->
+    <div class="card-body m-0 p-0">
+        <h5 class="card-title">Time Period Filter</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please select desired start date or end date</h6>
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+        <form [formGroup]="timePeriodsForm">
+
+            <!-- Timestep -->
+            <div class="d-flex flex-column bd-highlight">
+
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Type</label>
+                        </div>
+                        <select class="custom-select" id="timestepId" formControlName="timestepId">
+                            <option [ngValue]="null" disabled>Select timestep</option>
+                            <option *ngFor="let timestep of timesteps$ | async" [ngValue]="timestep.id">
+                                {{timestep.data?.name}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="timePeriodsForm.get('timestepId')?.invalid && (timePeriodsForm.get('timestepId')?.dirty || timePeriodsForm.get('timestepId')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="timePeriodsForm.get('timestepId')?.errors.required">
+                            Timestep is required
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Start Date -->
+            <div class="d-flex flex-column bd-highlight">
+
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Start Date</label>
+                        </div>
+                        <input type="date" class="form-control" id="startDate" formControlName="startDate"
+                            placeholder="yyyy-mm-dd">
+                    </div>
+                    <div *ngIf="timePeriodsForm.get('startDate')?.invalid && (timePeriodsForm.get('startDate')?.dirty || timePeriodsForm.get('startDate')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="timePeriodsForm.get('startDate')?.errors.required">
+                            A valid start date is required
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- End Date -->
+            <div class="d-flex flex-column bd-highlight">
+
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">End Date</label>
+                        </div>
+                        <input type="date" class="form-control" id="endDate" formControlName="endDate"
+                            placeholder="yyyy-mm-dd">
+                    </div>
+                    <div *ngIf="timePeriodsForm.get('endDate')?.invalid && (timePeriodsForm.get('endDate')?.dirty || timePeriodsForm.get('endDate')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="timePeriodsForm.get('endDate')?.errors.required">
+                            A valid end date is required
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

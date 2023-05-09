@@ -1,0 +1,20 @@
+<sb-overlay>
+    <div class="d-flex flex-column justify-content-center bd-highlight mb-3">
+        <div class="pt-2 bd-highlight text-center">
+            <h5 [ngClass]="iconClasses">
+                <fa-icon [icon]='["fas", icon]'></fa-icon>
+            </h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <h5>{{crosshead}} </h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <p *ngIf="(status == 'saving' || status == 'deleting' || status == 'initializing');else notification" class="processing">
+                <span>.</span><span>.</span><span>.</span>
+            </p>
+            <ng-template #notification>
+                <p>{{content}}</p>
+            </ng-template>
+        </div>        
+      </div>
+</sb-overlay>

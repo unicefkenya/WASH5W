@@ -1,0 +1,6 @@
+name: AdministrativeUnits
+version: 0.0.1
+description: Deploys AdministrativeUnits Microservice
+maintainers:
+  - name: Kwaje Anthony
+    email: kwajeanthony@gmail.com

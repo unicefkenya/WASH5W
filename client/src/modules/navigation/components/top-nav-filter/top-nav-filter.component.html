@@ -1,0 +1,17 @@
+<li class="nav-item dropdown dropdown-user no-caret" ngbDropdown placement="bottom-right" display="dynamic" title="Filter the system">
+    <a class="nav-link dropdown-toggle" id="filterDropdown" ngbDropdownToggle data-cy="filterMenu" role="button" aria-haspopup="true" aria-expanded="false">
+        <strong><fa-icon [icon]='["fas", "filter"]'></fa-icon></strong>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu aria-labelledby="dropdownFilter">
+        <h6 class="dropdown-header">
+            <div class="dropdown-user-details">
+                <div class="dropdown-user-details-name">Filter</div>
+            </div>
+        </h6>
+        <div class="dropdown-divider"></div>
+        <a *ngIf="(this.filterService.currentFilter$ | async )?.assignedContexts.length > 1" class="dropdown-item" href="javascript:void(0)" (click)="onFilterByContext()">Context</a>
+        <a class="dropdown-item" href="javascript:void(0)" (click)="onFilterByLocation()">Location</a>
+        <!--<a class="dropdown-item" href="javascript:void(0)" (click)="onFilterByTime()">Time</a>-->
+        <div class="dropdown-divider" *ngIf="false"></div>
+    </div>
+</li>

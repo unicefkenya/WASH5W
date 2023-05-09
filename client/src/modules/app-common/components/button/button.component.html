@@ -1,0 +1,176 @@
+<button *ngIf="action === 'filter'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onFilter()">
+    <fa-icon [icon]='["fas", "filter"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'add'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onAdd()">
+    <fa-icon [icon]='["fas", "plus"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'update'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onUpdate()">
+    <fa-icon [icon]='["fas", "pen"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'delete'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onDelete()">
+    <fa-icon [icon]='["fas", "trash"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'close'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onClose()">
+    <fa-icon [icon]='["fas", "lock"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'copy'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onCopy()">
+    <fa-icon [icon]='["fas", "copy"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'save'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onSave()">
+    Save <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'yes'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onYes()">
+    Yes <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'no'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onNo()">
+    No <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'open'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onOpen()">
+    <fa-icon [icon]='["fas", "external-link-alt"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'previous'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onPrevious()">
+    Back <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'next'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onNext()">
+    Next <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'quit'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onQuit()">
+    Quit <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'done'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onDone()">
+    Close <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'apply'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onApply()">
+    Apply <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'drillUp'" type="button" class="btn-button-bg-color-1olor-1olor-1"
+    [ngClass]="classes$ | async" data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async"
+    [disabled]="disabled$ | async" (click)="onDrillUp()">
+    <fa-icon [icon]='["fas", "arrow-up"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+
+<button *ngIf="action === 'drillDown'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onDrillDown()">
+    <fa-icon [icon]='["fas", "arrow-down"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<button *ngIf="action === 'link'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onOpen()">
+    <fa-icon [icon]='["fas", "link"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+
+<button *ngIf="action === 'collapse'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onCollapse()">
+    <fa-icon [icon]='["fas", "folder-open"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+
+<button *ngIf="action === 'expand'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onExpand()">
+    <fa-icon [icon]='["fas", "folder-closed"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+
+<button *ngIf="action === 'configure'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onConfigure()">
+    <fa-icon [icon]='["fas", "cog"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+
+<button *ngIf="action === 'preview'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onPreview()">
+    <fa-icon [icon]='["fas", "eye"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+
+<button *ngIf="action === 'hide'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onHide()">
+    <fa-icon [icon]='["fas", "eye-slash"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+
+<button *ngIf="action === 'select-nested'" type="button" class="btn-button-bg-color-1" [ngClass]="classes$ | async"
+    data-toggle="tooltip" data-placement="top" [title]="tooltip$ | async" [disabled]="disabled$ | async"
+    (click)="onSelectNested()">
+    <fa-icon [icon]='["fas", "caret-down"]'></fa-icon> <ng-container *ngIf="text">{{text}}</ng-container>
+</button>
+
+<div class="btn-group-vertical mt-0 mb-0 pt-0 pb-0 mr-1" *ngIf="action === 'order'">
+    <button type="button" class="btn btn-small btn-button-bg-color-1 mb-0 pt-1 pb-0" style="height:17.8px"
+        data-toggle="tooltip" data-placement="top" title="Move one step up" [disabled]="disabled$ | async"
+        (click)="onMoveUp()">
+        <fa-icon [icon]='["fas", "arrow-up"]'></fa-icon>
+    </button>
+
+    <button type="button" class="btn btn-small btn-button-bg-color-1 mt-0 pt-0 pb-1" style="height:17.8px"
+        data-toggle="tooltip" data-placement="top" title="Move one step down" [disabled]="disabled$ | async"
+        (click)="onMoveDown()">
+        <fa-icon [icon]='["fas", "arrow-down"]'></fa-icon>
+    </button>
+</div>
+
+
+
+<div *ngIf="action === 'select'" class="form-check">
+    <input class="form-check-input position-static" type="radio" [name]="name" [value]="id" [checked]="selected"
+        [disabled]="disabled" (change)="onSelectionChange($event)">
+</div>
+
+<div *ngIf="action === 'check' || action === 'uncheck'" class="form-check">
+    <input class="form-check-input position-static" type="checkbox" [value]="id" [checked]="checked"
+        [disabled]="disabled" (change)="onCheckboxChange($event)">
+</div>

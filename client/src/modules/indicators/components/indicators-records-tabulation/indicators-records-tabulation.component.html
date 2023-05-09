@@ -1,0 +1,357 @@
+<form class="m-0 p-0" [formGroup]="defaultForm">
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered border-dark filter">
+                <tr *ngIf="logical">
+                    <td class="col-1 align-middle text-left p-2 pl-3">
+                        Parent
+                    </td>
+                    <td class="col-11" class="align-middle p-2">
+                        <div class="input-group flex-nowrap">
+                            <ng-container formGroupName="logicalElement">
+                                <input type="text" class="form-control input-group-input"
+                                    id="truncatedLogicalElementName" placeholder=""
+                                    formControlName="truncatedLogicalElementName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Select Parent Logical Element"
+                                    (click)="onOpenLogicalElementSelector()">
+                                    <fa-icon [icon]='["fas", "circle-dot"]'></fa-icon>
+                                </button>
+                            </div>
+                            <div *ngIf="getLogicalElementId()" class="input-group-append">
+                                <button type="button" class="btn btn-ciat-shade-1 selector-button" data-toggle="tooltip"
+                                    data-placement="top" title="Clear Selected Parent Logical Element"
+                                    (click)="onClearLogicalElementSelector()">
+                                    <fa-icon [icon]='["fas", "trash"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex bd-highlight">
+        <div class="w-100 bd-highlight">
+            <sb-search placeholder="Search by indicators names" (searched)="onSearchTermChange($event)"></sb-search>
+        </div>
+        <div class="flex-shrink-1 bd-highlight">
+            <sb-loading-animation type="bars"></sb-loading-animation>
+        </div>
+    </div>
+
+    <!--For Small-Sized Devices Only-->
+    <div class="row d-md-none m-0 p-0">
+        <div class="col-12 m-0 mb-2 p-0"
+            *ngFor="let indicator of indicatorsDataService.indicators$ | async; index as i">
+
+            <table class="table m-0 mb-1 p-0 collapsible-group">
+                <tr class="title">
+                    <td class="col-12 text-center align-middle">
+                        {{indicator.data?.name}}
+                    </td>
+                </tr>
+                <tr class="title">
+                    <td class="col-12 text-center align-middle">
+                        <span class="d-flex justify-content-center">
+                            <sb-button action="update" entity="Indicator" id="{{indicator.id}}"
+                                (update)="onUpdateIndicator($event)" tooltip="Update {{indicator.data?.name}}">
+                            </sb-button>
+                            <sb-button action="delete" entity="Indicator" id="{{indicator.id}}"
+                                (delete)="onDeleteIndicator($event)" tooltip="Delete {{indicator.data?.name}}">
+                            </sb-button>
+                            <sb-button *ngIf="isExpanded(indicator)" action="collapse" entity="Indicator"
+                                id="{{indicator?.id}}" (collapse)="onCollapse(indicator)"
+                                tooltip="Close to hide more details">
+                            </sb-button>
+                            <sb-button *ngIf="isCollapsed(indicator)" action="expand" entity="Indicator"
+                                id="{{indicator?.id}}" (expand)="onExpand(indicator)"
+                                tooltip="Open to reveal more details">
+                            </sb-button>
+                        </span>
+                    </td>
+                </tr>
+                <tr *ngIf="isExpanded(indicator)" class="borderless">
+                    <td class="m-0 p-0" colspan="2">
+                        <div class="row m-0 p-0 mb-2 p-0 ">
+                            <div class="col-6 m-0 p-1 mt-2 text-uppercase small">
+                                Unit
+                            </div>
+                            <div class="col-6 m-0 p-1 mt-2">
+                                {{getUnit(indicator.data.unitId)?.data.name}}
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-6 m-0 p-1 mt-1 text-uppercase small">
+                                Entry
+                            </div>
+                            <div class="col-6 m-0 p-1 mt-1">
+                                <ng-container *ngIf="indicator.data.subindicatorsFilled">Subindicators Based
+                                </ng-container>
+                                <ng-container *ngIf="indicator.data.formFilled">Form Field Based</ng-container>
+                                <ng-container
+                                    *ngIf="!(indicator.data.subindicatorsFilled) && !(indicator.data.formFilled)">Manual
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-6 m-0 p-1 mt-1 text-uppercase small">
+                                Subindicators
+                            </div>
+                            <div class="col-6 m-0 p-1 mt-1">
+                                <ng-container *ngFor="let subindicator of (subindicators$ | async)">
+                                    {{subindicator.data.name + ";"}}
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-6 m-0 p-1 mt-1 text-uppercase small">
+                                Field
+                            </div>
+                            <div class="col-6 m-0 p-1 mt-1">
+                                {{(formField$ | async)?.data.title}}
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-6 m-0 p-1 mt-1 text-uppercase small">
+                                Aggregation
+                            </div>
+                            <div class="col-6 m-0 p-1 mt-1">
+                                <ng-container *ngIf="indicator.data.autoFillingRule">
+                                    {{getAggregationName(indicator.data.autoFillingRule?.aggregationId)}} of
+                                    {{getOptionName(indicator.data.autoFillingRule?.optionId)}} Values
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-0 border-top">
+                            <div class="col-12 m-0 p-0 mt-1">
+                                <!-- Header - Hide on screens than md -->
+                                <div class="custom-page-tabs-container border border-bottom-0 mt-1">
+                                    <ul class="nav nav-tabs custom-page-tabs">
+                                        <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                                    </ul>
+                                </div>
+
+                                <!-- Header Templates -->
+                                <ng-template #navItems>
+
+                                    <li *ngFor="let tab of pageTabs" class="nav-item">
+
+                                        <ng-container *ngIf="tab.id == activePageTab?.id; else inactive">
+                                            <a class="nav-link active" href="javascript:void(0);">
+                                                {{tab.title}}
+                                            </a>
+                                        </ng-container>
+
+                                        <ng-template #inactive>
+                                            <a class="nav-link" (click)="onChangeTab(tab)">
+                                                {{tab.title}}
+                                            </a>
+                                        </ng-template>
+                                    </li>
+
+                                </ng-template>
+
+                                <!-- Contents -->
+                                <div class="custom-page-contents-container border border-top-0">
+
+                                    <ng-container *ngIf="ready; else readying">
+                                        <sb-quantities-observations-records-tabulation
+                                            [timePeriodId]="getTimePeriodId()"
+                                            [phenomenonTypeId]="getPhenomenonTypeId()" [unitId]="getUnitId()"
+                                            [observationTypeId]="getObservationTypeId()">
+                                        </sb-quantities-observations-records-tabulation>
+                                    </ng-container>
+
+                                    <ng-template #readying>
+
+
+                                        <div class="d-flex justify-content-center">
+                                            <p class="text-center processing mb-5">
+                                                <span>.</span><span>.</span><span>.</span>
+                                            </p>
+                                        </div>
+
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!--For Middle-Sized Devices Upwards-->
+    <div class="row d-none d-md-block">
+        <div class="col" *ngFor="let indicator of indicatorsDataService.indicators$ | async; index as i">
+
+            <table class="table m-0 mb-1 collapsible-group" style="width:100%">
+                <tr class="title">
+                    <td class="col-1 m-0 p-0 pl-2 align-left align-middle">
+                        <span class="m-0 p-0" *ngIf="!numbered">
+                            {{i + 1 + paginationOffset}}
+                        </span>
+                        <span class="m-0 p-0" *ngIf="numbered">
+                            {{indicator.data?.no}}
+                        </span>
+                    </td>
+                    <td class="col-9 text-left align-middle">
+                        {{indicator.data?.name}}
+                    </td>
+                    <td class="col-2 text-center align-middle">
+                        <span class="d-flex flex-row-reverse">
+                            <sb-button *ngIf="isExpanded(indicator)" action="collapse" entity="Indicator"
+                                id="{{indicator?.id}}" (collapse)="onCollapse(indicator)"
+                                tooltip="Close to hide more details">
+                            </sb-button>
+                            <sb-button *ngIf="isCollapsed(indicator)" action="expand" entity="Indicator"
+                                id="{{indicator?.id}}" (expand)="onExpand(indicator)"
+                                tooltip="Open to reveal more details">
+                            </sb-button>
+                            <sb-button action="delete" entity="Indicator" id="{{indicator.id}}"
+                                (delete)="onDeleteIndicator($event)" tooltip="Delete {{indicator.data?.name}}">
+                            </sb-button>
+                            <sb-button action="update" entity="Indicator" id="{{indicator.id}}"
+                                (update)="onUpdateIndicator($event)" tooltip="Update {{indicator.data?.name}}">
+                            </sb-button>
+                        </span>
+                    </td>
+                </tr>
+                <tr *ngIf="isExpanded(indicator)" class="borderless">
+                    <td class="m-0 mb-2 p-0 pb-2" colspan="3">
+                        <div class="row m-0 p-0 mb-2 p-0 ">
+                            <div class="col-2 m-0 p-1 pl-2 mt-2 text-uppercase small">
+                                Unit
+                            </div>
+                            <div class="col-10 m-0 p-1 mt-2">
+                                {{getUnit(indicator.data.unitId)?.data.name}}
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-2 m-0 p-1 pl-2 mt-1 text-uppercase small">
+                                Entry
+                            </div>
+                            <div class="col-10 m-0 p-1 mt-1">
+                                <ng-container *ngIf="indicator.data.subindicatorsFilled">Subindicators Based
+                                </ng-container>
+                                <ng-container *ngIf="indicator.data.formFilled">Form Field Based</ng-container>
+                                <ng-container
+                                    *ngIf="!(indicator.data.subindicatorsFilled) && !(indicator.data.formFilled)">Manual
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-2 m-0 p-1 pl-2 mt-1 text-uppercase small">
+                                Subindicators
+                            </div>
+                            <div class="col-10 m-0 p-1 mt-1">
+                                <ng-container *ngFor="let subindicator of (subindicators$ | async)">
+                                    {{subindicator.data.name + ";"}}
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-2 m-0 p-1 pl-2 mt-1 text-uppercase small">
+                                Field
+                            </div>
+                            <div class="col-10 m-0 p-1 mt-1">
+                                {{(formField$ | async)?.data.title}}
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-2 border-top">
+                            <div class="col-2 m-0 p-1 pl-2 mt-1 text-uppercase small">
+                                Aggregation
+                            </div>
+                            <div class="col-10 m-0 p-1 mt-1">
+                                <ng-container *ngIf="indicator.data.autoFillingRule">
+                                    {{getAggregationName(indicator.data.autoFillingRule?.aggregationId)}} of
+                                    {{getOptionName(indicator.data.autoFillingRule?.optionId)}} Values
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 mt-2 mb-0 border-top">
+                            <div class="col-12 m-0 mt-1 p-1 pr-2 pl-2">
+                                <!-- Header - Hide on screens than md -->
+                                <div class="custom-page-tabs-container border border-bottom-0 mt-1">
+                                    <ul class="nav nav-tabs custom-page-tabs">
+                                        <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                                    </ul>
+                                </div>
+
+                                <!-- Header Templates -->
+                                <ng-template #navItems>
+
+                                    <li *ngFor="let tab of pageTabs" class="nav-item">
+
+                                        <ng-container *ngIf="tab.id == activePageTab?.id; else inactive">
+                                            <a class="nav-link active" href="javascript:void(0);">
+                                                {{tab.title}}
+                                            </a>
+                                        </ng-container>
+
+                                        <ng-template #inactive>
+                                            <a class="nav-link" (click)="onChangeTab(tab)">
+                                                {{tab.title}}
+                                            </a>
+                                        </ng-template>
+                                    </li>
+
+                                </ng-template>
+
+                                <!-- Contents -->
+                                <div class="custom-page-contents-container border border-top-0">
+
+                                    <ng-container *ngIf="ready; else readying">
+                                        <sb-quantities-observations-records-tabulation
+                                            [timePeriodId]="getTimePeriodId()"
+                                            [phenomenonTypeId]="getPhenomenonTypeId()" [unitId]="getUnitId()"
+                                            [observationTypeId]="getObservationTypeId()">
+                                        </sb-quantities-observations-records-tabulation>
+                                    </ng-container>
+
+                                    <ng-template #readying>
+
+
+                                        <div class="d-flex justify-content-center">
+                                            <p class="text-center processing mb-5">
+                                                <span>.</span><span>.</span><span>.</span>
+                                            </p>
+                                        </div>
+
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Data Form Elements Creation Tools">
+            <div class="btn-group mr-1" role="group" aria-label="Creation Tools">
+                <sb-button action="add" entity="Indicator" (add)="onAddIndicator()"></sb-button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <sb-pagination (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+            </sb-pagination>
+        </div>
+    </div>
+
+</form>

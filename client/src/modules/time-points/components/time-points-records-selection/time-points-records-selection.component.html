@@ -1,0 +1,56 @@
+<!-- Display the data form -->
+<div class="card-body m-0 p-0">
+    <h5 class="card-title">Time Period Filter</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please select desired start date or end date</h6>
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>
+    <form [formGroup]="timePeriodsForm">
+
+        <!-- Start Date -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Start Date</label>
+                    </div>
+                    <input type="date" class="form-control" id="startDate" formControlName="startDate"
+                        placeholder="yyyy-mm-dd">
+                </div>
+                <div *ngIf="timePeriodsForm.get('startDate')?.invalid && (timePeriodsForm.get('startDate')?.dirty || timePeriodsForm.get('startDate')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="timePeriodsForm.get('startDate')?.errors.required">
+                        Start date is required
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- End Date -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">End Date</label>
+                    </div>
+                    <input type="date" class="form-control" id="endDate" formControlName="endDate"
+                        placeholder="yyyy-mm-dd">
+                </div>
+                <div *ngIf="timePeriodsForm.get('endDate')?.invalid && (timePeriodsForm.get('endDate')?.dirty || timePeriodsForm.get('endDate')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="timePeriodsForm.get('endDate')?.errors.required">
+                        End date is required
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </form>
+
+</div>

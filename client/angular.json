@@ -1,0 +1,188 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "cli": {
+        "analytics": false
+    },
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "client": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                }
+            },
+            "root": "",
+            "sourceRoot": "src",
+            "prefix": "sb",
+            "architect": {
+                "build": {
+                    "builder": "@angular-builders/custom-webpack:browser",
+                    "options": {
+                        "outputPath": "dist/client",
+                        "index": "src/index.html",
+                        "main": "src/main.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "buildOptimizer": true,
+                        "sourceMap": false,
+                        "aot": true,
+                        "assets": [
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/leaflet/dist/images",
+                                "output": "leaflet/"
+                            },                                                      
+                            "src/favicon.png",
+                            "src/assets"
+                        ],
+                        "styles": [
+                            "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+                            "src/styles/styles.scss",
+                            "./node_modules/leaflet/dist/leaflet.css",
+                            "src/assets/css/easy-button.css",
+                            "src/assets/css/leaflet.control.select.css"
+                        ],
+                        "stylePreprocessorOptions": {
+                            "includePaths": [
+                                "src",
+                                "./node_modules"
+                            ]
+                        },
+                        "scripts": [
+                            "./node_modules/jquery/dist/jquery.min.js",
+                            "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+                            "./node_modules/leaflet/dist/leaflet.js",
+                            "src/assets/scripts/choropleth.js",
+                            "src/assets/scripts/easy-button.js",
+                            "src/assets/scripts/leaflet-grayscale.js",
+                            "src/assets/scripts/leaflet.control.select.js",
+                            "src/assets/scripts/smtp.js"
+                        ],
+                        "customWebpackConfig": {
+                            "path": "./extra-webpack.config.js"
+                         }
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "4mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "4mb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-builders/custom-webpack:dev-server",
+                    "options": {
+                        "browserTarget": "client:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "client:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-builders/custom-webpack:extract-i18n",
+                    "options": {
+                        "browserTarget": "client:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-builders/custom-webpack:karma",
+                    "options": {
+                        "main": "src/test.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.spec.json",
+                        "karmaConfig": "karma.conf.js",
+                        "assets": [
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/leaflet/dist/images",
+                                "output": "leaflet/"
+                            },
+                            "src/favicon.png",
+                            "src/assets"
+                        ],
+                        "styles": [
+                            "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+                            "src/styles/styles.scss",
+                            "./node_modules/leaflet/dist/leaflet.css",
+                            "src/assets/css/easy-button.css",
+                            "src/assets/css/leaflet.control.select.css"
+                        ],
+                        "stylePreprocessorOptions": {
+                            "includePaths": [
+                                "src",
+                                "./node_modules"
+                            ]
+                        },
+                        "scripts": [
+                            "./node_modules/jquery/dist/jquery.min.js",
+                            "./node_modules/bootstrap/dist/bootstrap.bundle.min.js",
+                            "./node_modules/leaflet/dist/leaflet.js",
+                            "src/assets/scripts/choropleth.js",
+                            "src/assets/scripts/easy-button.js",
+                            "src/assets/scripts/leaflet-grayscale.js",
+                            "src/assets/scripts/leaflet.control.select.js",
+                            "src/assets/scripts/smtp.js"
+                        ],
+                        "customWebpackConfig": {
+                            "path": "./extra-webpack.config.js"
+                         }
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-builders/custom-webpack:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "tsconfig.app.json",
+                            "tsconfig.spec.json",
+                            "e2e/tsconfig.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-builders/custom-webpack:protractor",
+                    "options": {
+                        "protractorConfig": "e2e/protractor.conf.js",
+                        "devServerTarget": "client:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "client:serve:production"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

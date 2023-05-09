@@ -1,0 +1,86 @@
+<!-- Display the data form -->
+<div class="card-body m-0 p-0">
+
+    <form [formGroup]="visualisationsContainersForm">
+
+        <ng-container *ngIf="visualisationContainer?.data.typeId == 1">
+            <h5 class="card-title">Page Group Details</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Please enter the page group's basic details</h6>
+        </ng-container>
+
+        <ng-container *ngIf="visualisationContainer?.data.typeId == 2">
+            <h5 class="card-title">Page Details</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Please enter the page's basic details</h6>
+        </ng-container>
+        
+        <ng-container *ngIf="visualisationContainer?.data.typeId == 3">
+            <h5 class="card-title">Page Tab Details</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Please enter the page tab's basic details</h6>
+        </ng-container> 
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <!-- Navigation Title -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Link Title</label>
+                    </div>
+                    <input type="text" class="form-control" id="name"
+                        placeholder="Enter the navigation link title" formControlName="navTitle">
+                </div>
+                <div *ngIf="visualisationsContainersForm.get('navTitle')?.invalid && (visualisationsContainersForm.get('navTitle')?.dirty || visualisationsContainersForm.get('navTitle')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationsContainersForm.get('navTitle')?.errors.required">
+                        Link Title is required
+                    </div>
+                    <div *ngIf="visualisationsContainersForm.get('navTitle')?.errors.minlength">
+                        Link Title should be at least 2 characters long
+                    </div>
+                    <div *ngIf="visualisationsContainersForm.get('navTitle')?.errors.maxlength">
+                        Link Title should not be more than 50 characters long
+                    </div>
+                    <div *ngIf="visualisationsContainersForm.get('navTitle')?.errors.exists">
+                        Link Title should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Page Title-->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Page Title</label>
+                    </div>
+                    <input type="text" class="form-control" id="navTitle"
+                        placeholder="Enter main page title" formControlName="pageTitle">
+                </div>
+                <div *ngIf="visualisationsContainersForm.get('pageTitle')?.invalid && (visualisationsContainersForm.get('pageTitle')?.dirty || visualisationsContainersForm.get('pageTitle')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationsContainersForm.get('pageTitle')?.errors.required">
+                        Page Title is required
+                    </div>
+                    <div *ngIf="visualisationsContainersForm.get('pageTitle')?.errors.minlength">
+                        Page Title should be at least 2 characters long
+                    </div>
+                    <div *ngIf="visualisationsContainersForm.get('pageTitle')?.errors.maxlength">
+                        Page Title should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="visualisationsContainersForm.get('pageTitle')?.errors.exists">
+                        Page Title should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

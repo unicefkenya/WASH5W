@@ -1,0 +1,33 @@
+{
+  "profile": "prod",
+  "domains": {
+    "default": "cloud.miles.co.ke",
+    "api": "cloud.miles.co.ke",
+    "postgres": "cloud.miles.co.ke",
+    "rabbitMQ": "cloud.miles.co.ke",
+    "registry": "cloud.miles.co.ke",
+    "traefik": "cloud.miles.co.ke"
+  },
+  "ips": {
+    "default": "138.68.86.134",
+    "local": "10.114.0.2"
+  },
+  "postgres": {
+    "username": "postgres",
+    "password": "postgres"	
+  },
+  "security": {
+    "certificates": {
+      "ca": "/ca.crt",
+      "server": "/server.crt"
+    },
+    "keys": {
+      "server": "/server.key"
+    }
+  },
+  "timePeriod": {
+    "min": "",
+    "max": ""	
+  }
+}
+

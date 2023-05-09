@@ -1,0 +1,151 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="card-body m-0 p-0">
+
+        <div class="card-body m-0 p-0" *ngIf='page == "default"'>
+
+            <h5 class="card-title">Basic Details</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Please enter the variable's basic details</h6>
+
+            <!-- Separator -->
+            <div class="bd-highlight">
+                <hr class="m-0 mt-2 mb-3 p-0 ">
+            </div>
+
+            <form [formGroup]="visualisationVariablesForm">
+
+                <!-- Label -->
+                <div class="d-flex flex-column bd-highlight">
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Label</label>
+                            </div>
+                            <input type="text" class="form-control" id="label" placeholder="Enter variable's label"
+                                formControlName="label">
+                        </div>
+                        <div *ngIf="visualisationVariablesForm.get('label')?.invalid && (visualisationVariablesForm.get('label')?.dirty || visualisationVariablesForm.get('label')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="visualisationVariablesForm.get('label')?.errors.required">
+                                Label is required
+                            </div>
+                            <div *ngIf="visualisationVariablesForm.get('label')?.errors.minlength">
+                                Label should be at least 1 character long
+                            </div>
+                            <div *ngIf="visualisationVariablesForm.get('label')?.errors.maxlength">
+                                Label should not be more than 250 characters long
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Category -->
+                <div class="d-flex flex-column bd-highlight">
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Category</label>
+                            </div>
+                            <input type="text" class="form-control" id="label" placeholder="Enter variable's category"
+                                formControlName="category">
+                        </div>
+
+                    </div>
+
+                    <div *ngIf="visualisationVariablesForm.get('category')?.invalid && (visualisationVariablesForm.get('category')?.dirty || visualisationVariablesForm.get('category')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="visualisationVariablesForm.get('category')?.errors.maxlength">
+                            Category should not be more than 250 characters long
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Colour -->
+                <div class="d-flex flex-column bd-highlight">
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Colour</label>
+                            </div>
+                            <input type="color" class="form-control" id="colourCode"
+                                placeholder="Select variable's colour code" title="Click to select colour"
+                                formControlName="colourCode">
+                        </div>
+                        <div *ngIf="visualisationVariablesForm.get('colourCode')?.invalid && (visualisationVariablesForm.get('colourCode')?.dirty || visualisationVariablesForm.get('colourCode')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="visualisationVariablesForm.get('colourCode')?.errors.required">
+                                Colour Code is required
+                            </div>
+                            <div *ngIf="visualisationVariablesForm.get('colourCode')?.errors.minlength">
+                                Colour Code should be 7 characters long
+                            </div>
+                            <div *ngIf="visualisationVariablesForm.get('colourCode')?.errors.maxlength">
+                                Colour Code should be 7 characters long
+                            </div>
+                            <div *ngIf="visualisationVariablesForm.get('colourCode')?.errors.exists">
+                                Colour Code should be unique
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Indicator -->
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text" id="indicatorName">Indicator</label>
+                        </div>
+                        <ng-container formGroupName="indicator">
+                            <input type="text" class="form-control input-group-input pl-3" id="indicatorName"
+                                placeholder="" formControlName="indicatorName" disabled>
+                        </ng-container>
+                        <div class="input-group-append pb-0">
+                            <button type="button" class="btn btn-button-bg-color-1" data-toggle="tooltip"
+                                data-placement="top" title="Choose Indicator" (click)="openIndicatorSelector()">
+                                <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div *ngIf="visualisationVariablesForm.get('indicator.indicatorId')?.invalid && (visualisationVariablesForm.get('indicator.indicatorId')?.dirty || visualisationVariablesForm.get('indicator.indicatorId')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="visualisationVariablesForm.get('indicator.indicatorId')?.errors.required">
+                            Indicator is required
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <ng-container *ngIf='page == "indicators"' class="p-0 m-0">
+
+            <div class="d-flex flex-column">
+                <div class="p-2">
+                    <sb-indicators-records-selection [selected]="getSelectedIndicators()"
+                        (select)="onSelectIndicator($event)">
+                    </sb-indicators-records-selection>
+                </div>
+            </div>
+
+        </ng-container>
+
+    </div>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

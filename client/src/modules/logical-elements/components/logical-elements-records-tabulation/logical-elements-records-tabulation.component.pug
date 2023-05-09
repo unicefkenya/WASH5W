@@ -1,0 +1,57 @@
+form
+  sb-search(placeholder='Search by logical elements names', (searched)='onSearchTermChange($event)')
+  sb-loading-animation
+  // For Small-Sized Devices Only
+  .row.d-md-none
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-sm-1.text-center.align-middle(scope='col') #
+            th.col-sm-9.text-left.align-middle(scope='col') Name
+            th.col-sm-2.text-center.align-middle(scope='col') Actions
+        ng-container(body='')
+          tr(*ngfor='let logicalElement of logicalElementsDataService.logicalElements$ | async; index as i', [attr.data-index]='i')
+            td.text-center.align-middle
+              | {{i + 1 + getPaginationOffset()}}
+            td.text-left.align-middle
+              | {{logicalElement.data?.name}}
+            td.text-center.align-middle
+              span.d-flex.flex-row-reverse
+                sb-button(action='delete', entity='Logical Element', id='{{logicalElement.id}}', (delete)='onDeleteLogicalElement($event)', tooltip='Delete {{logicalElement.data?.name}}')
+                sb-button(action='update', entity='Logical Element', id='{{logicalElement.id}}', (update)='onUpdateLogicalElement($event)', tooltip='Update {{logicalElement.data?.name}}')
+        ng-container(footer='')
+          tr
+            td.align-middle(scope='col', colspan='3')
+              span.d-flex.flex-row.flex-row-reverse
+                sb-button(action='add', entity='Logical Element', (add)='onAddLogicalElement()')
+  // For Middle-Sized Devices Upwards
+  .row.d-none.d-md-block
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-md-1.text-center.align-middle(scope='col') #
+            th.col-md-5.text-left.align-middle(scope='col') Name
+            th.col-md-5.text-left.align-middle(scope='col') Plural
+            th.col-md-1.text-center.align-middle(scope='col') Actions
+        ng-container(body='')
+          tr(*ngfor='let logicalElement of logicalElementsDataService.logicalElements$ | async; index as i', [attr.data-index]='i')
+            td.text-center.align-middle
+              | {{i + 1 + getPaginationOffset()}}
+            td.text-left.align-middle
+              | {{logicalElement.data?.name}}
+            td.text-left.align-middle
+              | {{logicalElement.data?.plural}}
+            td.text-center.align-middle
+              span.d-flex.flex-row-reverse
+                sb-button(action='delete', entity='Logical Element', id='{{logicalElement.id}}', (delete)='onDeleteLogicalElement($event)', tooltip='Delete {{logicalElement.data?.name}}')
+                sb-button(action='update', entity='Logical Element', id='{{logicalElement.id}}', (update)='onUpdateLogicalElement($event)', tooltip='Update {{logicalElement.data?.name}}')
+        ng-container(footer='')
+          tr
+            td.align-middle(scope='col', colspan='4')
+              span.d-flex.flex-row.flex-row-reverse
+                sb-button(action='add', entity='Logical Element', (add)='onAddLogicalElement()')
+  .row
+    .col
+      sb-pagination((pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')

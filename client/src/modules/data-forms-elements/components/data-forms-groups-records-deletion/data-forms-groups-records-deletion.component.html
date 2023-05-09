@@ -1,0 +1,29 @@
+<ngContainer [ngSwitch]="dataFormGroup">
+
+    <!-- Display a loading screen if the data form element hasn't been initialised -->
+    <sb-loading-animation *ngSwitchCase="dataFormGroup == undefined"></sb-loading-animation>
+
+    <!-- Display an error message if the data form element has been initialised to null -->
+    <div *ngSwitchCase="dataFormGroup == null" class="jumbotron">
+        <h1 class="display-4">Oops</h1>
+        <p class="lead">We are sorry we cannot display the Data Form Group's deletion form at this moment</p>
+        <hr class="my-4">
+        <p>Please try again in a little while</p>
+    </div>    
+
+    <!-- Display the confirmation panel if the data form element has been initialised to a valid value -->
+    <div *ngSwitchDefault class="d-flex flex-column justify-content-center bd-highlight mb-3">
+        <div class="pt-2 bd-highlight text-center">
+            <h5 [ngClass]="iconClasses">
+                <fa-icon [icon]='["fas", "question-circle"]'></fa-icon>
+            </h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <h5>Confirming</h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <p>Are you sure you want to delete the <span class="font-weight-bold">{{dataFormGroup?.data?.title}}</span> Data Form Group?</p>
+        </div>
+    </div>
+    
+</ngContainer>

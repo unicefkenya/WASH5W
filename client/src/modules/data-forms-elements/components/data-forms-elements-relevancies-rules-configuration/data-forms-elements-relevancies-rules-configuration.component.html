@@ -1,0 +1,171 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div *ngIf='page == "relevancy"' class="card border-0">
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">Relevancy</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Display when the following field meets the specified conditions</h6>
+            <form [formGroup]="relevancyRuleForm" class="p-0 m-0">
+                <div class="d-flex flex-column bd-highlight">
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="fieldTitle">Field</label>
+                            </div>
+                            <ng-container formGroupName="field">
+                                <input type="text" class="form-control input-group-input" id="fieldTitle" placeholder=""
+                                    formControlName="fieldTitle" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1"
+                                    data-toggle="tooltip" data-placement="top" title="Select Field"
+                                    (click)="onOpenFieldSelector()">
+                                    <fa-icon *ngIf="!getRelevancyFieldId()" [icon]='["fas", "caret-down"]'></fa-icon>
+                                    <fa-icon *ngIf="getRelevancyFieldId()" [icon]='["fas", "pen"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('field')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('field')}}
+                        </div>
+                    </div>
+                    <div *ngIf="getRelevancyFieldId()" class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="operatorId">Condition</label>
+                            </div>
+                            <select class="custom-select" id="operatorId" formControlName="operatorId"
+                                (change)="onRelevancyRuleOperatorChange()">
+                                <option [ngValue]="null" disabled>Select Condition</option>
+                                <option *ngFor="let operator of getOperators$(getRelevancyFieldTypeId())| async"
+                                    [ngValue]="operator.id">{{operator.data.condition}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="errors.get('operator')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('operator')}}
+                        </div>
+                    </div>
+                    <div *ngIf="getRelevancyOperatorId()" class="bd-highlight">
+
+                        <div class="input-group flex-nowrap mb-2">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Value</span>
+                            </div>
+
+                            <!-- Greater-Than -->
+                            <!-- Greater-Than Or Equal To -->
+                            <!-- Less-Than -->
+                            <!-- Less-Than Or Equal To -->
+                            <ng-container *ngIf="operatorIdIsMemberOf([1, 2, 3, 4])">
+
+                                <!--Date-->
+                                <ng-container *ngIf="getRelevancyFieldTypeId() == 7; else gtltNonDate">
+                                    <ng-container *ngTemplateOutlet="dateValue"></ng-container>
+                                </ng-container>
+
+                                <!--Integer-->
+                                <!--Decimal-->
+                                <ng-template #gtltNonDate>
+                                    <ng-container *ngTemplateOutlet="numericalValue"></ng-container>
+                                </ng-template>
+
+                            </ng-container>
+
+                            <!-- Equal To -->
+                            <!-- Not Equal To -->
+                            <ng-container *ngIf="operatorIdIsMemberOf([5,6])">
+
+                                <!--Single Selection-->
+                                <!--Dropdown-->
+                                <ng-container
+                                    *ngIf="getRelevancyFieldTypeId() == 8 || getRelevancyFieldTypeId() == 10; else eqNonSingleSelection">
+                                    <ng-container *ngTemplateOutlet="selectableValue"></ng-container>
+                                </ng-container>
+
+                                <!--Date-->
+                                <!--Integer-->
+                                <!--Decimal-->
+                                <ng-template #eqNonSingleSelection>
+
+                                    <!--Date-->
+                                    <ng-container *ngIf="getRelevancyFieldTypeId() == 7; else eqNonDate">
+                                        <ng-container *ngTemplateOutlet="dateValue"></ng-container>
+                                    </ng-container>
+
+                                    <!--Integer-->
+                                    <!--Decimal-->
+                                    <ng-template #eqNonDate>
+                                        <ng-container *ngTemplateOutlet="numericalValue"></ng-container>
+                                    </ng-template>
+
+                                </ng-template>
+
+                            </ng-container>
+
+                            <!-- Contains -->
+                            <!-- Does Not Contain -->
+                            <ng-container *ngIf="operatorIdIsMemberOf([7,8])">
+                                <ng-container *ngTemplateOutlet="selectableValue"></ng-container>
+                            </ng-container>
+
+                            <!-- Minimum Characters -->
+                            <!-- Maximum Characters -->
+                            <!-- Maximum MB Size -->
+                            <ng-container *ngIf="operatorIdIsMemberOf([9,10,11])">
+                                <ng-container *ngTemplateOutlet="numericalValue"></ng-container>
+                            </ng-container>
+
+                        </div>
+                        <div *ngIf="errors.get('value')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('value')}}
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #dateValue>
+                    <input type="date" class="form-control" id="value" formControlName="value">
+                </ng-template>
+
+                <ng-template #numericalValue>
+                    <input type="text" class="form-control" id="value" formControlName="value"
+                        placeholder="Enter value">
+                </ng-template>
+
+                <ng-template #selectableValue>
+                    <select class="custom-select" id="value" formControlName="value">
+                        <option [ngValue]="null">Select Value</option>
+                        <option *ngFor="let option of getOptions$(getRelevancyFieldOptions())| async"
+                            [ngValue]="option.id">
+                            {{option.data.name}}</option>
+                    </select>
+                </ng-template>
+            </form>
+
+
+        </div>
+    </div>
+
+
+    <div *ngIf='page == "fields"' class="card border-0">
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">Fields</h5>
+            <h6 class="card-subtitle mb-0 pb-0 text-muted">Search and select previously created fields</h6>
+            <sb-data-forms-fields-records-selection selectionMode="single" [contextId]="contextId"
+                [dataFormId]="dataFormId" (select)="onSelectDataFormElement($event)">
+            </sb-data-forms-fields-records-selection>
+        </div>
+    </div>
+
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

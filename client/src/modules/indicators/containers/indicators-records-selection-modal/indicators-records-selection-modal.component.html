@@ -1,0 +1,31 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-indicators-records-selection [contextId]="contextId" [selectionMode]="selectionMode" [desired]="desired" [undesired]="undesired"
+            [selected]="selected" (openedLogicalElementSelector)="onOpenLogicalElementSelector()"
+            (closedLogicalElementSelector)="onCloseLogicalElementSelector()" (select)="onSelect($event)"
+            (check)="onCheck($event)" (uncheck)="onUncheck($event)">
+        </sb-indicators-records-selection>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <!-- Done Buttons -->
+        <sb-button action="done" entity="Indicator" tooltip="Close Selector" guarded="false" (done)="onDone()">
+        </sb-button>
+
+        <!-- Logical Elements Selections Buttons -->
+        <ng-container *ngSwitchCase="'logical-elements-selections'">
+            <sb-button action="previous" entity="Indicator" tooltip="Load previous screen" guarded="false"
+                (previous)="closeLogicalElementSelector()"></sb-button>
+        </ng-container>
+
+    </ng-container>
+
+</sb-modal>

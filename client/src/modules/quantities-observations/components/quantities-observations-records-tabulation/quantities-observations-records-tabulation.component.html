@@ -1,0 +1,145 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <form class="mt-2">
+        <!--For Small-Sized Devices Only-->
+        <div class="row d-md-none mb-2 pb-2">
+            <div class="col">
+                <table class="table table-borderless table-stripped">
+                    <tbody>
+                        <ng-container
+                            *ngFor="let quantityObservation of quantitiesObservationsDataService.quantityObservations$ | async; index as i">
+                            <tr>
+                                <th scope="row" class="col-3">
+                                    Date
+                                </th>
+                                <td class="col-9">
+                                    {{getShortFormattedDateString(quantityObservation.data.timePointId)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="col-3">
+                                    Amount
+                                </th>
+                                <td class="col-9">
+                                    {{quantityObservation.data.amount}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="col-3">
+                                    Total
+                                </th>
+                                <td class="col-9">
+                                    {{quantityObservation.data.total}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="pb-2 border-bottom">
+                                    <span class="d-flex flex-row-reverse">
+                                        <sb-button action="delete" entity="Observation" id="{{quantityObservation.id}}"
+                                            (delete)="onDeleteQuantityObservation($event)"
+                                            tooltip="Delete {{quantityObservation.data?.name}}">
+                                        </sb-button>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+
+                </table>
+
+
+            </div>
+        </div>
+
+        <!--For Middle-Sized Devices Upwards-->
+        <div class="row d-none d-md-block">
+            <div class="col">
+
+                <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                    <ng-container header>
+                        <tr>
+                            <th scope="col" class="col-md-1 text-center align-middle"></th>
+                            <th scope="col" class="col-md-5 text-left align-middle">Date</th>
+                            <th scope="col" class="col-md-2 text-right align-middle">Amount</th>
+                            <th scope="col" class="col-md-2 text-right align-middle">Total</th>
+                            <th scope="col" class="col-md-2 text-right align-middle">Actions</th>
+                        </tr>
+                    </ng-container >
+
+                    <ng-container body>
+
+
+                        <ng-container
+                            *ngFor="let quantityObservation of quantitiesObservationsDataService.quantityObservations$| async; index as i">
+
+                            <tr>
+
+                                <td class="text-center align-middle p-2">
+                                    {{i + 1 + paginationOffset}}
+                                </td>
+
+                                <td class="text-left align-middle">
+                                    {{getFormattedDateString(quantityObservation.data.timePointId)}}
+                                </td>
+
+                                <td class="text-right align-middle">
+                                    {{quantityObservation.data.amount}}
+                                </td>
+
+                                <td class="text-right align-middle">
+                                    {{quantityObservation.data.total}}
+                                </td>
+
+
+                                <td class="text-right align-middle p-2">
+                                    <span class="d-flex flex-row-reverse">
+                                        <sb-button action="delete" entity="Observation" id="{{quantityObservation.id}}"
+                                            (delete)="onDeleteQuantityObservation($event)"
+                                            tooltip="Delete {{quantityObservation.data?.name}}">
+                                        </sb-button>
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                        </ng-container>
+
+                    </ng-container >
+
+                    <ng-container footer>
+                        <tr>
+                            <td scope="col" colspan="5" class="align-middle p-2">
+                                <span class="d-flex flex-row flex-row-reverse">
+                                    <sb-button action="add" entity="Observation" (add)="onAddQuantityObservation()">
+                                    </sb-button>
+                                </span>
+
+                            </td>
+                        </tr>
+                    </ng-container >
+
+                </sb-table>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <sb-pagination (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+                </sb-pagination>
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

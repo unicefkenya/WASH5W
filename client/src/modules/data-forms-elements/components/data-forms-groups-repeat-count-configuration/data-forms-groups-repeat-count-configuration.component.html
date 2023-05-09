@@ -1,0 +1,61 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div *ngIf='page == "repeatability"' class="card border-0">
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">Repeat Count</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Repeat n times, where n is the integral value of the field below</h6>
+            <form [formGroup]="repeatabilityRuleForm" class="p-0 m-0">
+                <div class="d-flex flex-column bd-highlight">
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="fieldTitle">Field</label>
+                            </div>
+                            <ng-container formGroupName="field">
+                                <input type="text" class="form-control input-group-input" id="fieldTitle" placeholder=""
+                                    formControlName="fieldTitle" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1"
+                                    data-toggle="tooltip" data-placement="top" title="Select Field"
+                                    (click)="onOpenFieldSelector()">
+                                    <fa-icon *ngIf="!getRepeatabilityFieldId()" [icon]='["fas", "caret-down"]'></fa-icon>
+                                    <fa-icon *ngIf="getRepeatabilityFieldId()" [icon]='["fas", "pen"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('field')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('field')}}
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+
+    <div *ngIf='page == "fields"' class="card border-0">
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">Fields</h5>
+            <h6 class="card-subtitle mb-0 pb-0 text-muted">Search and select previously created fields</h6>
+            <sb-data-forms-fields-records-selection selectionMode="single" [contextId]="contextId"
+                [dataFormId]="dataFormId" [dataFormElementTypeId]="3" (select)="onSelectDataFormElement($event)">
+            </sb-data-forms-fields-records-selection>
+        </div>
+    </div>
+
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

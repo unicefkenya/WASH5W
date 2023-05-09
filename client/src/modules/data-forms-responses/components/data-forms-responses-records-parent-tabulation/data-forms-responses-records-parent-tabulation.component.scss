@@ -1,0 +1,23 @@
+.input-group > .input-group-prepend {
+    flex: 0 0 0;
+    width: 40px;
+  }
+
+.tab-link:hover {
+    cursor: pointer;
+}
+
+.custom-border td {
+  border: 2px solid #000; /* Change the border width and color as needed */
+}
+
+div.odd {
+  background-color: #f5f5f5;
+  border: 1px solid #ececec;
+}
+
+div.even {
+  background-color: #fff;
+  border: 1px solid #ededed;
+}
+

@@ -1,0 +1,22 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-systems-users-rights-records-selection [selectionMode]="selectionMode" [desired]="desired" [undesired]="undesired"
+        [selected]="selected" (select)="onSelect($event)" (check)="onCheck($event)" (uncheck)="onUncheck($event)">
+    </sb-systems-users-rights-records-selection>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <sb-button action="done" entity="System User Right" tooltip="Close Selector" guarded="false"
+            (done)="onDone()"></sb-button>
+
+    </ng-container>
+
+</sb-modal>

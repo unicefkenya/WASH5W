@@ -1,0 +1,14 @@
+<ng-container *ngIf="initialised; else initialising">
+    <div class="map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
+    </div>
+</ng-container>
+
+<ng-template #initialising>
+
+    <div class="d-flex justify-content-center align-items-center placeholder">
+         <p class="text-center processing mb-5">
+              <span>.</span><span>.</span><span>.</span>
+         </p>
+    </div>
+
+</ng-template>

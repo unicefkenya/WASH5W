@@ -1,0 +1,96 @@
+<ng-container *ngIf='page == "default"'>
+
+    <div class="card-body m-0 p-0">
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please enter the entity's basic details</h6>
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+    
+        <form [formGroup]="entitiesTypesForm">
+    
+            <!-- Name -->
+            <div class="d-flex flex-column bd-highlight">
+    
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Singular Name</label>
+                        </div>
+                        <input type="text" class="form-control" id="name" placeholder="Enter the entity type's singular name"
+                            formControlName="name">
+                    </div>
+                    <div *ngIf="entitiesTypesForm.get('name')?.invalid && (entitiesTypesForm.get('name')?.dirty || entitiesTypesForm.get('name')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="entitiesTypesForm.get('name')?.errors.required">
+                            Singular Name is required
+                        </div>
+                        <div *ngIf="entitiesTypesForm.get('name')?.errors.minlength">
+                            Singular Name should be at least 2 characters long
+                        </div>
+                        <div *ngIf="entitiesTypesForm.get('name')?.errors.maxlength">
+                            Singular Name should not be more than 250 characters long
+                        </div>
+                        <div *ngIf="entitiesTypesForm.get('name')?.errors.exists">
+                            Singular Name should be unique
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+    
+    
+            <!-- Plural -->
+            <div class="d-flex flex-column bd-highlight">
+    
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Plural Name</label>
+                        </div>
+                        <input type="text" class="form-control" id="plural" placeholder="Enter the entity type's plural name" formControlName="plural">
+                    </div>
+                    <div *ngIf="entitiesTypesForm.get('plural')?.invalid && (entitiesTypesForm.get('plural')?.dirty || entitiesTypesForm.get('plural')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="entitiesTypesForm.get('plural')?.errors.required">
+                            Plural name is required
+                        </div>
+                        <div *ngIf="entitiesTypesForm.get('plural')?.errors.minlength">
+                            Plural name should be at least 2 characters long
+                        </div>
+                        <div *ngIf="entitiesTypesForm.get('plural')?.errors.maxlength">
+                            Plural name should not be more than 250 characters long
+                        </div>
+                        <div *ngIf="entitiesTypesForm.get('plural')?.errors.exists">
+                            Plural name should be unique
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+    
+        </form>
+    
+    </div>
+
+</ng-container>
+
+<ng-container *ngIf='page == "optionsTypes"' class="p-0 m-0">
+
+    <div class="card-body m-0 p-0">
+        <h5 class="card-title">Applicable Options</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please select the entity type's applicable options</h6>
+        <sb-options-types-records-selection selectionMode="multi"
+            [selected]="getSelectedOptionsTypesIds()" (check)="onSelectOptionType($event)"
+            (uncheck)="onDeselectOptionType($event)">
+        </sb-options-types-records-selection>
+
+        <div *ngIf="errors.get('optionsTypes')" class="alert alert-danger mb-2" role="alert">
+            {{errors.get('optionsTypes')}}
+        </div>
+    </div>
+
+
+
+</ng-container>

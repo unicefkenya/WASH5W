@@ -1,0 +1,26 @@
+form
+  .d-flex.flex-column.mb-3
+    .p-2
+      sb-search((searched)='onSearchTermChange($event)')
+    .p-2
+      sb-loading-animation
+  .row
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-sm-11.text-left.align-middle(scope='col') Name 
+            th.col-sm-1.text-center.align-middle(scope='col') Select
+        ng-container(body='')
+          tr(*ngfor='let administrativeHierarchy of administrativeHierarchiesDataService.administrativeHierarchies$ | async')
+            td.text-left.align-middle
+              | {{administrativeHierarchy.data?.name}}
+            td.text-center.align-middle
+              span.d-flex.justify-content-center
+                div(*ngif='selectionMode === "single"; else multi')
+                  sb-button(action='select', entity='AdministrativeHierarchy', id='{{administrativeHierarchy.id}}', name='administrativeHierarchy', [selected]='isSelected(administrativeHierarchy.id)', [disabled]='isSelected(administrativeHierarchy.id) && disableSelectedAdministrativeHierarchyIdsTreatment', (select)='onSelect($event)')
+                ng-template(#multi='')
+                  sb-button(action='check', entity='AdministrativeHierarchy', id='{{administrativeHierarchy.id}}', name='administrativeHierarchy', [checked]='isChecked(administrativeHierarchy.id)', [disabled]='isChecked(administrativeHierarchy.id) && disableSelectedAdministrativeHierarchyIdsTreatment', (check)='onCheck($event)', (uncheck)='onUncheck($event)')
+  .row
+    .col
+      sb-pagination(type='modal', (pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')

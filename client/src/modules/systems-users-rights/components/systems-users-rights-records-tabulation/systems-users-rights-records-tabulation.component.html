@@ -1,0 +1,148 @@
+<form class="mt-3">
+
+    <sb-loading-animation type="bars"></sb-loading-animation>
+
+    <!--For Small-Sized Devices Only-->
+    <div class="row d-md-none">
+        <div class="col">
+            <table class="table table-borderless">
+                <tbody>
+                    <ng-container
+                        *ngFor="let systemUserRight of systemsUsersRightsDataService.systemsUsersRights$ | async; index as i">
+
+                        <tr>
+                            <td class="bg-pagination-bg-color-2" style="border-bottom: 5px solid #fff;">
+                                <div class="row border-bottom pb-2">
+                                    <div class="col-5 text-uppercase small text-left align-middle">
+                                        Context
+                                    </div>
+                                    <div class="col-7 text-left align-middle">
+                                        {{systemUserRight.data?.context.name}}
+                                    </div>
+                                </div>
+                                <div class="row border-bottom pt-2 pb-2">
+                                    <div class="col-5 text-uppercase small text-left align-middle">
+                                        Role
+                                    </div>
+                                    <div class="col-7 text-left align-middle">
+                                        {{systemUserRight.data?.role.name}}
+                                    </div>
+                                </div>
+                                <div class="row border-bottom pt-2 pb-2">
+                                    <div class="col-5 text-uppercase small text-left align-middle">
+                                        Scope
+                                    </div>
+                                    <div class="col-7 text-left align-middle">
+                                        {{systemUserRight.data?.party.name}}
+                                    </div>
+                                </div>
+                                <div class="row pt-2 pb-2">
+                                    <div class="col-5 text-uppercase small text-left align-middle">
+                                        Actions
+                                    </div>
+                                    <div class="col-7 text-left align-middle">
+                                        <span class="d-flex justify-content-start">
+                                            <sb-button action="delete" entity="System User Right"
+                                                id="{{systemUserRight.id}}" (delete)="onDeleteSystemUserRight($event)"
+                                                tooltip="Delete {{systemUserRight.data?.name}}"></sb-button>
+                                            <sb-button action="update" entity="System User Right"
+                                                id="{{systemUserRight.id}}" (update)="onUpdateSystemUserRight($event)"
+                                                tooltip="Update {{systemUserRight.data?.name}}"></sb-button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </ng-container>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td scope="col" colspan="2" class="align-middle mt-3">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="System User Right" (add)="onAddSystemUserRight()">
+                                </sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+
+    <!--For Middle-Sized Devices Upwards-->
+    <div class="row d-none d-md-block">
+        <div class="col">
+            <sb-table data="true" headed="true" bodied="true" footed="true" stripped="false" bordered="false">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-md-1 text-center align-middle">#</th>
+                        <th scope="col" class="col-md-4 text-left align-middle">Context</th>
+                        <th scope="col" class="col-md-2 text-left align-middle">Role</th>
+                        <th scope="col" class="col-md-4 text-left align-middle">Scope</th>
+                        <th scope="col" class="col-md-1 text-center align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+
+                    <tr
+                        *ngFor="let systemUserRight of systemsUsersRightsDataService.systemsUsersRights$ | async; index as i">
+
+                        <td class="text-center align-middle">
+                            {{i + 1 + paginationOffset}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{systemUserRight.data?.context.name}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{systemUserRight.data?.role.name}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{systemUserRight.data?.party.name}}
+                        </td>
+
+                        <td class="text-center align-middle">
+                            <span class="d-flex flex-row-reverse">
+                                <sb-button action="delete" entity="System User Right" id="{{systemUserRight.id}}"
+                                    (delete)="onDeleteSystemUserRight($event)"
+                                    tooltip="Delete {{systemUserRight.data?.name}}"></sb-button>
+                                <sb-button action="update" entity="System User Right" id="{{systemUserRight.id}}"
+                                    (update)="onUpdateSystemUserRight($event)"
+                                    tooltip="Update {{systemUserRight.data?.name}}"></sb-button>
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </ng-container>
+
+                <ng-container footer>
+                    <tr>
+                        <td scope="col" colspan="5" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="System User Right" (add)="onAddSystemUserRight()">
+                                </sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <sb-pagination (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+            </sb-pagination>
+        </div>
+    </div>
+
+</form>

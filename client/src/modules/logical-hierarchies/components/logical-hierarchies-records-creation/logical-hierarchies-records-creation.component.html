@@ -1,0 +1,129 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <ng-container *ngIf='page == "default"'>
+
+
+        <div class="card-body m-0 p-0">
+
+            <h5 class="card-title">Basic Details</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Please select the hierarchical subsidiary element</h6>
+
+            <!-- Separator -->
+            <div class="bd-highlight">
+                <hr class="m-0 mt-2 mb-3 p-0 ">
+            </div>
+
+            <form [formGroup]="logicalHierarchiesForm" class="p-0 m-0">
+
+                <div class="d-flex flex-column bd-highlight">
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="schemeName">Scheme</label>
+                            </div>
+                            <ng-container formGroupName="scheme">
+                                <input type="text" class="form-control input-group-input" id="schemeName" placeholder=""
+                                    formControlName="schemeName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Select logical scheme" disabled>
+                                    <fa-icon [icon]='["fas", "bullseye"]'>
+                                    </fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('scheme')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('scheme')}}
+                        </div>
+                    </div>
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="commissionerName">Parent</label>
+                            </div>
+                            <ng-container formGroupName="commissioner">
+                                <input type="text" class="form-control input-group-input" id="commissionerName"
+                                    placeholder="" formControlName="commissionerName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Select parent logical element"
+                                    disabled>
+                                    <fa-icon [icon]='["fas", "bullseye"]'>
+                                    </fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('commissioner')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('commissioner')}}
+                        </div>
+                    </div>
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="responsibleName">Subsidiary</label>
+                            </div>
+                            <ng-container formGroupName="responsible">
+                                <input type="text" class="form-control input-group-input" id="responsibleName"
+                                    placeholder="" formControlName="responsibleName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Select subsidiary logical element"
+                                    (click)="openSubsidiaryLogicalElementSelector()">
+                                    <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('responsible')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('responsible')}}
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </ng-container>
+
+    <ng-container *ngIf='page == "subsidiary-units"' class="p-0 m-0">
+
+        <div class="card-body m-0 p-0">
+
+            <h5 class="card-title">Subsidiary</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Please choose the subsidiary logical element (required)</h6>
+
+            <!-- Separator -->
+            <div class="bd-highlight">
+                <hr class="m-0 mt-2 mb-3 p-0 ">
+            </div>
+
+            <sb-logical-elements-records-selection [selectionMode]="'single'"
+                [undesired]="getCommissionerId()? [getCommissionerId()]: []"
+                [selected]="getResponsibleId()? [getResponsibleId()]: []" 
+                [desiredTypes]="getPermissibleUnitTypesIds()"
+                (select)="onSelectSubsidiaryLogicalElement($event)">
+            </sb-logical-elements-records-selection>
+
+        </div>
+
+    </ng-container>
+
+
+</ng-container>
+
+<ng-template #initialising>
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

@@ -1,0 +1,56 @@
+@import 'styles/variables.scss';
+
+/*
+ngb-pagination ::ng-deep ul.pagination {
+    justify-content: center;
+   
+}
+
+ngb-pagination ::ng-deep ul > li.page-item {
+    width: auto;
+    
+}
+
+ngb-pagination ::ng-deep ul > .page-item.active .page-link {
+    background-color: green;
+    border-color: red;
+}*/
+
+
+ngb-pagination ::ng-deep ul > li:first-child {
+    width: 45px;
+}
+
+ngb-pagination ::ng-deep ul > li:last-child {
+    width: 45px;
+}
+
+ngb-pagination ::ng-deep ul.pagination {
+    justify-content: center;
+   
+}
+
+ngb-pagination ::ng-deep ul > li.page-item {
+    width: auto;
+    
+}
+
+ngb-pagination ::ng-deep ul > .page-item .page-link {
+    color: $pagination-page-link-700;
+}
+
+
+ngb-pagination ::ng-deep ul > .page-item.active .page-link {
+    background-color:$pagination-bg-color-200;
+    border-color:$pagination-border-bg-color-300;
+} 
+
+
+
+ngb-pagination ::ng-deep ul > li:first-child {
+    width: 45px;
+}
+
+ngb-pagination ::ng-deep ul > li:last-child {
+    width: 45px;
+}

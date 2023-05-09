@@ -1,0 +1,160 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="card-body m-0 p-0" *ngIf='page == "default"'>
+
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please enter the entity's basic details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <form [formGroup]="entitiesForm">
+
+            <!--Type -->
+            <div class="d-flex flex-column bd-highlight">
+
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Entity Type</label>
+                        </div>
+                        <select class="custom-select" id="typeId" formControlName="typeId" (change)="onEntityTypeChange()">
+                            <option [ngValue]="null" disabled>Select Entity Type</option>
+                            <option *ngFor="let entityType of entitiesTypes$ | async" [ngValue]="entityType.id">
+                                {{entityType.data?.name}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="entitiesForm.get('typeId')?.invalid && (entitiesForm.get('typeId')?.dirty || entitiesForm.get('typeId')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="entitiesForm.get('typeId')?.errors.required">
+                            Entity Type is required
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Name -->
+            <div class="d-flex flex-column bd-highlight">
+
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Entity Name</label>
+                        </div>
+                        <input type="text" class="form-control" id="name" placeholder="Enter Entity's Name"
+                            formControlName="name">
+                    </div>
+                    <div *ngIf="entitiesForm.get('name')?.invalid && (entitiesForm.get('name')?.dirty || entitiesForm.get('name')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="entitiesForm.get('name')?.errors.required">
+                            Entity Name is required
+                        </div>
+                        <div *ngIf="entitiesForm.get('name')?.errors.minlength">
+                            Entity Name should be at least 2 characters long
+                        </div>
+                        <div *ngIf="entitiesForm.get('name')?.errors.maxlength">
+                            Entity Name should not be more than 250 characters long
+                        </div>
+                        <div *ngIf="entitiesForm.get('name')?.errors.exists">
+                            Entity Name should be unique
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--Location -->
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text" id="locationName">Entity Location</label>
+                    </div>
+                    <ng-container formGroupName="location">
+                        <input type="text" class="form-control input-group-input pl-3" id="locationName" placeholder=""
+                            formControlName="locationName" disabled>
+                    </ng-container>
+                    <div class="input-group-append pb-0">
+                        <button type="button" class="btn btn-button-bg-color-1" data-toggle="tooltip" data-placement="top"
+                            title="Choose Location" (click)="openLocationSelector()">
+                            <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="entitiesForm.get('location.locationId')?.invalid && (entitiesForm.get('location.locationId')?.dirty || entitiesForm.get('location.locationId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="entitiesForm.get('location.locationId')?.errors.required">
+                        Entity Location is required
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+    <!-- Classifications -->
+    <div class="card-body m-0 mt-3 p-0 pt-3" *ngIf='page == "default" && classifications.length > 0'>
+
+        <h5 class="card-title">Classification Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please specify the entity's classifications</h6>
+        
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+                
+        <form>
+            <div class="bd-highlight" *ngFor="let classification of classifications">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label
+                            class="input-group-text">{{textUtilService.truncate(getOptionType(classification.optionTypeId)?.data.name,
+                            [13, "..."])}}</label>
+                    </div>
+                    <select class="custom-select" (change)="onChangeClassification(classification.optionTypeId, $event.target.value)">
+                        <option [value]="null" [selected]="classification.optionId == null" disabled>Select Option</option>
+                        <option *ngFor="let option of getOptions(classification.optionTypeId)" [value]="option.id" [selected]="classification.optionId == option.id">
+                            {{option.data?.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div *ngIf="classificationError" class="alert alert-danger mt-3">
+        {{classificationError}}
+    </div>
+
+
+    <ng-container *ngIf='page == "locations"' class="p-0 m-0">
+
+        <div class="d-flex flex-column">
+            <div class="p-2">
+                <sb-administrative-hierarchies-records-selection 
+                    [full]="true" 
+                    [selected]="getSelectedLocations()"
+                    (select)="onSelectAdministrativeHierarchyElement($event)">
+                </sb-administrative-hierarchies-records-selection>
+            </div>
+        </div>
+
+    </ng-container>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

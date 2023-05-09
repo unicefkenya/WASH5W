@@ -1,0 +1,6 @@
+name: SystemsModulesPermissions
+version: 0.0.1
+description: Deploys SystemsModulesPermissions Microservice
+maintainers:
+  - name: Kwaje Anthony
+    email: kwajeanthony@gmail.com

@@ -1,0 +1,250 @@
+<ng-container *ngIf='page == "default"'>
+
+    <ng-container *ngIf="initialised; else initialising">
+
+        <div class="card-body m-0 p-0">
+
+            <form [formGroup]="workflowTransitionsForm" class="p-0 m-0">
+
+                <h5 class="card-title">Basic Details</h5>
+                <h6 class="card-subtitle mb-1 text-muted">Please provide the transition's start & end statuses</h6>
+
+                <!-- Separator -->
+                <div class="bd-highlight">
+                    <hr class="m-0 mt-2 mb-3 p-0 ">
+                </div>
+
+                <div class="d-flex flex-column bd-highlight">
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="workflowName">Workflow</label>
+                            </div>
+                            <ng-container formGroupName="workflow">
+                                <input type="text" class="form-control input-group-input" id="workflowName"
+                                    placeholder="" formControlName="workflowName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Choose workflow"
+                                    (click)="openWorkflowSelector()">
+                                    <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('workflow')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('workflow')}}
+                        </div>
+                    </div>
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="fromStatusName">From</label>
+                            </div>
+                            <ng-container formGroupName="fromStatus">
+                                <input type="text" class="form-control input-group-input" id="fromStatusName"
+                                    placeholder="" formControlName="fromStatusName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Choose 'from' status"
+                                    (click)="openFromWorkflowStatusSelector()">
+                                    <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('fromStatus')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('fromStatus')}}
+                        </div>
+                    </div>
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="toStatusName">To</label>
+                            </div>
+                            <ng-container formGroupName="toStatus">
+                                <input type="text" class="form-control input-group-input" id="toStatusName"
+                                    placeholder="" formControlName="toStatusName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Choose 'to' status"
+                                    (click)="openToWorkflowStatusSelector()">
+                                    <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('toStatus')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('toStatus')}}
+                        </div>
+                    </div>
+
+                    <h5 class="card-title mt-3">Security Details</h5>
+                    <h6 class="card-subtitle mb-1 text-muted">Please provide the permission required to trigger the
+                        transition</h6>
+
+                    <!-- Separator -->
+                    <div class="bd-highlight">
+                        <hr class="m-0 mt-2 mb-3 p-0 ">
+                    </div>
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="permissionName">Permission</label>
+                            </div>
+                            <ng-container formGroupName="permission">
+                                <input type="text" class="form-control input-group-input" id="permissionName"
+                                    placeholder="" formControlName="permissionName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                    data-toggle="tooltip" data-placement="top" title="Choose permission"
+                                    (click)="openPermissionSelector()">
+                                    <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="errors.get('permission')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('permission')}}
+                        </div>
+                    </div>
+
+                    <h5 class="card-title mt-3">Labeling Details</h5>
+                    <h6 class="card-subtitle mb-1 text-muted">Please provide an action verb to be used as the
+                        transition's label</h6>
+
+                    <!-- Separator -->
+                    <div class="bd-highlight">
+                        <hr class="m-0 mt-2 mb-3 p-0 ">
+                    </div>
+
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="typeVerb">Verb</label>
+                            </div>
+                            <input type="text" class="form-control" id="verb"
+                                placeholder="Enter descriptive action verb" formControlName="verb">
+                        </div>
+                        <div *ngIf="errors.get('verb')" class="alert alert-danger mb-2" role="alert">
+                            {{errors.get('verb')}}
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+
+    </ng-container>
+
+
+    <ng-template #initialising>
+
+        <div class="d-flex justify-content-center m-1">
+            <p class="text-center processing">
+                <span>.</span><span>.</span><span>.</span>
+            </p>
+        </div>
+
+    </ng-template>
+
+</ng-container>
+
+<ng-container *ngIf='page == "workflows"' class="p-0 m-0">
+
+    <div class="card-body m-0 p-0">
+
+        <h5 class="card-title">Workflow Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please choose the target workflow</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <sb-workflows-records-selection [selectionMode]="'single'" [selected]="getWorkflowId()? [getWorkflowId()]: []"
+            (select)="onSelectWorkflow($event)">
+        </sb-workflows-records-selection>
+
+    </div>
+
+
+
+</ng-container>
+
+
+<ng-container *ngIf='page == "from-statuses"' class="p-0 m-0">
+
+    <div class="card-body m-0 p-0">
+
+        <h5 class="card-title">'From' Workflow Status Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please choose the 'from' workflow status</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <sb-workflow-statuses-records-selection [selectionMode]="'single'"
+            [selected]="getFromStatusId()? [getFromStatusId()]: []" (select)="onSelectFromWorkflowStatus($event)">
+        </sb-workflow-statuses-records-selection>
+
+
+    </div>
+
+
+
+</ng-container>
+
+<ng-container *ngIf='page == "to-statuses"' class="p-0 m-0">
+
+    <div class="card-body m-0 p-0">
+
+        <h5 class="card-title">'To' Workflow Status Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please choose the 'to' workflow status</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <sb-workflow-statuses-records-selection [selectionMode]="'single'"
+            [undesired]="getFromStatusId()? [getFromStatusId()]: []" [selected]="getToStatusId()? [getToStatusId()]: []"
+            (select)="onSelectToWorkflowStatus($event)">
+        </sb-workflow-statuses-records-selection>
+
+
+    </div>
+
+
+
+</ng-container>
+
+<ng-container *ngIf='page == "permissions"' class="p-0 m-0">
+
+    <div class="card-body m-0 p-0">
+
+        <h5 class="card-title">Permission Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please choose the permission details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <sb-systems-modules-permissions-records-selection [selectionMode]="'single'"
+            [selected]="getPermissionId()? [getPermissionId()]: []" (select)="onSelectPermission($event)">
+        </sb-systems-modules-permissions-records-selection>
+
+
+    </div>
+
+</ng-container>

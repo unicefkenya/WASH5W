@@ -1,0 +1,199 @@
+<form>
+
+    <!--For Small-Sized Devices Only-->
+    <div class="row d-md-none">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true"
+                [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-sm-10 text-left align-middle">Reporter</th>
+                        <th scope="col" class="col-sm-2 text-right align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+                    <tr
+                        *ngFor="let dataFormResponse of dataFormsResponsesDataService.dataFormsResponses$ | async; index as i">
+
+                        <!-- Reporter -->
+                        <td class="text-left align-middle" *ngIf="isLoggedInUserEntityScoped() || isLoggedInUserOrganisationScoped()">
+                            {{dataFormResponse.data?.respondent?.name}}
+                        </td>                        
+
+                        <td class="text-left align-middle" *ngIf="isLoggedInUserLocationScoped()">
+                            <ng-container [ngSwitch]="getResponseClassification(dataFormResponse)">
+                                <ng-container *ngSwitchCase="1">
+                                    {{dataFormResponse.data?.respondent?.name}}, {{dataFormResponse.data?.entity?.name}}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="3">
+                                    {{dataFormResponse.data?.respondent?.name}}, {{dataFormResponse.data?.organisations[0]?.name}}
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    {{dataFormResponse.data?.respondent?.name}}
+                                </ng-container>
+                              </ng-container>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center align-middle">
+                            <span class="d-flex flex-row-reverse">
+                                <sb-button *ngIf="!isEditable(dataFormResponse)" action="preview"
+                                    entity="Data Form Response" id="{{dataFormResponse.id}}"
+                                    (preview)="onPreviewDataFormResponse(dataFormResponse)" tooltip="Preview Response">
+                                </sb-button>
+                                <sb-button *ngIf="isEditable(dataFormResponse)" action="delete"
+                                    entity="Data Form Response" id="{{dataFormResponse.id}}"
+                                    (delete)="onDeleteDataFormResponse($event)" tooltip="Delete Response"></sb-button>
+                                <sb-button *ngIf="isEditable(dataFormResponse)" action="update"
+                                    entity="Data Form Response" id="{{dataFormResponse.id}}"
+                                    (update)="onEditDataFormResponse(dataFormResponse)" tooltip="Edit Response">
+                                </sb-button>
+                            </span>
+                        </td>
+
+                    </tr>
+                </ng-container>
+
+                <ng-container *ngIf="isCurrentTimePeriodOpen()" footer>
+                    <tr>
+                        <td scope="col" colspan="3" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="Data Form Response" (add)="onAddDataFormResponse()">
+                                </sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <!--For Middle-Sized Devices Upwards-->
+    <div class="row d-none d-md-block">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true"
+                [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr *ngIf="isLoggedInUserEntityScoped()">
+                        <th scope="col" class="col-md-1 text-center align-middle">#</th>
+                        <th scope="col" class="col-md-2 text-left align-middle">Date</th>
+                        <th scope="col" class="col-md-6 text-left align-middle">Reporter</th>
+                        <th scope="col" class="col-md-2 text-center align-middle">Status</th>
+                        <th scope="col" class="col-md-1 text-right align-middle">Actions</th>
+                    </tr>
+                    <tr *ngIf="isLoggedInUserLocationScoped() || isLoggedInUserOrganisationScoped()">
+                        <th scope="col" class="col-md-1 text-center align-middle">#</th>
+                        <th scope="col" class="col-md-2 text-left align-middle">Date</th>
+                        <th scope="col" class="col-md-3 text-left align-middle">Reporter</th>
+                        <th scope="col" class="col-md-3 text-left align-middle">Location</th>
+                        <th scope="col" class="col-md-2 text-center align-middle">Status</th>
+                        <th scope="col" class="col-md-1 text-right align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+
+                    <tr
+                        *ngFor="let dataFormResponse of dataFormsResponsesDataService.dataFormsResponses$ | async; index as i">
+
+                        <!-- # -->
+                        <td class="text-center align-middle">
+                            {{i + 1 + paginationOffset}}
+                        </td>
+
+                        <!-- Date -->
+                        <td class="text-left align-middle">
+                            {{getFormattedDate(dataFormResponse.data?.timePointId, 'medium')}}
+                        </td>   
+                        
+                        <!-- Reporter -->
+                        <td class="text-left align-middle" *ngIf="isLoggedInUserEntityScoped() || isLoggedInUserOrganisationScoped()">
+                            {{dataFormResponse.data?.respondent?.name}}
+                        </td>                        
+
+                        <td class="text-left align-middle" *ngIf="isLoggedInUserLocationScoped()">
+                            <ng-container [ngSwitch]="getResponseClassification(dataFormResponse)">
+                                <ng-container *ngSwitchCase="1">
+                                    {{dataFormResponse.data?.respondent?.name}}, {{dataFormResponse.data?.entity?.name}}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="3">
+                                    {{dataFormResponse.data?.respondent?.name}}, {{dataFormResponse.data?.organisations[0]?.name}}
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    {{dataFormResponse.data?.respondent?.name}}
+                                </ng-container>
+                              </ng-container>
+                        </td>
+
+
+                        <!-- Location -->
+                        <td *ngIf="isLoggedInUserLocationScoped() || isLoggedInUserOrganisationScoped()" class="text-left align-middle">
+                            {{dataFormResponse.data?.location[0]?.name}}
+                        </td>                        
+
+
+                        <!-- Status -->
+                        <td class="text-center align-middle">
+                            {{dataFormResponse.data?.status?.name}}
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center align-middle">
+                            <span class="d-flex flex-row-reverse">
+                                <sb-button *ngIf="!isEditable(dataFormResponse)" action="preview"
+                                    entity="Data Form Response" id="{{dataFormResponse.id}}"
+                                    (preview)="onPreviewDataFormResponse(dataFormResponse)" tooltip="Preview Response">
+                                </sb-button>
+                                <sb-button *ngIf="isEditable(dataFormResponse)" action="delete"
+                                    entity="Data Form Response" id="{{dataFormResponse.id}}"
+                                    (delete)="onDeleteDataFormResponse($event)" tooltip="Delete Response">
+                                </sb-button>
+                                <sb-button *ngIf="isEditable(dataFormResponse)" action="update"
+                                    entity="Data Form Response" id="{{dataFormResponse.id}}"
+                                    (update)="onEditDataFormResponse(dataFormResponse)" tooltip="Edit Response">
+                                </sb-button>
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </ng-container>
+
+                <ng-container *ngIf="isCurrentTimePeriodOpen() && activeTab?.index == 0" footer>
+                    <tr>
+                        <td *ngIf="isLoggedInUserEntityScoped()" scope="col" colspan="5" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="Data Form Response" (add)="onAddDataFormResponse()">
+                                </sb-button>
+                            </span>
+
+                        </td>
+                        <td *ngIf="isLoggedInUserLocationScoped() || isLoggedInUserOrganisationScoped()" scope="col" colspan="6" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="Data Form Response" (add)="onAddDataFormResponse()">
+                                </sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <sb-pagination (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+            </sb-pagination>
+        </div>
+    </div>
+
+</form>
+
+<ng-template #locationView>
+
+</ng-template>

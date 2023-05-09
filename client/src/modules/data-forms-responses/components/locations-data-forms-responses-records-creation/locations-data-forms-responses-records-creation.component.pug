@@ -1,0 +1,27 @@
+form([formgroup]='responsesForm')
+  // Name
+  .form-group
+    label(for='name') Name
+    input#name.form-control(type='text', placeholder='', formcontrolname='name')
+    .alert.alert-danger.mt-3(*ngif="responsesForm.get('name')?.invalid && (responsesForm.get('name')?.dirty || responsesForm.get('name')?.touched)")
+      div(*ngif="responsesForm.get('name')?.errors.required")
+        | Name is required
+      div(*ngif="responsesForm.get('name')?.errors.minlength")
+        | Name should be at least 2 characters long
+      div(*ngif="responsesForm.get('name')?.errors.maxlength")
+        | Name should not be more than 250 characters long
+      div(*ngif="responsesForm.get('name')?.errors.exists")
+        | Name should be unique
+  // Type
+  .form-group
+    label(for='plural') Type
+    input#plural.form-control(type='text', placeholder='', formcontrolname='plural')
+    .alert.alert-danger.mt-3(*ngif="responsesForm.get('plural')?.invalid && (responsesForm.get('plural')?.dirty || responsesForm.get('plural')?.touched)")
+      div(*ngif="responsesForm.get('plural')?.errors.required")
+        | Type is required
+      div(*ngif="responsesForm.get('plural')?.errors.minlength")
+        | Type should be at least 2 characters long
+      div(*ngif="responsesForm.get('plural')?.errors.maxlength")
+        | Type should not be more than 250 characters long
+      div(*ngif="responsesForm.get('plural')?.errors.exists")
+        | Type should be unique

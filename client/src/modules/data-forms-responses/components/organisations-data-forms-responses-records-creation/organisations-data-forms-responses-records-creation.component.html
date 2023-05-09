@@ -1,0 +1,144 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="card-body m-0 p-0" *ngIf='page == "default"'>
+
+        <!-- Display the data form -->
+        <form [formGroup]="responsesForm">
+
+            <!-- Site Type -->
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Scope</label>
+                    </div>
+                    <ng-container formGroupName="siteType">
+                        <select class="custom-select" id="siteTypeId" formControlName="siteTypeId"
+                            (change)="onSiteTypeChange()">
+                            <option [ngValue]="null" disabled class="text-muted">Select the report target</option>
+                            <option [ngValue]="1" class="text-muted">Entity</option>
+                            <option [ngValue]="2" class="text-muted">Location</option>
+                        </select>
+                    </ng-container>
+                </div>
+                <div *ngIf="responsesForm.get('siteType.siteTypeId')?.invalid && (responsesForm.get('siteType.siteTypeId')?.dirty || responsesForm.get('siteType.siteTypeId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="responsesForm.get('siteType.siteTypeId')?.errors.required">
+                        Scope is required
+                    </div>
+                </div>
+            </div>
+
+            <!--Entity -->
+            <div *ngIf="getSiteTypeId() == 1" class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text" id="entityName">Entity</label>
+                    </div>
+                    <ng-container formGroupName="entity">
+                        <input type="text" class="form-control input-group-input pl-3" id="entityName" placeholder=""
+                            formControlName="entityName" disabled>
+                    </ng-container>
+                    <div class="input-group-append pb-0">
+                        <button type="button" class="btn btn-button-bg-color-1" data-toggle="tooltip"
+                            data-placement="top" title="Choose entity" (click)="openEntitySelector()">
+                            <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="responsesForm.get('entity.entityId')?.invalid && (responsesForm.get('entity.entityId')?.dirty || responsesForm.get('entity.entityId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="responsesForm.get('entity.entityId')?.errors.required">
+                        Entity is required
+                    </div>
+                </div>
+            </div>
+
+            <!--Location -->
+            <div *ngIf="getSiteTypeId() == 2" class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text" id="administrativeUnitName">Location</label>
+                    </div>
+                    <ng-container formGroupName="location">
+                        <input type="text" class="form-control input-group-input pl-3" id="administrativeUnitName" placeholder=""
+                            formControlName="administrativeUnitName" disabled>
+                    </ng-container>
+                    <div class="input-group-append pb-0">
+                        <button type="button" class="btn btn-button-bg-color-1" data-toggle="tooltip"
+                            data-placement="top" title="Choose location" (click)="openLocationSelector()">
+                            <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="responsesForm.get('location.administrativeUnitId')?.invalid && (responsesForm.get('location.administrativeUnitId')?.dirty || responsesForm.get('location.administrativeUnitId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="responsesForm.get('location.administrativeUnitId')?.errors.required">
+                        Location is required
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <ng-container *ngIf='page == "entities"' class="p-0 m-0">
+
+        <div class="card-body m-0 p-0">
+
+            <h5 class="card-title">Entity Details</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Please select the target entity</h6>
+
+            <!-- Separator -->
+            <div class="bd-highlight">
+                <hr class="m-0 mt-1 mb-3 p-0 ">
+            </div>
+
+            <div class="d-flex flex-column">
+                <div class="p-2">
+                    <sb-entities-records-selection [selected]="getSelectedEntities()" (select)="onSelectEntity($event)">
+                    </sb-entities-records-selection>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </ng-container>
+
+    <ng-container *ngIf='page == "locations"' class="p-0 m-0">
+
+        <div class="card-body m-0 p-0">
+
+            <h5 class="card-title">Location Details</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Please select the target location</h6>
+
+            <!-- Separator -->
+            <div class="bd-highlight">
+                <hr class="m-0 mt-1 mb-3 p-0 ">
+            </div>
+
+            <div class="d-flex flex-column">
+                <div class="p-2">
+                    <sb-administrative-hierarchies-records-selection [full]="true" [selected]="getSelectedLocations()"
+                        (select)="onSelectAdministrativeHierarchy($event)">
+                    </sb-administrative-hierarchies-records-selection>
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

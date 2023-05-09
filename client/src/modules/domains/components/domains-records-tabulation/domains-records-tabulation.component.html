@@ -1,0 +1,121 @@
+<form>
+
+    <div class="d-flex bd-highlight">
+        <div class="w-100 bd-highlight">
+            <sb-search placeholder="Search by domains names" (searched)="onSearchTermChange($event)"></sb-search>
+        </div>
+        <div class="flex-shrink-1 bd-highlight">
+            <sb-loading-animation type="bars"></sb-loading-animation>
+        </div>
+    </div>
+
+    <!--For Small-Sized Devices Only-->
+    <div class="row d-md-none">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-sm-1 text-center align-middle">#</th>
+                        <th scope="col" class="col-sm-9 text-left align-middle">Name</th>
+                        <th scope="col" class="col-sm-2 text-center align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+                    <tr *ngFor="let domain of domainsDataService.domains$ | async; index as i"  >
+
+                        <td class="text-center align-middle">
+                            {{i + 1 + paginationOffset}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{domain.data?.name}}
+                        </td>
+
+                        <td class="text-center align-middle">
+                            <span class="d-flex flex-row-reverse">
+                                <sb-button action="delete" entity="Domain" id="{{domain.id}}"
+                                    (delete)="onDeleteDomain($event)" tooltip="Delete {{domain.data?.name}}"></sb-button>
+                                <sb-button action="update" entity="Domain" id="{{domain.id}}"
+                                    (update)="onUpdateDomain($event)" tooltip="Update {{domain.data?.name}}"></sb-button>
+                            </span>
+                        </td>
+
+                    </tr>
+                </ng-container>
+
+                <ng-container footer>
+                    <tr>
+                        <td scope="col" colspan="3" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="Domain" (add)="onAddDomain()"></sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <!--For Middle-Sized Devices Upwards-->
+    <div class="row d-none d-md-block">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-md-1 text-center align-middle">#</th>
+                        <th scope="col" class="col-md-10 text-left align-middle">Name</th>                   
+                        <th scope="col" class="col-md-1 text-center align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+
+                    <tr *ngFor="let domain of domainsDataService.domains$ | async; index as i"  >
+
+                        <td class="text-center align-middle">
+                            {{i + 1 + paginationOffset}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{domain.data?.name}}
+                        </td>                                              
+
+                        <td class="text-center align-middle">
+                            <span class="d-flex flex-row-reverse">
+                                <sb-button action="delete" entity="Domain" id="{{domain.id}}"
+                                    (delete)="onDeleteDomain($event)" tooltip="Delete {{domain.data?.name}}"></sb-button>
+                                <sb-button action="update" entity="Domain" id="{{domain.id}}"
+                                    (update)="onUpdateDomain($event)" tooltip="Update {{domain.data?.name}}"></sb-button>
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </ng-container>
+
+                <ng-container footer>
+                    <tr>
+                        <td scope="col" colspan="5" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="Domain" (add)="onAddDomain()"></sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <sb-pagination (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+            </sb-pagination>
+        </div>
+    </div>
+
+</form>

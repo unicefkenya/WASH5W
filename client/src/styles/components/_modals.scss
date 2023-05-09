@@ -1,0 +1,33 @@
+
+// Light theme for modal
+
+.modal-light {
+  .modal-title {
+    color: $blue-light-900;
+    font-size: 1rem;
+  }
+}
+
+
+// Dark theme for modal
+
+.modal-dark {
+  .modal-title {
+    color: $gray-dark-900;
+  } 
+}
+
+
+// Modal Body
+.modal-body {
+  min-height: 200px;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  /*justify-content: center;*/
+  align-items: center;
+
+  :first-child {
+    width: 100%;
+  }
+}

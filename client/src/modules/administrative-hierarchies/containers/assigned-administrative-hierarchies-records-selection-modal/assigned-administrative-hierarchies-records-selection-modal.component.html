@@ -1,0 +1,22 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-assigned-administrative-hierarchies-records-selection [selectionMode]="selectionMode" [full]="full" [selected]="selected"
+            (select)="onSelect($event)" (check)="onCheck($event)" (uncheck)="onUncheck($event)">
+        </sb-assigned-administrative-hierarchies-records-selection>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <sb-button action="done" entity="Administrative Hierarchy" tooltip="Close Selector" guarded="false"
+            (done)="onDone()"></sb-button>
+
+    </ng-container>
+
+</sb-modal>

@@ -1,0 +1,202 @@
+<div class="row p-0 m-0">
+    <div class="col p-0 m-0 content">
+
+        <ng-container *ngIf='page == "default"'>
+
+            <ng-container *ngIf="initialised; else initialising">
+
+                <div class="card-body m-0 p-0">
+                    <h5 class="card-title">General</h5>
+                    <h6 class="card-subtitle mb-3 text-muted">Enter basic field details and select governing rules</h6>
+                    <form [formGroup]="dataFormsFieldsForm" class="p-0 m-0">
+
+                        <div class="d-flex flex-column bd-highlight">
+                            <div class="bd-highlight">
+                                <div class="input-group flex-nowrap mb-2">
+                                    <div class="input-group-prepend pb-0">
+                                        <label class="input-group-text" id="typeTitle">Title</label>
+                                    </div>
+                                    <input type="text" class="form-control" id="title" placeholder=""
+                                        formControlName="title">
+                                </div>
+                                <div *ngIf="errors.get('title')" class="alert alert-danger mb-2" role="alert">
+                                    {{errors.get('title')}}
+                                </div>
+                            </div>
+                            <div class="bd-highlight">
+                                <div class="input-group flex-nowrap mb-2">
+                                    <div class="input-group-prepend pb-0">
+                                        <label class="input-group-text" id="typeTitle">Type</label>
+                                    </div>
+                                    <ng-container formGroupName="type">
+                                        <input type="text" class="form-control input-group-input" id="typeTitle"
+                                            placeholder="" formControlName="typeTitle" disabled="">
+                                    </ng-container>
+                                    <div class="input-group-append pb-0">
+                                        <button type="button" class="btn btn-button-bg-color-1" data-toggle="tooltip"
+                                            data-placement="top" title="Select Field"
+                                            (click)="openFieldTypeSelector()">
+                                            <fa-icon *ngIf="!getFieldTypeId()" [icon]='["fas", "caret-down"]'></fa-icon>
+                                            <fa-icon *ngIf="getFieldTypeId()" [icon]='["fas", "pen"]'></fa-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="errors.get('type')" class="alert alert-danger mb-2" role="alert">
+                                    {{errors.get('type')}}
+                                </div>
+                            </div>
+                            <div *ngIf="isDescribed()" class="bd-highlight">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Description</span>
+                                    </div>
+                                    <textarea type="text" class="form-control" id="description" placeholder=""
+                                        formControlName="description"></textarea>
+                                </div>
+                                <div *ngIf="errors.get('description')" class="alert alert-danger mb-2" role="alert">
+                                    {{errors.get('description')}}
+                                </div>
+                            </div>
+                            <div class="bd-highlight mt-3">
+
+                                <div class="d-flex flex-column bd-highlight">
+                                    <div class="bd-highlight p-2">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="describe"
+                                                [checked]="isDescribed()" (change)="toggleDescribability($event)">
+                                            <label class="custom-control-label" for="describe">Add Description</label>
+                                        </div>
+                                    </div>
+                                    <div class="bd-highlight p-2 border-top">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="conditional"
+                                                [checked]="isConditional()" (change)="toggleConditionality($event)">
+                                            <label class="custom-control-label" for="conditional">Show
+                                                Conditionally</label>
+                                        </div>
+                                    </div>
+                                    <div class="bd-highlight p-2 border-top">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="required"
+                                                [checked]="isRequired()" (change)="toggleRequireability($event)">
+                                            <label class="custom-control-label" for="required">Require Response</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="getFieldTypeId() && !isOptionable(getFieldTypeId())"
+                                        class="bd-highlight p-2 border-top">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="validated"
+                                                [checked]="isValidated()" (change)="toggleValidability($event)">
+                                            <label class="custom-control-label" for="validated">Validate
+                                                Response</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </ng-container>
+
+
+            <ng-template #initialising>
+
+                <div class="d-flex justify-content-center m-1">
+                    <p class="text-center processing">
+                        <span>.</span><span>.</span><span>.</span>
+                    </p>
+                </div>
+
+            </ng-template>
+
+        </ng-container>
+
+
+        <ng-container *ngIf='page == "types"' class="p-0 m-0">
+
+            <sb-data-forms-elements-types-records-selection (select)="onSelectFieldType($event)">
+            </sb-data-forms-elements-types-records-selection>
+
+        </ng-container>
+
+
+        <ng-container *ngIf='page == "options"'>
+
+            <div class="card-body m-0 p-0">
+                <h5 class="card-title">Options</h5>
+                <h6 class="card-subtitle mb-3 pb-0 text-muted">Search and select previously created options</h6>
+                <sb-options-records-selection [selected]="getOptionsIds()" selectionMode="multi" (check)="onSelectOption($event)"
+                    (uncheck)="onDeselectOption($event)">
+                </sb-options-records-selection>
+                <div *ngIf="errors.get('options')" class="alert alert-danger mb-2" role="alert">
+                    {{errors.get('options')}}
+                </div>
+            </div>
+
+        </ng-container>
+
+
+        <ng-container *ngIf='page == "relevancy"'>
+            <sb-data-forms-elements-relevancies-rules-configuration [contextId]="contextId" [dataFormId]="dataFormId"
+                [(relevancyRule)]=relevancyRule (openedSelector)="onOpenFieldSelector()"
+                (closedSelector)="onCloseFieldSelector()">
+            </sb-data-forms-elements-relevancies-rules-configuration>
+        </ng-container>
+
+
+        <ng-container *ngIf='page == "validity"'>
+
+            <div class="card-body m-0 p-0">
+                <h5 class="card-title">Validity</h5>
+                <h6 class="card-subtitle mb-3 text-muted">Consider valid when within following constraints are met</h6>
+
+                <sb-table [hoverable]="false" [data]="false" [captioned]="false" [bodied]="true" [footed]="true">
+                    <ng-container body>
+                        <ng-container *ngFor="let rule of validationRules; index as i">
+                            <tr>
+                                <td class="col-10 p-1 text-left text-muted align-middle">
+                                    <small>CONSTRAINT</small> {{i + 1}}
+                                </td>
+                                <td class="col-2 p-1">
+                                    <span class="d-flex justify-content-end">
+                                        <sb-button style="width: 43.2px ; height: 39.2px" action="delete" entity="Rule"
+                                            (delete)="onDeleteValidationRule(i)">
+                                        </sb-button>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-1 align-middle" colspan="2">
+                                    <div class="d-flex flex-column">
+                                        <sb-data-forms-fields-validations-rules-configuration
+                                            *ngIf='page == "validity"' [dataFormFieldTypeId]="getFieldTypeId()"
+                                            [validationRule]="rule">
+                                        </sb-data-forms-fields-validations-rules-configuration>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container footer>
+                        <tr>
+                            <td class="p-1" colspan="2">
+                                <span class="d-flex justify-content-end">
+                                    <sb-button style="width: 43.2px ; height: 39.2px" action="add" entity="Rule"
+                                        (add)="onAddValidationRule()"></sb-button>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </sb-table>
+
+            </div>
+
+
+
+
+
+        </ng-container>
+    </div>
+</div>

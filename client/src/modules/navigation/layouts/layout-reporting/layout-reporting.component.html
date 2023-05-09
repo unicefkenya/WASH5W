@@ -1,0 +1,14 @@
+<span class="sb-reporting-fixed">
+    <sb-topnav></sb-topnav>
+    <div id="reporting-layout">
+        <div id="reporting-layout-content">
+            <main>
+                <ng-content select="[header]"></ng-content>
+                <div class="mx-4 pl-1 pr-1" style="margin-top: -100px;">
+                    <ng-content select="[body]"></ng-content> 
+                </div>
+            </main>
+            <sb-footer></sb-footer>
+        </div>
+    </div>
+</span>

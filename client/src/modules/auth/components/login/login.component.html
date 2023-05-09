@@ -1,0 +1,112 @@
+<!-- default -->
+<form *ngIf="page == 'default'" [formGroup]="loginForm">    
+    <div class="form-group">
+        <label class="small mb-1" for="inputEmailAddress">Email</label>
+        <input class="form-control py-4" id="inputEmailAddress" type="email" placeholder="Enter email address"
+            formControlName="email" />
+    </div>
+    <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
+        class="alert alert-danger mt-3">
+        <div *ngIf="loginForm.get('email')?.errors.required">
+            Email is required
+        </div>
+        <div *ngIf="loginForm.get('email')?.errors.email">
+            Email is invalid
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="small mb-1" for="inputPassword">Password</label>
+        <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password"
+            formControlName="password" />
+    </div>
+    <div *ngIf="false" class="form-group">
+        <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
+            <label class="custom-control-label" for="rememberPasswordCheck">Remember
+                password</label>
+        </div>
+    </div>
+    <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
+        class="alert alert-danger mt-3">
+        <div *ngIf="loginForm.get('password')?.errors.required">
+            Password is required
+        </div>
+        <div *ngIf="loginForm.get('password')?.errors.invalid">
+            Password is invalid
+        </div>
+    </div>
+    <div class="form-group d-flex align-items-center justify-content-end mt-4 mb-0">
+        <a class="btn btn-button-bg-color-1 ml-2 " href="javascript:void(0);" (click)="login()">Login</a>
+    </div>
+    <div *ngIf='error.message != ""' class="form-group">
+        <div class="alert alert-danger mt-4 text-center">
+            {{error.message}}. {{error.suggestion}}
+        </div>
+    </div>
+</form>
+
+<!-- Loging In -->
+<div *ngIf="page == 'loging-in'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5>
+            <fa-icon [icon]='["fas", "stopwatch"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Loging In</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p class="text-center processing">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+</div>
+
+<!-- Suceeded -->
+<div *ngIf="page == 'suceeded'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5 class="text-success">
+            <fa-icon [icon]='["fas", "check-circle"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Suceeded</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p class="text-center">
+            Welcome back {{getUserName() ? getUserName() : ""}}
+        </p>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p class="text-center">
+            Preparing your account
+        </p>
+    </div>    
+    <div class="d-flex justify-content-center m-1">       
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>    
+</div>
+
+<!-- Failed -->
+<div *ngIf="page == 'failed'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5 class="text-danger">
+            <fa-icon [icon]='["fas", "times-circle"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Failed</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p>{{error.message}}. {{error.suggestion}}</p>
+    </div>
+    <div *ngIf="!error.retryable" class="row">
+        <div class="col-12">
+            <div class="form-group mt-4 mb-0 text-center">
+                <a class="btn btn-button-bg-color-1" href="javascript:void(0);" (click)="quit()">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>

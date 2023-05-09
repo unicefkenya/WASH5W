@@ -1,0 +1,8 @@
+
+ol:first-child, li:first-child, th:first-child, td:first-child, .form-check-input:first-child {
+    width: auto !important;
+}
+
+        .dropdown-toggle::before {
+            display: none !important;
+        }

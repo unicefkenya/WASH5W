@@ -1,0 +1,113 @@
+<ng-container *ngIf="initialised; else initialising">
+
+
+    <!--For Small-Sized Devices Only-->
+    <div class="row d-md-none">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true"
+                [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-sm-10 text-left align-middle">Name</th>
+                        <th scope="col" class="col-sm-2 text-center align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+
+                    <ng-container *ngFor="let visualisation of visualisations$ | async; index as i">
+                        <tr>
+                            <td class="text-left align-middle">
+                                {{visualisation.data?.name}}
+                            </td>
+
+                            <td class="text-center align-middle">
+                                <span class="d-flex flex-row-reverse">
+                                    <sb-button action="delete" entity="Visualisation" id="{{visualisation.id}}"
+                                        (delete)="onDeleteVisualisation($event)"
+                                        tooltip="Delete {{visualisation.data?.name}}">
+                                    </sb-button>
+                                    <sb-button action="update" entity="Visualisation" id="{{visualisation.id}}"
+                                        (update)="onUpdateVisualisation($event)"
+                                        tooltip="Update {{visualisation.data?.name}}">
+                                    </sb-button>
+                                </span>
+                            </td>
+
+                        </tr>
+                    </ng-container>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <!--For Middle-Sized Devices Upwards-->
+    <div class="row d-none d-md-block">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="false" [stripped]="true"
+                [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-md-5 text-left align-middle">Name</th>
+                        <th scope="col" class="col-md-3 text-left align-middle">Type</th>
+                        <th scope="col" class="col-md-3 text-left align-middle">Data</th>
+                        <th scope="col" class="col-md-1 text-center align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+
+
+                    <ng-container *ngFor="let visualisation of visualisations$ | async; index as i">
+
+                        <tr>
+
+                            <td class="text-left align-middle">
+                                {{visualisation.data?.name}}
+                            </td>
+
+                            <td class="text-left align-middle">
+                                {{getSubtypeTitle$(visualisation.data.visualisationTypeId) | async}}
+                            </td> 
+                            
+                            <td class="text-left align-middle">
+                                {{getDataTypeTitle$(visualisation.data.visualisationDataTypeId) | async}}
+                            </td>                             
+
+                            <td class="text-center align-middle">
+                                <span class="d-flex flex-row-reverse">
+                                    <sb-button action="delete" entity="Visualisation" id="{{visualisation.id}}"
+                                        (delete)="onDeleteVisualisation($event)"
+                                        tooltip="Delete {{visualisation.data?.name}}">
+                                    </sb-button>
+                                    <sb-button action="update" entity="Visualisation" id="{{visualisation.id}}"
+                                        (update)="onUpdateVisualisation($event)"
+                                        tooltip="Update {{visualisation.data?.name}}">
+                                    </sb-button>
+                                </span>
+                            </td>
+
+                        </tr>
+
+                    </ng-container>
+
+                </ng-container>
+
+
+
+            </sb-table>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

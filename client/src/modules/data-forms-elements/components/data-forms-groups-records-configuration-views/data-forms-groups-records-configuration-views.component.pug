@@ -1,0 +1,24 @@
+ngcontainer([ngswitch]='basicsInitialised')
+  // Display the data form if the component was successfully basicsInitialised
+  form(*ngswitchcase='basicsInitialised == true', [formgroup]='dataFormsElementsForm')
+    // Name
+    .form-group
+      label(for='name') Name
+      input#name.form-control(type='text', placeholder='', formcontrolname='name')
+      .alert.alert-danger.mt-3(*ngif="dataFormsElementsForm.get('name')?.invalid && (dataFormsElementsForm.get('name')?.dirty || dataFormsElementsForm.get('name')?.touched)")
+        div(*ngif="dataFormsElementsForm.get('name')?.errors.required")
+          | Name is required
+        div(*ngif="dataFormsElementsForm.get('name')?.errors.minlength")
+          | Name should be at least 2 characters long
+        div(*ngif="dataFormsElementsForm.get('name')?.errors.maxlength")
+          | Name should not be more than 250 characters long
+        div(*ngif="dataFormsElementsForm.get('name')?.errors.exists")
+          | Name should be unique
+  // Display an error message if the component was not successfully basicsInitialised
+  .jumbotron(*ngswitchcase='basicsInitialised == false')
+    h1.display-4 Oops
+    p.lead We are sorry we cannot display the Data Form Element&apos;s update form at this moment
+    hr.my-4
+    p Please try again in a little while
+  // Display a loading screen otherwise
+  sb-loading-animation(*ngswitchdefault='')

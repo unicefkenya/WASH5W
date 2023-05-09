@@ -1,0 +1,170 @@
+<!-- default -->
+<form *ngIf="page == 'default'" [formGroup]="systemsUsersForm">
+    <div class="form-row">
+        <div class="col-12">
+            <div class="form-group">
+                <label class="small mb-1" for="name">Full Name</label>
+                <input class="form-control py-4" id="name" type="text" placeholder="Enter your full name"
+                    formControlName="name" />
+            </div>
+            <div *ngIf="systemsUsersForm.get('name')?.invalid && (systemsUsersForm.get('name')?.dirty || systemsUsersForm.get('name')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="systemsUsersForm.get('name')?.errors.required">
+                    Your full name is required
+                </div>
+                <div *ngIf="systemsUsersForm.get('name')?.errors.minlength">
+                    Your full name should be at least 2 characters long
+                </div>
+                <div *ngIf="systemsUsersForm.get('name')?.errors.maxlength">
+                    Your full name should not be more than 250 characters long
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12">
+            <div class="form-group">
+                <label class="small mb-1" for="email">Email</label>
+                <input class="form-control py-4" id="email" type="email" aria-describedby="emailHelp"
+                    placeholder="Enter your email address" formControlName="email" />
+            </div>
+            <div *ngIf="systemsUsersForm.get('email')?.invalid && (systemsUsersForm.get('email')?.dirty || systemsUsersForm.get('email')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="systemsUsersForm.get('email')?.errors.required">
+                    Your email is equired.
+                </div>
+                <div *ngIf="systemsUsersForm.get('email')?.errors.email">
+                    Your email is invalid
+                </div>
+                <div *ngIf="systemsUsersForm.get('email')?.errors.exists">
+                    Your email is already in use.
+                </div>
+                <!-- https://blog.moonmail.io/what-is-the-maximum-length-of-a-valid-email-address-f712c6c4bc93 -->
+                <div *ngIf="systemsUsersForm.get('email')?.errors.maxlength">
+                    Your email should not be more than 320 characters long
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12">
+            <div class="form-group">
+                <label class="small mb-1" for="password">Password</label>
+                <input class="form-control py-4" id="password" type="password" placeholder="Enter your password"
+                    formControlName="password" />
+            </div>
+            <div *ngIf="systemsUsersForm.get('password')?.invalid && (systemsUsersForm.get('password')?.dirty || systemsUsersForm.get('password')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="systemsUsersForm.get('password')?.errors.required">
+                    Your password is required
+                </div>
+                <div *ngIf="systemsUsersForm.get('password')?.errors.minlength">
+                    Your password should be at least 8 characters long
+                </div>
+                <div *ngIf="systemsUsersForm.get('password')?.errors.maxlength">
+                    Your password should not be be more than 250 characters long
+                </div>
+                <div *ngIf="systemsUsersForm.get('password')?.errors.hasNoDigit">
+                    Your password should contain at least one digit.
+                </div>
+                <div *ngIf="systemsUsersForm.get('password')?.errors.hasNoLowerCaseLetter">
+                    Your password should contain at least one lowercase letter.
+                </div>
+                <div *ngIf="systemsUsersForm.get('password')?.errors.hasNoUpperCaseLetter">
+                    Your password should contain at least one uppercase letter.
+                </div>
+                <div *ngIf="systemsUsersForm.get('password')?.errors.hasNoSpecialCharacter">
+                    Your password should contain at least one special character.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12">
+            <div class="form-group mt-4 mb-0">
+                <a class="btn btn-button-bg-color-1 btn-block" href="javascript:void(0);" (click)="save()">Create
+                    Account</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Saving -->
+<div *ngIf="page == 'saving'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5>
+            <fa-icon [icon]='["fas", "stopwatch"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Creating</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p class="text-center processing">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+</div>
+
+<!-- Suceeded -->
+<div *ngIf="page == 'suceeded'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5 class="text-success">
+            <fa-icon [icon]='["fas", "check-circle"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Created</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p class="text-center text-success">
+            <strong>Your account has been successfully created</strong>
+        </p>
+        <p class="text-center">
+            An account activation link has been sent to your email
+        </p>
+    </div>
+    <div *ngIf="!error.retryable" class="row">
+        <div class="col-12">
+            <div class="form-group mt-4 mb-0 text-center">
+                <a class="btn btn-button-bg-color-1" href="javascript:void(0);" (click)="quit()">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Failed -->
+<div *ngIf="page == 'failed'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5 class="text-danger">
+            <fa-icon [icon]='["fas", "times-circle"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Failed</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p>{{error.message}}. {{error.suggestion}}</p>
+    </div>
+    <div *ngIf="error.retryable" class="row">
+        <div class="col-6">
+            <div class="form-group mt-4 mb-0">
+                <a class="btn btn-button-bg-color-1 btn-block" href="javascript:void(0);" (click)="quit()">Go to the
+                    Homepage</a>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group mt-4 mb-0">
+                <a class="btn btn-button-bg-color-1 btn-block" href="javascript:void(0);" (click)="retry()">Try
+                    again</a>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!error.retryable" class="row">
+        <div class="col-12">
+            <div class="form-group mt-4 mb-0 text-center">
+                <a class="btn btn-button-bg-color-1" href="javascript:void(0);" (click)="quit()">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>

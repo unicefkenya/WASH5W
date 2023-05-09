@@ -1,0 +1,34 @@
+<!-- Display the data form -->
+<form [formGroup]="dissagregationsSchemesForm">
+
+    <!-- Name -->
+    <div class="d-flex flex-column bd-highlight">
+
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text">Name</label>
+                </div>
+                <input type="text" class="form-control" id="name" placeholder="Enter Options Type Name"
+                    formControlName="name">
+            </div>
+            <div *ngIf="dissagregationsSchemesForm.get('name')?.invalid && (dissagregationsSchemesForm.get('name')?.dirty || dissagregationsSchemesForm.get('name')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="dissagregationsSchemesForm.get('name')?.errors.required">
+                    Name is required
+                </div>
+                <div *ngIf="dissagregationsSchemesForm.get('name')?.errors.minlength">
+                    Name should be at least 2 characters long
+                </div>
+                <div *ngIf="dissagregationsSchemesForm.get('name')?.errors.maxlength">
+                    Name should not be more than 250 characters long
+                </div>
+                <div *ngIf="dissagregationsSchemesForm.get('name')?.errors.exists">
+                    Name should be unique
+                </div>
+            </div>
+        </div>
+
+    </div>   
+
+</form>

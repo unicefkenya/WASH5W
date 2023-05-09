@@ -1,0 +1,197 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <form [formGroup]="organisationsForm">
+
+        <div *ngIf="!desiredTypes || desiredTypes.length == 0" class="row m-0 p-0">
+            <div class="col m-0 p-0">
+                <table class="table table-bordered border-dark filter" style="width: 100%;">
+                    <tr>
+                        <td class="col-1 align-middle text-left p-2 pl-3">
+                            Type
+                        </td>
+                        <td class="col-11 align-middle p-2">
+                            <select class="custom-select" id="typeId" formControlName="typeId"
+                                (change)="onOrganisationTypeChange()">
+                                <option [ngValue]="null" disabled>Select Organisation Type</option>
+                                <option
+                                    *ngFor="let organisationType of organisationsTypesDataService.organisationsTypes$ | async"
+                                    [ngValue]="organisationType.id">
+                                    {{organisationType.data?.name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-flex bd-highlight">
+            <div class="bd-highlight">
+                <sb-search placeholder="Search by organisations names" (searched)="onSearchTermChange($event)">
+                </sb-search>
+            </div>
+            <div *ngIf="(organisationsDataService.loading$ | async) == true" class="flex-shrink-1 bd-highlight">
+                <p class="text-center processing">
+                    <span>.</span><span>.</span><span>.</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="row m-0 p-0">
+            <div class="col m-0 p-0">
+                <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                    <ng-container header>
+                        <tr>
+                            <th scope="col" class="col-sm-2 text-center align-middle"></th>
+                            <th scope="col" class="col-sm-10 text-left align-middle">Name </th>
+                        </tr>
+                    </ng-container>
+
+                    <ng-container body>
+
+                        <ng-container *ngIf="desired.length > 0; else desiredUnspecified">
+
+                            <ng-container
+                                *ngFor="let organisation of organisationsDataService.organisations$ | async">
+
+                                <tr *ngIf="isDesired(organisation)">
+
+                                    <td class="text-center align-middle">
+                                        <span class="d-flex justify-content-center">
+
+                                            <div *ngIf='selectionMode === "single"; else multi'>
+                                                <sb-button action="select" entity="Organisation"
+                                                    id="{{organisation.id}}" name="organisation"
+                                                    [selected]="isSelected(organisation)"
+                                                    (select)="onSelect(organisation)">
+                                                </sb-button>
+                                            </div>
+
+                                            <ng-template #multi>
+                                                <sb-button action="check" entity="Organisation"
+                                                    id="{{organisation.id}}" name="organisation"
+                                                    [checked]="isChecked(organisation)"
+                                                    (check)="onCheck(organisation)"
+                                                    (uncheck)="onUncheck(organisation)">
+                                                </sb-button>
+                                            </ng-template>
+
+                                        </span>
+                                    </td>                                    
+
+                                    <td class="text-left align-middle">
+                                        {{organisation.data?.name}}
+                                    </td>
+
+                                </tr>
+
+                            </ng-container>
+
+                        </ng-container>
+
+                        <ng-template #desiredUnspecified>
+
+                            <ng-container *ngIf="undesired.length > 0; else undesiredUnspecified">
+
+                                <ng-container
+                                    *ngFor="let organisation of organisationsDataService.organisations$ | async">
+
+                                    <tr *ngIf="!isUndesired(organisation)">
+
+                                        <td class="text-center align-middle">
+                                            <span class="d-flex justify-content-center">
+
+                                                <div *ngIf='selectionMode === "single"; else multi'>
+                                                    <sb-button action="select" entity="Organisation"
+                                                        id="{{organisation.id}}" name="organisation"
+                                                        [selected]="isSelected(organisation)"
+                                                        (select)="onSelect(organisation)">
+                                                    </sb-button>
+                                                </div>
+
+                                                <ng-template #multi>
+                                                    <sb-button action="check" entity="Organisation"
+                                                        id="{{organisation.id}}" name="organisation"
+                                                        [checked]="isChecked(organisation)"
+                                                        (check)="onCheck(organisation)"
+                                                        (uncheck)="onUncheck(organisation)">
+                                                    </sb-button>
+                                                </ng-template>
+
+                                            </span>
+                                        </td>                                        
+
+                                        <td class="text-left align-middle">
+                                            {{organisation.data?.name}}
+                                        </td>
+
+                                    </tr>
+
+                                </ng-container>
+
+                            </ng-container>
+
+                            <ng-template #undesiredUnspecified>
+
+                                <tr
+                                    *ngFor="let organisation of organisationsDataService.organisations$ | async">
+
+                                    <td class="text-center align-middle">
+                                        <span class="d-flex justify-content-center">
+
+                                            <div *ngIf='selectionMode === "single"; else multi'>
+                                                <sb-button action="select" entity="Organisation"
+                                                    id="{{organisation.id}}" name="organisation"
+                                                    [selected]="isSelected(organisation)"
+                                                    (select)="onSelect(organisation)">
+                                                </sb-button>
+                                            </div>
+
+                                            <ng-template #multi>
+                                                <sb-button action="check" entity="Organisation"
+                                                    id="{{organisation.id}}" name="organisation"
+                                                    [checked]="isChecked(organisation)"
+                                                    (check)="onCheck(organisation)"
+                                                    (uncheck)="onUncheck(organisation)">
+                                                </sb-button>
+                                            </ng-template>
+
+                                        </span>
+                                    </td>                                    
+
+                                    <td class="text-left align-middle">
+                                        {{organisation.data?.name}}
+                                    </td>
+
+                                </tr>
+
+                            </ng-template>
+
+                        </ng-template>
+
+                    </ng-container>
+                </sb-table>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col">
+                <sb-pagination type="modal" (pageChanged)="onPageChange($event)"
+                    (pageSizeChanged)="onPageSizeChange($event)">
+                </sb-pagination>
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

@@ -1,0 +1,15 @@
+<sb-overlay>
+    <div class="d-flex flex-column justify-content-center bd-highlight mb-3">
+        <div class="pt-2 bd-highlight text-center">
+            <h5 [ngClass]="iconClasses">
+                <fa-icon [icon]="['fas', icon]"></fa-icon>
+            </h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <h5>{{crosshead}}</h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <countdown #cd [config]="config" (event)="handleEvent($event)"></countdown>
+        </div>        
+      </div>
+</sb-overlay>

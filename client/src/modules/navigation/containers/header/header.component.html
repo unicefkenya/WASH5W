@@ -1,0 +1,21 @@
+<header [ngClass]="customClasses">
+
+    <div class="container-fluid">
+        <div class="pt-4" style="padding-bottom: 100px;">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto mx-1 pb-1">
+                    <h1 class="header-title">
+                        <div class="page-header-icon"><i data-feather="layout"></i></div>
+                        {{title}}
+                    </h1>
+                    <div class="header-subtitle">
+                        {{subtitle}}<span *ngIf="showLocation">&nbsp;&nbsp;|&nbsp;&nbsp;<fa-icon [icon]='["fas", "location-dot"]'></fa-icon>&nbsp;{{(filterService.currentFilter$ | async)?.activeAdministrativeUnit?.data.name}}</span>
+                    </div>                  
+                </div>
+            </div>
+            <div class="row pt-3">
+                <sb-breadcrumbs class="w-100 pl-3 pr-3" *ngIf="!hideBreadcrumbs" [dynamic]="dynamicBreadcrumbs"></sb-breadcrumbs>
+            </div>
+        </div>
+    </div>
+</header>

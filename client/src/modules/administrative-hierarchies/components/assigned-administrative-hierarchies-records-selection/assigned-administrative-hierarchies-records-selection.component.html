@@ -1,0 +1,116 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <form [formGroup]="administrativeHierarchiesForm">
+
+        <div *ngIf="this.filterService.filter.openedAssignedAdministrativeHierarchies.length > 0" class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-ciat-tint-2">
+                        <li class="breadcrumb-item" style="display: inline ;"><a href="javascript:void(0);"
+                            (click)="onDrillUp(null)">Home</a></li>
+                        <ng-container
+                            *ngFor="let adminHierarchy of this.filterService.filter.openedAssignedAdministrativeHierarchies">
+                            <li *ngIf="!isLastSelected(adminHierarchy.id)" class="breadcrumb-item"><a
+                                    href="javascript:void(0);"
+                                    (click)="onDrillUp(adminHierarchy)">{{adminHierarchy.data?.responsible?.name}}</a>
+                            </li>
+                            <li *ngIf="isLastSelected(adminHierarchy.id)" class="breadcrumb-item active">
+                                {{adminHierarchy.data?.responsible?.name}}
+                            </li>
+                        </ng-container>
+                    </ol>
+                </nav>
+
+            </div>
+        </div>
+
+        <div *ngIf="this.filterService.filter.activeAssignedAdministrativeStructures.length > 0" class="d-flex bd-highlight">
+            <div class="w-100 bd-highlight">
+                <sb-search placeholder="Search by administrative units names" (searched)="onSearchTermChange($event)">
+                </sb-search>
+            </div>
+            <div class="flex-shrink-1 bd-highlight">
+                <sb-loading-animation type="bars"></sb-loading-animation>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                    <ng-container header>
+                        <tr>
+                            <th scope="col" class="col-3 text-center align-middle"></th>
+                            <th scope="col" class="col-7 text-left align-middle">Name </th>
+                            <th scope="col" class="col-2 text-center align-middle">Drill</th>
+                        </tr>
+                    </ng-container>
+
+                    <ng-container body>
+                        <tr *ngFor="let administrativeHierarchy of administrativeHierarchiesDataService.administrativeHierarchies$ | async">
+
+                            <td class="text-center align-middle">
+                                <span class="d-flex justify-content-center">
+
+                                    <ng-container *ngIf='selectionMode === "single"; else multi'>
+                                        <sb-button action="select" entity="Administrative Hierarchy"
+                                            id="{{administrativeHierarchy.id}}" name="administrativeHierarchy"
+                                            [selected]="isSelected(administrativeHierarchy)"
+                                            (select)="onSelect(administrativeHierarchy)">
+                                        </sb-button>
+                                    </ng-container>
+
+                                    <ng-template #multi>
+                                        <sb-button action="check" entity="Administrative Hierarchy"
+                                            id="{{administrativeHierarchy.id}}" name="administrativeHierarchy"
+                                            [checked]="isChecked(administrativeHierarchy)"
+                                            (check)="onCheck(administrativeHierarchy)"
+                                            (uncheck)="onUncheck(administrativeHierarchy)">
+                                        </sb-button>
+                                    </ng-template>
+
+                                </span>
+                            </td>
+
+                            <td class="text-left align-middle">
+                                {{administrativeHierarchy.data?.responsible.name}}
+                            </td>
+
+                            <td class="text-center align-middle">
+                                <span class="d-flex justify-content-center">
+
+                                    <sb-button action="drillDown" entity="Administrative Hierarchy"
+                                        id="{{administrativeHierarchy.id}}"
+                                        (drillDown)="onDrillDown(administrativeHierarchy)"
+                                        tooltip="Drill down {{administrativeHierarchy.data?.responsible?.name}}">
+                                    </sb-button>
+
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </sb-table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <sb-pagination type="modal" (pageChanged)="onPageChange($event)"
+                    (pageSizeChanged)="onPageSizeChange($event)">
+                </sb-pagination>
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

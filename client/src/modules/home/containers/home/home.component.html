@@ -1,0 +1,210 @@
+<sb-layout-home>
+
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="navbar-main">
+    <div class="container">
+      <a class="navbar-brand" routerLink="/">EMERGENCIES KE</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isMenuCollapsed = !isMenuCollapsed"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <fa-icon class="ml-1" [icon]='["fas", "bars"]'></fa-icon>
+      </button>
+      <div class="collapse navbar-collapse" [ngbCollapse]="isMenuCollapsed">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link js-scroll-trigger" [ngClass]="{'active' : activeFragment == 'home'}"
+              (click)="scrollToElement(home)" style="font-weight:bold;">Home</a>
+          </li>
+          <li class="nav-item"><a class="nav-link js-scroll-trigger" [ngClass]="{'active' : activeFragment == 'about'}"
+              (click)="scrollToElement(about)" style="font-weight:bold;">About</a></li>
+          <li class="nav-item"><a class="nav-link js-scroll-trigger"
+              [ngClass]="{'active' : activeFragment == 'background'}" (click)="scrollToElement(background)"
+              style="font-weight:bold;">Background</a></li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" [ngClass]="{'active' : activeFragment == 'background'}"
+              [routerLink]="['/contents/data_forms_responses', {outlets: {content: []}}]"
+              style="font-weight:bold;">Dashboards</a>
+          </li>
+          <li class="nav-item"><a class="nav-link js-scroll-trigger"
+              [ngClass]="{'active' : activeFragment == 'contacts'}" (click)="scrollToElement(contacts)"
+              style="font-weight:bold;">Partners</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Masthead-->
+  <header class="masthead" id="home">
+    <div class="container d-flex h-100 align-items-center">
+      <div class="mx-auto text-center">
+        <h1 class="mx-auto my-0 text-uppercase">EMERGENCIES KE</h1>
+        <h2 class="text-white mx-auto mt-2 mb-5" style="font-weight:bold">
+          Report and Monitor WASH Related Emergencies in Kenya
+        </h2>
+        <div class="row">
+          <div class="col-sm">
+            <a class="btn btn-button-bg-color-1 mx-auto"
+              [routerLink]="['/contents/data_forms_responses', {outlets: {content: []}}]">GET STARTED</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- About-->
+  <section class="about-section text-center" id="about" #about>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 mx-auto">
+          <h2 class="text-white mb-4">About</h2>
+          <p class="text-white">
+            This is a web-based system that facilitates monitoring of emergencies around WASH (Water, Sanitation and
+            Health)
+          </p>
+        </div>
+      </div>
+      <img class="img-fluid" src="assets/img/demo-image-2.png" alt="" />
+    </div>
+  </section>
+  <!-- Background-->
+  <section class="projects-section  mt-1 bg-feature-bg-color-3" id="background" #background>
+    <div class="container">
+      <h2 class="text-black text-center mb-4">Background</h2>
+      <!-- Background Row 1-->
+      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+        <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-3_5.jpg" alt="" />
+        </div>
+        <div class="col-lg-6">
+          <div class="bg-feature-card-bg-color-4 text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-left">
+                <h4 class="text-white">Introduction</h4>
+                <p class="mb-0 text-white">
+                  COVID-19 is a global pandemic affecting most countries and territories around the world. As of 14th
+                  April 2020,
+                  there were 1.9 million confirmed COVID-19 cases resulting in close to 120,000 deaths with the first
+                  case of COVID-19 being confirmed in Kenya on 13 March 2020.
+                  UNICEF and Partners came together to address issues related to the Pandemic, including but not limited
+                  to ensuring the provision and continuity of WASH services.
+                </p>
+                <p></p>
+                <hr class="d-none d-lg-block mb-0 ml-0" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Background Row 2-->
+      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+        <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-4.jpg" alt="" /></div>
+        <div class="col-lg-6 order-lg-first">
+          <div class="bg-feature-card-bg-color-4 text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-right">
+                <h4 class="text-white">Project</h4>
+                <p class="mb-0 text-white">
+                  To enhance coordination and accountability at national and county level, UNICEF, Ministry of Water and
+                  the
+                  Ministry of Health with the support of Sweden Embassy partnered to conceptualize a Covid-19 Response
+                  Platform.<br>
+                  However as time passed, the need for a more versatile tool that handles <b>All WASH emergencies</b>
+                  was conceived.
+                </p>
+                <p></p>
+                <hr class="d-none d-lg-block mb-0 mr-0" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Background Row 3-->
+      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+        <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-5_5.png" alt="" />
+        </div>
+        <div class="col-lg-6">
+          <div class="bg-feature-card-bg-color-4 text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-left">
+                <h4 class="text-white">System</h4>
+                <p class="mb-0 text-white">
+                  AGS (Advanced Geospatial Solutions) was then contracted to design and implement the dynamic
+                  web based data portal with the capacity to monitor any emerging emergency situation under WASH.
+                  The data portal allows its respective users to :-
+
+                  <li>Monitor emergencies at national and county levels.</li>
+                  <li>Monitor partner participation in emergencies and the activities they are undertaking</li>
+                  <li>View generated reports based on the 5W Matrix</li>
+                  <li>Download reports</li>
+                  <li>Dynamically configure data such as indicators.</li>
+                  <li>View reports on your computer and mobile device. </li>
+                </p>
+                <p></p>
+                <hr class="d-none d-lg-block mb-0 ml-0" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Background Row 4-->
+      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+        <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-6.jpg" alt="" /></div>
+        <div class="col-lg-6 order-lg-first">
+          <div class="bg-unicef-ke-shade-2 text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-right">
+                <h4 class="">Status</h4>
+                <p class="mb-0">
+                  The system is in its final satges of development.
+                  It had its first succesful training of stakeholders from <b>22-11-2021</b> to <b>24-11-2021</b> and is
+                  set
+                  to have the last traning on <b>2nd December</b>, thereafter the system will go live.
+                </p>
+                <p></p>
+                <hr class="d-none d-lg-block mb-0 mr-0" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Dashboard Link-->
+  <section class="signup-section" id="signup" #signup>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto text-center">
+          <fa-icon class="fa-2x mb-2 text-white" [icon]='["far", "paper-plane"]'></fa-icon>
+          <h2 class="text-white mb-5">Emergencies KE</h2>
+          <a class="btn btn-primary mx-auto" [routerLink]="['/contents/data_forms_responses', {outlets: {content: []}}]">Open Dashboard</a>
+          <!--<button class="btn btn-primary mx-auto" type="submit">Dashboard</button>-->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact-->
+  <section class="contact-section bg-contact-bg-color-1 bg-img" id="contacts" #contacts>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card-deck mt-5">
+            <div class="card">
+              <img src="assets/img/leo.jpg" class="card-img" alt="...">
+            </div>
+            <div class="card">
+              <img src="assets/img/jaguar.jpg" class="card-img" alt="...">
+            </div>
+            <div class="card">
+              <img src="assets/img/Sweden.png" class="card-img" alt="...">
+            </div>
+            <div class="card">
+              <img src="assets/img/unicef-logo.png" class="card-img" alt="...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Footer-->
+  <footer class="footer bg-footer-bg-color-3 small text-center text-white">
+    <div class="container">Powered by <a href="https://ags.co.ke/" target="_blank" rel="noopener noreferrer"
+        class="text-white">ags /</a><a href="https://miles.co.ke/" target="_blank" rel="noopener noreferrer"
+        class="text-white">miles</a></div>
+  </footer>
+</sb-layout-home>

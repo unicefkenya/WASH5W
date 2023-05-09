@@ -1,0 +1,6 @@
+name: WorkflowStatuses
+version: 0.0.1
+description: Deploys WorkflowStatuses Microservice
+maintainers:
+  - name: Kwaje Anthony
+    email: kwajeanthony@gmail.com

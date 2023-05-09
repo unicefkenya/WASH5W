@@ -1,0 +1,44 @@
+<ng-container *ngIf='page == "default"'>
+
+    <form [formGroup]="responsesForm">
+
+        <!--Location -->
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text" id="locationName">Location</label>
+                </div>
+                <ng-container formGroupName="location">
+                    <input type="text" class="form-control input-group-input pl-3" id="locationName" placeholder=""
+                        formControlName="locationName" disabled>
+                </ng-container>
+                <div class="input-group-append pb-0">
+                    <button type="button" class="btn btn-button-bg-color-1" data-toggle="tooltip" data-placement="top"
+                        title="Choose Location" (click)="openLocationSelector()">
+                        <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="responsesForm.get('location.locationId')?.invalid && (responsesForm.get('location.locationId')?.dirty || responsesForm.get('location.locationId')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="responsesForm.get('location.locationId')?.errors.required">
+                    Location is required
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>
+
+
+<ng-container *ngIf='page == "locations"' class="p-0 m-0">
+
+    <div class="d-flex flex-column">
+        <div class="p-2">
+            <sb-assigned-administrative-hierarchies-records-selection [full]="true" (select)="onSelectAdministrativeHierarchyElement($event)">
+            </sb-assigned-administrative-hierarchies-records-selection>
+        </div>
+    </div>
+
+</ng-container>

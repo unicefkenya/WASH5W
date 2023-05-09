@@ -1,0 +1,47 @@
+# Default values for the Microservice's Helm Chart.
+# This is a YAML-formatted file.
+
+# MICROSERVICE
+# ----------------------------------------------------------------------------------------
+microservice:
+
+  # Ingress
+  ingress:
+    name: accountabilities-types
+    class: traefik
+    rules:
+      host: cloud.miles.co.ke
+      http:
+        path: /api/v1/accountabilities_types
+        backend:
+          service:
+            name: accountabilities-types
+            port:
+              number: 80
+
+  # Service
+  service:
+    name: accountabilities-types
+    port:
+      default: 80
+      target: 8080
+
+  # Deployment
+  deployment:
+    name: accountabilities-types
+
+  # Application / Application Replicas
+  application:
+    name: accountabilities-types
+    version: 0.0.1
+    image:
+      id: cloud.miles.co.ke:5043/accountabilities-types
+      tag: 0.0.1
+      pull:
+        policy: Always
+        secret: regcred
+    environment:
+      postgres:
+        host: bitnami-postgres-postgresql
+    replicas: 1
+

@@ -1,0 +1,44 @@
+<nav class="sb-topnav navbar navbar-expand shadow" [ngClass]="customClasses">
+
+    <a class="navbar-brand" title="Open Home Page" routerLink="/home">
+        <small><fa-icon [icon]='["fas", "house-chimney"]'></fa-icon>&nbsp;&nbsp;|&nbsp;&nbsp;REPORTING TOOL</small>
+    </a>
+
+    <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" data-cy="topNavToggleSideNav"
+        (click)="toggleSideNav()">
+        <fa-icon [icon]='["fas", "bars"]'></fa-icon>
+    </button>
+
+    <!-- Navbar Search-->
+    <!--
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <div class="input-group">
+            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button"><fa-icon [icon]='["fas", "search"]'></fa-icon></button>
+            </div>
+        </div>
+    </form>
+    -->
+
+    <div class="d-none d-md-inline-block ml-auto w-75 mr-0 mr-md-3 my-2 my-md-0 small">
+        {{truncateTitle((this.filterService.currentFilter$ | async )?.activeContext?.data.name) | uppercase}}
+    </div>
+
+    <!-- Navbar Tools-->
+
+    <ul class="navbar-nav w-md-25 w-md-100 d-flex flex-row-reverse">
+        <sb-topnav-user></sb-topnav-user>
+        <sb-topnav-filter></sb-topnav-filter>
+        <li class="nav-item ml-3 mr-3">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                <fa-icon *ngIf="online" class="negate text-green-shade-1" title="You seem to be online"
+                    [icon]='["fas", "wifi"]'></fa-icon>
+                <fa-icon *ngIf="!online" class="negate text-red-shade-1" title="You seem to be offline"
+                    [icon]='["fas", "wifi"]'></fa-icon>
+            </div>
+        </li>
+    </ul>
+
+
+</nav>

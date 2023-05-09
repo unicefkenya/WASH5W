@@ -1,0 +1,43 @@
+// Set widths of input-group inputs
+
+.input-group>.input-group-prepend {
+    flex: 0 0 10%;
+}
+
+.input-group {
+
+    &.input-group-text {
+        width: 100%;
+    }
+
+    &.filter-input-group {
+
+        margin-right: 5px;
+        width: 33.3%;
+
+        .custom-select {
+                height: 40px;
+            
+        }
+    }
+
+}
+
+
+.input-group-input {
+    height: 40px;
+}
+
+.input-group-text {
+    min-width: 135.77px;
+    background-color: $config-page-header-bg-color-900;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: #5eaf5e;
+    background: #5eaf5e;
+}
+
+
+

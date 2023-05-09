@@ -1,0 +1,60 @@
+ngcontainer([ngswitch]='initialised')
+  // Display the data form if the component was successfully initialised
+  form(*ngswitchcase='initialised == true')
+    .d-flex.bd-highlight
+      .w-100.bd-highlight
+        sb-search(placeholder='Search by logicalSchemes names', (searched)='onSearchTermChange($event)')
+      .flex-shrink-1.bd-highlight
+        sb-loading-animation
+    .row
+      .col
+        sb-table
+          ng-container(header='')
+            tr
+              th.col-sm-11.text-left.align-middle(scope='col') Name 
+              th.col-sm-1.text-center.align-middle(scope='col') Select
+          ng-container(body='')
+            ng-container(*ngif='desired.length > 0; else desiredUnspecified')
+              ng-container(*ngfor='let logicalScheme of logicalSchemesDataService.logicalSchemes$ | async')
+                tr(*ngif='isDesired(logicalScheme)')
+                  td.text-left.align-middle
+                    | {{logicalScheme.data?.name}}
+                  td.text-center.align-middle
+                    span.d-flex.justify-content-center
+                      div(*ngif='selectionMode === "single"; else multi')
+                        sb-button(action='select', entity='LogicalScheme', id='{{logicalScheme.id}}', name='logicalScheme', [selected]='isSelected(logicalScheme)', (select)='onSelect(logicalScheme)')
+                      ng-template(#multi='')
+                        sb-button(action='check', entity='LogicalScheme', id='{{logicalScheme.id}}', name='logicalScheme', [checked]='isChecked(logicalScheme)', (check)='onCheck(logicalScheme)', (uncheck)='onUncheck($event)')
+            ng-container(#desiredunspecified='')
+              ng-container(*ngif='undesired.length > 0; else undesiredUnspecified')
+                ng-container(*ngfor='let logicalScheme of logicalSchemesDataService.logicalSchemes$ | async')
+                  tr(*ngif='!isUndesired(logicalScheme)')
+                    td.text-left.align-middle
+                      | {{logicalScheme.data?.name}}
+                    td.text-center.align-middle
+                      span.d-flex.justify-content-center
+                        div(*ngif='selectionMode === "single"; else multi')
+                          sb-button(action='select', entity='LogicalScheme', id='{{logicalScheme.id}}', name='logicalScheme', [selected]='isSelected(logicalScheme)', (select)='onSelect(logicalScheme)')
+                        ng-template(#multi='')
+                          sb-button(action='check', entity='LogicalScheme', id='{{logicalScheme.id}}', name='logicalScheme', [checked]='isChecked(logicalScheme)', (check)='onCheck(logicalScheme)', (uncheck)='onUncheck($event)')
+              ng-container(#undesiredunspecified='')
+                tr(*ngfor='let logicalScheme of logicalSchemesDataService.logicalSchemes$ | async')
+                  td.text-left.align-middle
+                    | {{logicalScheme.data?.name}}
+                  td.text-center.align-middle
+                    span.d-flex.justify-content-center
+                      div(*ngif='selectionMode === "single"; else multi')
+                        sb-button(action='select', entity='LogicalScheme', id='{{logicalScheme.id}}', name='logicalScheme', [selected]='isSelected(logicalScheme)', (select)='onSelect(logicalScheme)')
+                      ng-template(#multi='')
+                        sb-button(action='check', entity='LogicalScheme', id='{{logicalScheme.id}}', name='logicalScheme', [checked]='isChecked(logicalScheme)', (check)='onCheck(logicalScheme)', (uncheck)='onUncheck($event)')
+    .row
+      .col
+        sb-pagination(type='modal', (pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')
+  // Display an error message if the component was not successfully initialised
+  .jumbotron(*ngswitchcase='initialised == false')
+    h1.display-4 Oops
+    p.lead We are sorry we cannot display the Logical Schemes at this moment
+    hr.my-4
+    p Please try again in a little while
+  // Display a loading screen otherwise
+  sb-loading-animation(*ngswitchdefault='')

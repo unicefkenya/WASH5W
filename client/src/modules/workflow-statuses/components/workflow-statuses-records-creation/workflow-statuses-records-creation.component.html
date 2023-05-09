@@ -1,0 +1,45 @@
+<div class="card-body m-0 p-0">
+
+    <form [formGroup]="workflowStatusesForm">
+
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please enter the workflow status' basic details</h6>
+    
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+    
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter the workflow status' name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="workflowStatusesForm.get('name')?.invalid && (workflowStatusesForm.get('name')?.dirty || workflowStatusesForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="workflowStatusesForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="workflowStatusesForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="workflowStatusesForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="workflowStatusesForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

@@ -1,0 +1,48 @@
+<ng-container *ngIf="initialised; else initialising">
+    <div class="row">
+        <div class="col">
+
+            <table class="table table-sm mt-3 table-bordered">
+    
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-left align-middle">
+                            <span>Location</span>
+                        </th>
+                        <th *ngFor="let variable of getCurrentDimensionVisualisationVariables()"
+                            scope="col" class="col-2 text-center align-middle">
+                            <span>{{variable.data.label}}</span>
+                        </th>
+    
+    
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr *ngFor="let subsidiary of subsidiaries">
+        
+                        <td class="text-left align-middle" [ngClass]="'none'">
+                            {{subsidiary.data.responsible.name}}
+                        </td>
+                        <td *ngFor="let variable of getCurrentDimensionVisualisationVariables()"
+                             class="col-2 text-center align-middle"  [ngStyle]="getVariableColorCode(variable)">
+                            {{getValue(subsidiary.data.responsible.id, variable.id)? ((getValue(subsidiary.data.responsible.id, variable.id) | number : '1.2-3') + '%') : '' }}
+                        </td>
+        
+                    </tr>
+                </tbody>
+            </table>
+    
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #initialising>
+
+    <div class="d-flex justify-content-center align-items-center placeholder">
+         <p class="text-center processing mb-5">
+              <span>.</span><span>.</span><span>.</span>
+         </p>
+    </div>
+
+</ng-template>

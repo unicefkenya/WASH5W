@@ -1,0 +1,23 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-dissagregations-records-selection [selectionMode]="selectionMode" [desiredType]="desiredType" [desired]="desired"
+            [undesired]="undesired" [selected]="selected" (select)="onSelect($event)" (check)="onCheck($event)"
+            (uncheck)="onUncheck($event)">
+        </sb-dissagregations-records-selection>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <sb-button action="done" entity="Dissagregation" tooltip="Close Selector" guarded="false"
+            (done)="onDone()"></sb-button>
+
+    </ng-container>
+
+</sb-modal>

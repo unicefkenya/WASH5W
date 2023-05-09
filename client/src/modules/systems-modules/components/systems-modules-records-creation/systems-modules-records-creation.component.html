@@ -1,0 +1,73 @@
+<div class="card-body m-0 p-0">
+
+    <form [formGroup]="systemsModulesForm">
+
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Please enter the system module's basic details</h6>
+    
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-1 mb-3 p-0 ">
+        </div>    
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter system module's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="systemsModulesForm.get('name')?.invalid && (systemsModulesForm.get('name')?.dirty || systemsModulesForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsModulesForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="systemsModulesForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="systemsModulesForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="systemsModulesForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="card-title mt-4">Additional Details</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Please select all the applicable flags</h6>
+    
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-1 mb-3 p-0 ">
+        </div>          
+
+        <!-- Flags -->
+        <div class="d-flex flex-column bd-highlight mt-3">
+
+            <!-- Conditionally enable for the current deployment -->
+            <div class="bd-highlight p-2">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="required" [checked]="isEnabled()"
+                        (change)="toggleEnablement($event)">
+                    <label class="custom-control-label" for="required">Enabled</label>
+                </div>
+            </div>
+
+            <!-- Conditionally customise permissions for the current deployment -->
+            <div class="bd-highlight p-2">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="validated" [checked]="isCustomisable()"
+                        (change)="toggleCustomisability($event)">
+                    <label class="custom-control-label" for="validated">Customisable</label>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>

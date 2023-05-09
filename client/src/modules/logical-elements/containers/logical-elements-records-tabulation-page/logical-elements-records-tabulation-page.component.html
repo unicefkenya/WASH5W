@@ -1,0 +1,61 @@
+<sb-header title="{{title}}" subtitle="{{subtitle}}" [hideBreadcrumbs]="true"></sb-header>
+
+<div class="mx-4 pl-1 pr-1" style="margin-top: -100px;">
+
+    <!-- Tabbed Home -->
+    <ng-container *ngIf="(tabs.length > 0)">
+
+        <!-- Header - Hide on screens smaller than md -->
+        <div class="d-none d-md-block custom-page-tabs-container mt-0 ml-2 mr-2 shadow border-top">
+            <ul class="nav nav-tabs custom-page-tabs">
+                <ng-container *ngTemplateOutlet="navItems"></ng-container>
+            </ul>
+        </div>
+
+        <!-- Header - Hide on screens wider than md -->
+        <div class="d-md-none custom-page-pills-container mt-0 ml-2 mr-2">
+            <ul class="nav flex-column nav-pills custom-page-pills">
+                <ng-container *ngTemplateOutlet="navItems"></ng-container>
+            </ul>
+        </div>
+
+        <!-- Header Templates -->
+        <ng-template #navItems>
+
+            <li *ngFor="let tab of getSortedTabs()" class="nav-item">
+
+                <a *ngIf="tab.active" class="nav-link active" href="javascript:void(0);">
+                    {{tab.title}}
+                </a>
+
+                <a *ngIf="!(tab.active)" class="nav-link"
+                    [routerLink]="['/contents/' + tab.link]">
+                    {{tab.title}}
+                </a>
+
+            </li>
+
+        </ng-template>
+
+        <!-- Contents -->
+        <div class="custom-page-contents-container shadow ml-2 mr-2 pt-3">
+            <ng-container *ngTemplateOutlet="content"></ng-container>
+        </div>
+
+    </ng-container>
+
+    <!-- Plain Home -->
+    <ng-container *ngIf="!(tabs.length > 0)">
+        <sb-card>
+            <div class="card-body">
+                <ng-container *ngTemplateOutlet="content"></ng-container>
+            </div>
+        </sb-card>
+    </ng-container>
+
+
+</div>
+
+<ng-template #content>
+    <sb-logical-elements-records-tabulation></sb-logical-elements-records-tabulation>
+</ng-template>

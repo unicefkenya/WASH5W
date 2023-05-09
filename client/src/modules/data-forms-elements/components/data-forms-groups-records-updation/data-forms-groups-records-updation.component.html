@@ -1,0 +1,121 @@
+<div class="row p-0 m-0">
+    <div class="col p-0 m-0 content">
+
+        <ng-container *ngIf='page == "default"'>
+
+            <ng-container *ngIf="initialised; else initialising">
+
+                <div class="card-body m-0 p-0">
+                    <h5 class="card-title">General</h5>
+                    <h6 class="card-subtitle mb-3 text-muted">Enter basic group details and select governing rules</h6>
+                    <form [formGroup]="dataFormsGroupsForm" class="p-0 m-0">
+
+                        <div class="d-flex flex-column bd-highlight">
+                            <div class="bd-highlight">
+                                <div class="input-group flex-nowrap mb-2">
+                                    <div class="input-group-prepend pb-0">
+                                        <label class="input-group-text" for="title">Title</label>
+                                    </div>
+                                    <input type="text" class="form-control" id="title" placeholder=""
+                                        formControlName="title">
+                                </div>
+                                <div *ngIf="errors.get('title')" class="alert alert-danger mb-2" role="alert">
+                                    {{errors.get('title')}}
+                                </div>
+                            </div>
+                            <div class="bd-highlight">
+                                <div class="input-group flex-nowrap mb-2">
+                                    <div class="input-group-prepend pb-0">
+                                        <label class="input-group-text" for="layoutId">Layout</label>
+                                    </div>
+                                    <select id="layoutId" class="form-control custom-select" formControlName="layoutId">
+                                        <option [ngValue]="1">Vertical</option>
+                                        <option [ngValue]="2">Horizontal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div *ngIf="isDescribed()" class="bd-highlight">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Description</span>
+                                    </div>
+                                    <input *ngIf="false" type="text" class="form-control" id="description" placeholder=""
+                                        formControlName="description">
+                                        <textarea class="form-control" id="description" placeholder=""
+                                        formControlName="description"></textarea>
+                                </div>
+                                <div *ngIf="errors.get('description')" class="alert alert-danger mb-2" role="alert">
+                                    {{errors.get('description')}}
+                                </div>
+                            </div>
+                            <div class="bd-highlight mt-3">
+
+                                <div class="d-flex flex-column bd-highlight">
+                                    <div class="bd-highlight p-2">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="describe"
+                                                [checked]="isDescribed()" (change)="toggleDescribability($event)">
+                                            <label class="custom-control-label" for="describe">Add Description</label>
+                                        </div>
+                                    </div>
+                                    <div class="bd-highlight p-2 custom-switch">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="titled"
+                                                [checked]="isTitled()" (change)="toggleTitleability($event)">
+                                            <label class="custom-control-label" for="titled">Show Title</label>
+                                        </div>
+                                    </div>                                    
+                                    <div class="bd-highlight p-2 border-top">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="conditional"
+                                                [checked]="isConditional()" (change)="toggleConditionality($event)">
+                                            <label class="custom-control-label" for="conditional">Show Conditionally</label>
+                                        </div>
+                                    </div>
+                                    <div class="bd-highlight p-2 border-top">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="required"
+                                                [checked]="isRepeated()" (change)="toggleRepeatability($event)">
+                                            <label class="custom-control-label" for="required">Repeat</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </ng-container>
+
+
+            <ng-template #initialising>
+
+                <div class="d-flex justify-content-center m-1">
+                    <p class="text-center processing">
+                        <span>.</span><span>.</span><span>.</span>
+                    </p>
+                </div>
+
+            </ng-template>
+
+        </ng-container>
+
+
+        <ng-container *ngIf='page == "relevancy"'>
+            <sb-data-forms-elements-relevancies-rules-configuration [contextId]="contextId" [dataFormId]="dataFormId"
+                [(relevancyRule)]=relevancyRule (openedSelector)="onOpenFieldSelector()"
+                (closedSelector)="onCloseFieldSelector()">
+            </sb-data-forms-elements-relevancies-rules-configuration>
+        </ng-container>
+
+
+        <ng-container *ngIf='page == "repeatability"'>
+            <sb-data-forms-groups-repeat-count-configuration [contextId]="contextId" [dataFormId]="dataFormId"
+                [(repeatabilityRule)]=repeatabilityRule (openedSelector)="onOpenFieldSelector()"
+                (closedSelector)="onCloseFieldSelector()">
+            </sb-data-forms-groups-repeat-count-configuration>
+        </ng-container>        
+
+
+    </div>
+</div>

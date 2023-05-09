@@ -1,0 +1,148 @@
+<div class="card-body m-0 p-0">
+    <!-- Display the system module permission -->
+    <form [formGroup]="systemsModulesPermissionsForm">
+
+
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Please enter the permission's basic details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-1 mb-3 p-0 ">
+        </div>
+
+
+        <!-- Type -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Type</label>
+                    </div>
+                    <select class="custom-select" id="systemModuleId" formControlName="systemModuleId">
+                        <option [ngValue]="null" disabled>Select system module</option>
+                        <option *ngFor="let systemModule of systemsModulesDataService.systemsModules$ | async"
+                            [ngValue]="systemModule.id">
+                            {{systemModule.data?.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="systemsModulesPermissionsForm.get('systemModuleId')?.invalid && (systemsModulesPermissionsForm.get('systemModuleId')?.dirty || systemsModulesPermissionsForm.get('systemModuleId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsModulesPermissionsForm.get('systemModuleId')?.errors.required">
+                        System Module is required
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Code -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Code</label>
+                    </div>
+                    <input type="text" class="form-control" id="code"
+                        placeholder="Enter the system module permission's code" formControlName="code">
+                </div>
+                <div *ngIf="systemsModulesPermissionsForm.get('code')?.invalid && (systemsModulesPermissionsForm.get('code')?.dirty || systemsModulesPermissionsForm.get('code')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsModulesPermissionsForm.get('code')?.errors.required">
+                        Code is required
+                    </div>
+                    <div *ngIf="systemsModulesPermissionsForm.get('code')?.errors.minlength">
+                        Code should be at least 2 characters long
+                    </div>
+                    <div *ngIf="systemsModulesPermissionsForm.get('code')?.errors.maxlength">
+                        Code should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="systemsModulesPermissionsForm.get('code')?.errors.exists">
+                        Code should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name"
+                        placeholder="Enter the system module permission's name" formControlName="name">
+                </div>
+                <div *ngIf="systemsModulesPermissionsForm.get('name')?.invalid && (systemsModulesPermissionsForm.get('name')?.dirty || systemsModulesPermissionsForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsModulesPermissionsForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="systemsModulesPermissionsForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="systemsModulesPermissionsForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="systemsModulesPermissionsForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <h5 class="card-title mt-4">Additional Details</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Optionally enter the permission's miscellaneous details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-1 mb-3 p-0 ">
+        </div>
+
+
+
+        <!-- Description -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Description</label>
+                    </div>
+                    <textarea class="form-control" id="description" formControlName="description"></textarea>
+                </div>
+                <div *ngIf="systemsModulesPermissionsForm.get('description')?.invalid && (systemsModulesPermissionsForm.get('description')?.dirty || systemsModulesPermissionsForm.get('description')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsModulesPermissionsForm.get('description')?.errors.maxlength">
+                        Description cannot be more than 500 characters long
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Flags -->
+        <div *ngIf="isDevelopmentEnvironment()" class="d-flex flex-column bd-highlight mt-2">
+
+            <!-- Conditionally customise permissions for the current deployment -->
+            <div class="bd-highlight p-2">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="validated" [checked]="isCustom()"
+                        (change)="toggleCustomness($event)">
+                    <label class="custom-control-label" for="validated">Custom</label>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+</div>

@@ -1,0 +1,52 @@
+/*
+ * Copyright (C) 2021 Second Mile
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+package ke.co.miles.administrativehierarchies.repository.insertion;
+
+import ke.co.miles.administrativehierarchies.configurations.DatabaseConfig;
+import ke.co.miles.administrativehierarchies.models.AdministrativeHierarchy;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+/**
+ * @author Kwaje Anthony <tony@miles.co.ke>
+ * @version 1.0
+ * @since 1.0
+ */
+@Component
+@Slf4j
+public class InsertAdministrativeHierarchyQuery {
+
+  @Autowired
+  DatabaseConfig databaseConfig;
+
+  /**
+   * Inserts a new administrativeHierarchy record into the database
+   *
+   * @param administrativeHierarchy   a bean containing the administrativeHierarchy record details
+   * @return the unique identifier of the newly inserted administrativeHierarchy record
+   */
+  public Mono<Long> insertAdministrativeHierarchy(AdministrativeHierarchy administrativeHierarchy) {
+
+    log.trace("Entering insertAdministrativeHierarchy()");
+
+    String query = "INSERT INTO administrative_hierarchy(data) VALUES(?::jsonb)";
+
+    return
+        Mono.from(
+            databaseConfig
+                .getDatabase()
+                .update(query)
+                .parameters(
+                    administrativeHierarchy.getData())
+                .returnGeneratedKeys()
+                .getAs(Long.class));
+  }
+
+}

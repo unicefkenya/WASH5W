@@ -1,0 +1,696 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="data-form-group d-none d-md-block" [ngClass]="{'odd': odd, 'even': !odd}">
+        <div class="data-form-group-title">
+            <h6 [ngClass]="{'collapsed': !isExpanded(container), 'expanded': isExpanded(container)}">
+                <span class="row align-middle">
+                    <span class="col-3 text-center align-middle text">
+                        <span class="d-flex flex-column text-center">
+                            <span class="p-1 text-uppercase small">
+                                Type
+                            </span>
+                            <span class="p-1">
+                                <ng-container *ngIf="container.data.typeId == 1">Page Group</ng-container>
+                                <ng-container *ngIf="container.data.typeId == 2">Page</ng-container>
+                                <ng-container *ngIf="container.data.typeId == 3">Page Tab</ng-container>
+                            </span>
+                        </span>
+                    </span>
+                    <span class="col-3 text-center align-middle text">
+                        <span class="d-flex flex-column text-center">
+                            <span class="p-1 text-uppercase small">
+                                Link Title
+                            </span>
+                            <span class="p-1">
+                                {{container.data.navTitle}}
+                            </span>
+                        </span>
+                    </span>
+                    <span class="col-3 text-center align-middle text">
+                        <span class="d-flex flex-column text-center">
+                            <span class="p-1 text-uppercase small">
+                                Page Title
+                            </span>
+                            <span class="p-1">
+                                <ng-container *ngIf="container.data.pageTitle">{{container.data.pageTitle}}
+                                </ng-container>
+                                <ng-container *ngIf="!(container.data.pageTitle)">N/A</ng-container>
+                            </span>
+                        </span>
+                    </span>
+                    <span class="col-3 text-center align-middle actions">
+                        <span class="d-flex flex-column text-right">
+                            <span class="p-1 text-uppercase small">
+
+                            </span>
+                            <span class="p-1">
+                                <span class="d-flex justify-content-end">
+                                    <sb-button action="update" entity="Visualisation Container" id="{{container.id}}"
+                                        (update)="onUpdateVisualisationContainer($event)" tooltip="Update container">
+                                    </sb-button>
+                                    <sb-button action="delete" entity="Visualisation Container" id="{{container.id}}"
+                                        (delete)="onDeleteVisualisationContainer($event)" tooltip="Delete container">
+                                    </sb-button>
+                                    <sb-button *ngIf="isExpanded(container)" action="collapse"
+                                        entity="Visualisation Container" id="{{container?.id}}"
+                                        (collapse)="onCollapse(container)" tooltip="Close to hide more details">
+                                    </sb-button>
+                                    <sb-button *ngIf="isCollapsed(container)" action="expand"
+                                        entity="Visualisation Container" id="{{container?.id}}"
+                                        (expand)="onExpand(container)" tooltip="Open to reveal more details">
+                                    </sb-button>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </span>
+            </h6>
+        </div>
+
+        <div *ngIf="container && isExpanded(container)" class="data-form-group-content ">
+
+            <div *ngIf="nestedVisualisationContainers?.length > 0" class="row align-middle">
+                <div class="col">
+                    <ng-container *ngFor="let visualisationContainer of nestedVisualisationContainers">
+                        <sb-visualisations-containers-records-tabulation [odd]="!odd"
+                            *ngIf="visualisationContainer.data?.typeId == 1 || visualisationContainer.data?.typeId == 2"
+                            [container]="visualisationContainer"
+                            [nestedVisualisationContainers]="getNestedVisualisationContainers(visualisationContainer.id)">
+                        </sb-visualisations-containers-records-tabulation>
+                        <sb-visualisations-containers-records-tabulation [odd]="!odd"
+                            *ngIf="visualisationContainer.data?.typeId == 3" [container]="visualisationContainer">
+                        </sb-visualisations-containers-records-tabulation>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="visualisations?.length > 0" class="row align-middle">
+                <div class="col">
+                    <div class="custom-page-tabs-container mt-0 ml-2 mr-2 border border-bottom-0">
+                        <ul class="nav nav-tabs custom-page-tabs">
+                            <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                        </ul>
+                    </div>
+
+                    <!-- Header Templates -->
+                    <ng-template #navItems>
+
+                        <li *ngFor="let tab of tabs" class="nav-item">
+
+                            <a *ngIf="tab.index == activeTabIndex" class="nav-link active" href="javascript:void(0);">
+                                {{tab.title}}
+                            </a>
+
+                            <a *ngIf="tab.index !== activeTabIndex" class="nav-link" href="javascript:void(0);"
+                                (click)="openTab(tab.index)">
+                                {{tab.title}}
+                            </a>
+
+                        </li>
+
+                    </ng-template>
+
+                    <!-- Contents -->
+                    <div class="custom-page-contents-container border border-top-0 ml-2 mr-2 pt-3">
+                        <sb-visualisations-records-tabulation *ngIf="activeTabIndex === 0" [container]="container">
+                        </sb-visualisations-records-tabulation>
+                        <sb-visualisation-variables-records-tabulation *ngIf="activeTabIndex === 1"
+                            [container]="container">
+                        </sb-visualisation-variables-records-tabulation>
+                        <sb-visualisation-axes-records-tabulation *ngIf="activeTabIndex === 2" [container]="container">
+                        </sb-visualisation-axes-records-tabulation>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-middle">
+                <div class="col">
+                    <div class="d-flex justify-content-end mt-4">
+                        <div class="btn-toolbar mb-3" role="toolbar"
+                            aria-label="Visualisation Containers Creation Tools">
+                            <div class="btn-group mr-1" role="group" aria-label="Creation Tools">
+
+                                <!-- 1. PAGE GROUP -->
+
+                                <!-- Make it possible to add a page group within a page group -->
+                                <button *ngIf="container.data.typeId == 1" type="button" title="Add Page Group"
+                                    class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(1)">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Group
+                                </button>
+
+                                <!-- Make it possible to add a page within a page group -->
+                                <button *ngIf="container.data.typeId == 1" type="button" title="Add Page"
+                                    class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(2)">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Page
+                                </button>
+
+
+                                <!-- 2. PAGE -->
+
+                                <!-- Make it possible to add a page tab within a page so long as it has no visualisations -->
+                                <button *ngIf="container.data.typeId == 2 && (!visualisations || visualisations.length == 0)"
+                                    type="button" title="Add Page Tab" class="btn btn-button-bg-color-1"
+                                    (click)="onAddVisualisationContainer(3)">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Tab
+                                </button>
+
+                                <!-- Make it possible to add a visualisation within a page so long as it has no tabs -->
+                                <button
+                                    *ngIf="container.data.typeId == 2 && (!nestedVisualisationContainers || nestedVisualisationContainers.length == 0)"
+                                    type="button" title="Add Visualisation" class="btn btn-button-bg-color-1"
+                                    (click)="onAddVisualisation()">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                </button>
+
+
+                                <!-- 3. TAB -->
+
+                                <!-- Make it possible to add a visualisation within a tab -->
+                                <button *ngIf="container.data.typeId == 3" type="button"
+                                    title="Add Visualisation" class="btn btn-button-bg-color-1"
+                                    (click)="onAddVisualisation()">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="data-form-group d-md-none" [ngClass]="{'odd': odd, 'even': !odd}">
+        <div class="data-form-group-title">
+            <h6 [ngClass]="{'collapsed': !isExpanded(container), 'expanded': isExpanded(container)}">
+                <div class="row align-middle">
+                    <div class="col-12 text-center align-middle text">
+                        <div class="row m-1 p-1">
+                            <div class="col-4 font-weight-bold">
+                                Type
+                            </div>
+                            <div class="col-8 text-left">
+                                <ng-container *ngIf="container.data.typeId == 1">Page Group</ng-container>
+                                <ng-container *ngIf="container.data.typeId == 2">Page</ng-container>
+                                <ng-container *ngIf="container.data.typeId == 3">Page Tab</ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-1 p-1">
+                            <div class="col-4 font-weight-bold">
+                                Link
+                            </div>
+                            <div class="col-8 text-left">
+                                {{textUtilService.truncate(container.data.navTitle,[25,"..."])}}
+                            </div>
+                        </div>
+                        <div class="row m-1 p-1">
+                            <div class="col-4 font-weight-bold">
+                                Page
+                            </div>
+                            <div class="col-8 text-left">
+                                <ng-container
+                                    *ngIf="container.data.pageTitle">{{textUtilService.truncate(container.data.pageTitle,[25,"..."])}}
+                                </ng-container>
+                                <ng-container *ngIf="!(container.data.pageTitle)">N/A</ng-container>
+                            </div>
+                        </div>
+                        <div class="row m-1 p-1">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-center">
+                                    <sb-button action="update" entity="Visualisation Container" id="{{container.id}}"
+                                        (update)="onUpdateVisualisationContainer($event)" tooltip="Update container">
+                                    </sb-button>
+                                    <sb-button action="delete" entity="Visualisation Container" id="{{container.id}}"
+                                        (delete)="onDeleteVisualisationContainer($event)" tooltip="Delete container">
+                                    </sb-button>
+                                    <sb-button *ngIf="isExpanded(container)" action="collapse"
+                                        entity="Visualisation Container" id="{{container?.id}}"
+                                        (collapse)="onCollapse(container)" tooltip="Close to hide more details">
+                                    </sb-button>
+                                    <sb-button *ngIf="isCollapsed(container)" action="expand"
+                                        entity="Visualisation Container" id="{{container?.id}}"
+                                        (expand)="onExpand(container)" tooltip="Open to reveal more details">
+                                    </sb-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h6>
+        </div>
+
+        <div *ngIf="container && isExpanded(container)" class="data-form-group-content ">
+
+            <div *ngIf="nestedVisualisationContainers?.length > 0" class="row align-middle">
+                <div class="col">
+                    <ng-container *ngFor="let visualisationContainer of nestedVisualisationContainers">
+                        <sb-visualisations-containers-records-tabulation [odd]="!odd"
+                            *ngIf="visualisationContainer.data?.typeId == 1 || visualisationContainer.data?.typeId == 2"
+                            [container]="visualisationContainer"
+                            [nestedVisualisationContainers]="getNestedVisualisationContainers(visualisationContainer.id)">
+                        </sb-visualisations-containers-records-tabulation>
+                        <sb-visualisations-containers-records-tabulation [odd]="!odd"
+                            *ngIf="visualisationContainer.data?.typeId == 3" [container]="visualisationContainer">
+                        </sb-visualisations-containers-records-tabulation>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div *ngIf="visualisations?.length > 0" class="row align-middle">
+                <div class="col">
+
+                    <div class="custom-page-pills-container mt-0 ml-2 mr-2">
+                        <ul class="nav flex-column nav-pills custom-page-pills">
+                            <li *ngFor="let tab of tabs" class="nav-item">
+
+                                <a *ngIf="tab.index == activeTabIndex" class="nav-link active"
+                                    href="javascript:void(0);">
+                                    {{tab.title}}
+                                </a>
+
+                                <a *ngIf="tab.index !== activeTabIndex" class="nav-link" href="javascript:void(0);"
+                                    (click)="openTab(tab.index)">
+                                    {{tab.title}}
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Contents -->
+                    <div class="custom-page-contents-container border border-top-0 ml-2 mr-2 pt-3">
+                        <sb-visualisations-records-tabulation *ngIf="activeTabIndex === 0" [container]="container">
+                        </sb-visualisations-records-tabulation>
+                        <sb-visualisation-variables-records-tabulation *ngIf="activeTabIndex === 1"
+                            [container]="container">
+                        </sb-visualisation-variables-records-tabulation>
+                        <sb-visualisation-axes-records-tabulation *ngIf="activeTabIndex === 2" [container]="container">
+                        </sb-visualisation-axes-records-tabulation>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row align-middle">
+                <div class="col">
+                    <div class="d-flex justify-content-end mt-4">
+                        <div class="btn-toolbar mb-3" role="toolbar"
+                            aria-label="Visualisation Containers Creation Tools">
+                            <div class="btn-group mr-1" role="group" aria-label="Creation Tools">
+
+                                <!-- 1. PAGE GROUP -->
+
+                                <!-- Make it possible to add a page group within a page group -->
+                                <button *ngIf="container.data.typeId == 1" type="button" title="Add Page Group"
+                                    class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(1)">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Group
+                                </button>
+
+                                <!-- Make it possible to add a page within a page group -->
+                                <button *ngIf="container.data.typeId == 1" type="button" title="Add Page"
+                                    class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(2)">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Page
+                                </button>
+
+                                <!-- 2. PAGE -->
+
+                                <!-- Make it possible to add a page tab within a page so long as it has no visualisations -->
+                                <button
+                                    *ngIf="container.data.typeId == 2 && (!visualisations || visualisations.length == 0)"
+                                    type="button" title="Add Page Tab" class="btn btn-button-bg-color-1"
+                                    (click)="onAddVisualisationContainer(3)">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Tab
+                                </button>
+
+                                <!-- Make it possible to add a visualisation within a page so long as it has no tabs -->
+                                <button
+                                    *ngIf="container.data.typeId == 2 && (!nestedVisualisationContainers || nestedVisualisationContainers.length == 0)"
+                                    type="button" title="Add Visualisation" class="btn btn-button-bg-color-1"
+                                    (click)="onAddVisualisation()">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                </button>
+
+                                <!-- 3. TAB -->
+
+                                <!-- Make it possible to add a visualisation within a tab -->
+                                <button *ngIf="container.data.typeId == 3" type="button" title="Add Visualisation"
+                                    class="btn btn-button-bg-color-1" (click)="onAddVisualisation()">
+                                    <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--For Small-Sized Devices Only-->
+    <div *ngIf="false" class="row m-0 p-0 d-md-none">
+        <div class="col m-0 p-0" style="width:100%">
+            <table class="table m-0 mb-1 collapsible-group" style="width:100%">
+                <tbody>
+                    <tr>
+                        <td class="bg-pagination-bg-color-2" style="border-bottom: 5px solid #fff;">
+                            <div class="row border-bottom pb-2">
+                                <div class="col-5 text-uppercase small text-left align-middle">
+                                    Type
+                                </div>
+                                <div class="col-7 text-left align-middle">
+                                    <ng-container *ngIf="container.data.typeId == 1">Page Group</ng-container>
+                                    <ng-container *ngIf="container.data.typeId == 2">Page</ng-container>
+                                    <ng-container *ngIf="container.data.typeId == 3">Page Tab</ng-container>
+                                </div>
+                            </div>
+                            <div class="row border-bottom pt-2 pb-2">
+                                <div class="col-5 text-uppercase small text-left align-middle">
+                                    Link Title
+                                </div>
+                                <div class="col-7 text-left align-middle">
+                                    {{container.data.navTitle}}
+                                </div>
+                            </div>
+                            <div class="row border-bottom pt-2 pb-2">
+                                <div class="col-5 text-uppercase small text-left align-middle">
+                                    Page Title
+                                </div>
+                                <div class="col-7 text-left align-middle">
+                                    <ng-container *ngIf="container.data.pageTitle">{{container.data.pageTitle}}
+                                    </ng-container>
+                                    <ng-container *ngIf="!(container.data.pageTitle)">N/A</ng-container>
+                                </div>
+                            </div>
+                            <div class="row pt-2 pb-2">
+                                <div class="col-5 text-uppercase small text-right align-middle">
+                                    Actions
+                                </div>
+                                <div class="col-7 text-left align-middle">
+                                    <span class="d-flex justify-content-end">
+                                        <sb-button action="update" entity="Visualisation Container"
+                                            id="{{container.id}}" (update)="onUpdateVisualisationContainer($event)"
+                                            tooltip="Update container">
+                                        </sb-button>
+                                        <sb-button action="delete" entity="Visualisation Container"
+                                            id="{{container.id}}" (delete)="onDeleteVisualisationContainer($event)"
+                                            tooltip="Delete container">
+                                        </sb-button>
+                                        <sb-button *ngIf="isExpanded(container)" action="collapse"
+                                            entity="Visualisation Container" id="{{container?.id}}"
+                                            (collapse)="onCollapse(container)" tooltip="Close to hide more details">
+                                        </sb-button>
+                                        <sb-button *ngIf="isCollapsed(container)" action="expand"
+                                            entity="Visualisation Container" id="{{container?.id}}"
+                                            (expand)="onExpand(container)" tooltip="Open to reveal more details">
+                                        </sb-button>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="container && isExpanded(container) && nestedVisualisationContainers?.length > 0">
+                        <td colspan="2" class="text-center align-middle m-0 p-0">
+                            <ng-container *ngFor="let visualisationContainer of nestedVisualisationContainers">
+                                <sb-visualisations-containers-records-tabulation
+                                    *ngIf="visualisationContainer.data?.typeId == 1 || visualisationContainer.data?.typeId == 2"
+                                    [container]="visualisationContainer"
+                                    [nestedVisualisationContainers]="getNestedVisualisationContainers(visualisationContainer.id)">
+                                </sb-visualisations-containers-records-tabulation>
+                                <sb-visualisations-containers-records-tabulation
+                                    *ngIf="visualisationContainer.data?.typeId == 3"
+                                    [container]="visualisationContainer">
+                                </sb-visualisations-containers-records-tabulation>
+                            </ng-container>
+                        </td>
+                    </tr>
+                    <tr *ngIf="container && isExpanded(container) && visualisations?.length > 0">
+                        <td colspan="2" class="text-center align-middle m-0 p-0">
+                            <sb-visualisations-records-tabulation [container]="container">
+                            </sb-visualisations-records-tabulation>
+                        </td>
+                    </tr>
+                    <tr *ngIf="container && isExpanded(container)">
+                        <td colspan="2">
+                            <div class="d-flex justify-content-end mt-4">
+                                <div class="btn-toolbar mb-3" role="toolbar"
+                                    aria-label="Visualisation Containers Creation Tools">
+                                    <div class="btn-group mr-1" role="group" aria-label="Creation Tools">
+
+                                        <!-- 1. PAGE GROUP -->
+
+                                        <!-- Make it possible to add a page group within a page group -->
+                                        <button *ngIf="container.data.typeId == 1" type="button" title="Add Page Group"
+                                            class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(1)">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Group
+                                        </button>
+
+                                        <!-- Make it possible to add a page within a page group -->
+                                        <button *ngIf="container.data.typeId == 1" type="button" title="Add Page"
+                                            class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(2)">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Page
+                                        </button>
+
+
+                                        <!-- 2. PAGE -->
+
+                                        <!-- Make it possible to add a page tab within a page so long as it has no visualisations -->
+                                        <button
+                                            *ngIf="container.data.typeId == 2 && (!visualisations || visualisations.length == 0)"
+                                            type="button" title="Add Page Tab" class="btn btn-button-bg-color-1"
+                                            (click)="onAddVisualisationContainer(3)">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Tab
+                                        </button>
+
+                                        <!-- Make it possible to add a visualisation within a page so long as it has no tabs -->
+                                        <button
+                                            *ngIf="container.data.typeId == 2 && (!nestedVisualisationContainers || nestedVisualisationContainers.length == 0)"
+                                            type="button" title="Add Visualisation" class="btn btn-button-bg-color-1"
+                                            (click)="onAddVisualisation()">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                        </button>
+
+
+                                        <!-- 3. TAB -->
+
+                                        <!-- Make it possible to add a visualisation within a tab -->
+                                        <button *ngIf="container.data.typeId == 3" type="button"
+                                            title="Add Visualisation" class="btn btn-button-bg-color-1"
+                                            (click)="onAddVisualisation()">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--For Middle-Sized Devices Upwards-->
+    <div *ngIf="false" class="row m-0 p-0 d-none d-md-block">
+        <div class="col m-0 p-0">
+
+            <table class="table m-0 mb-1 collapsible-group" style="width:100%">
+                <tbody>
+                    <tr class="title">
+                        <td class="col-3 align-middle border-left">
+                            <span class="d-flex flex-column text-center">
+                                <span class="p-1 text-uppercase small">
+                                    Type
+                                </span>
+                                <span class="p-1">
+                                    <ng-container *ngIf="container.data.typeId == 1">Page Group</ng-container>
+                                    <ng-container *ngIf="container.data.typeId == 2">Page</ng-container>
+                                    <ng-container *ngIf="container.data.typeId == 3">Page Tab</ng-container>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="col-3 text-left align-middle">
+                            <span class="d-flex flex-column text-center">
+                                <span class="p-1 text-uppercase small">
+                                    Link Title
+                                </span>
+                                <span class="p-1">
+                                    {{container.data.navTitle}}
+                                </span>
+                            </span>
+                        </td>
+                        <td class="col-3 text-left align-middle">
+                            <span class="d-flex flex-column text-center">
+                                <span class="p-1 text-uppercase small">
+                                    Page Title
+                                </span>
+                                <span class="p-1">
+                                    <ng-container *ngIf="container.data.pageTitle">{{container.data.pageTitle}}
+                                    </ng-container>
+                                    <ng-container *ngIf="!(container.data.pageTitle)">N/A</ng-container>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="col-3 text-left align-middle border-right">
+                            <span class="d-flex flex-column text-right">
+                                <span class="p-1 text-uppercase small">
+
+                                </span>
+                                <span class="p-1">
+                                    <span class="d-flex justify-content-end">
+                                        <sb-button action="update" entity="Visualisation Container"
+                                            id="{{container.id}}" (update)="onUpdateVisualisationContainer($event)"
+                                            tooltip="Update container">
+                                        </sb-button>
+                                        <sb-button action="delete" entity="Visualisation Container"
+                                            id="{{container.id}}" (delete)="onDeleteVisualisationContainer($event)"
+                                            tooltip="Delete container">
+                                        </sb-button>
+                                        <sb-button *ngIf="isExpanded(container)" action="collapse"
+                                            entity="Visualisation Container" id="{{container?.id}}"
+                                            (collapse)="onCollapse(container)" tooltip="Close to hide more details">
+                                        </sb-button>
+                                        <sb-button *ngIf="isCollapsed(container)" action="expand"
+                                            entity="Visualisation Container" id="{{container?.id}}"
+                                            (expand)="onExpand(container)" tooltip="Open to reveal more details">
+                                        </sb-button>
+                                    </span>
+                                </span>
+                            </span>
+
+                        </td>
+                    </tr>
+                    <tr *ngIf="container && isExpanded(container) && nestedVisualisationContainers?.length > 0">
+                        <td colspan="4" class="text-center align-middle border">
+                            <ng-container *ngFor="let visualisationContainer of nestedVisualisationContainers">
+                                <sb-visualisations-containers-records-tabulation
+                                    *ngIf="visualisationContainer.data?.typeId == 1 || visualisationContainer.data?.typeId == 2"
+                                    [container]="visualisationContainer"
+                                    [nestedVisualisationContainers]="getNestedVisualisationContainers(visualisationContainer.id)">
+                                </sb-visualisations-containers-records-tabulation>
+                                <sb-visualisations-containers-records-tabulation
+                                    *ngIf="visualisationContainer.data?.typeId == 3"
+                                    [container]="visualisationContainer">
+                                </sb-visualisations-containers-records-tabulation>
+                            </ng-container>
+                        </td>
+                    </tr>
+                    <tr *ngIf="container && isExpanded(container) && visualisations?.length > 0">
+                        <td colspan="4" class="text-center align-middle border">
+                            <!-- Header - Hide on screens smaller than md -->
+                            <div class="d-none d-md-block custom-page-tabs-container mt-0 ml-2 mr-2 border-top">
+                                <ul class="nav nav-tabs custom-page-tabs">
+                                    <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                                </ul>
+                            </div>
+
+                            <!-- Header - Hide on screens wider than md -->
+                            <div class="d-md-none custom-page-pills-container mt-0 ml-2 mr-2">
+                                <ul class="nav flex-column nav-pills custom-page-pills">
+                                    <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                                </ul>
+                            </div>
+
+                            <!-- Header Templates -->
+                            <ng-template #navItems>
+
+                                <li *ngFor="let tab of tabs" class="nav-item">
+
+                                    <a *ngIf="tab.active" class="nav-link active" href="javascript:void(0);">
+                                        {{tab.title}}
+                                    </a>
+
+                                    <a *ngIf="!(tab.active)" class="nav-link" href="javascript:void(0);"
+                                        (click)="openTab(tab.index)">
+                                        {{tab.title}}
+                                    </a>
+
+                                </li>
+
+                            </ng-template>
+
+                            <!-- Contents -->
+                            <div class="custom-page-contents-container border border-top-0 ml-2 mr-2 pt-3">
+                                <sb-visualisations-records-tabulation *ngIf="activeTabIndex === 0"
+                                    [container]="container">
+                                </sb-visualisations-records-tabulation>
+                                <sb-visualisation-variables-records-tabulation *ngIf="activeTabIndex === 1"
+                                    [container]="container">
+                                </sb-visualisation-variables-records-tabulation>
+                                <sb-visualisation-axes-records-tabulation *ngIf="activeTabIndex === 2"
+                                    [container]="container">
+                                </sb-visualisation-axes-records-tabulation>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr *ngIf="container && isExpanded(container)">
+                        <td colspan="4" class="border">
+                            <div class="d-flex justify-content-end mt-4">
+                                <div class="btn-toolbar mb-3" role="toolbar"
+                                    aria-label="Visualisation Containers Creation Tools">
+                                    <div class="btn-group mr-1" role="group" aria-label="Creation Tools">
+
+                                        <!-- 1. PAGE GROUP -->
+
+                                        <!-- Make it possible to add a page group within a page group -->
+                                        <button *ngIf="container.data.typeId == 1" type="button" title="Add Page Group"
+                                            class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(1)">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Group
+                                        </button>
+
+                                        <!-- Make it possible to add a page within a page group -->
+                                        <button *ngIf="container.data.typeId == 1" type="button" title="Add Page"
+                                            class="btn btn-button-bg-color-1" (click)="onAddVisualisationContainer(2)">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Page
+                                        </button>
+
+
+                                        <!-- 2. PAGE -->
+
+                                        <!-- Make it possible to add a page tab within a page so long as it has no visualisations -->
+                                        <button
+                                            *ngIf="container.data.typeId == 2 && (!visualisations || visualisations.length == 0)"
+                                            type="button" title="Add Page Tab" class="btn btn-button-bg-color-1"
+                                            (click)="onAddVisualisationContainer(3)">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Tab
+                                        </button>
+
+                                        <!-- Make it possible to add a visualisation within a page so long as it has no tabs -->
+                                        <button
+                                            *ngIf="container.data.typeId == 2 && (!nestedVisualisationContainers || nestedVisualisationContainers.length == 0)"
+                                            type="button" title="Add Visualisation" class="btn btn-button-bg-color-1"
+                                            (click)="onAddVisualisation()">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                        </button>
+
+
+                                        <!-- 3. TAB -->
+
+                                        <!-- Make it possible to add a visualisation within a tab -->
+                                        <button *ngIf="container.data.typeId == 3" type="button"
+                                            title="Add Visualisation" class="btn btn-button-bg-color-1"
+                                            (click)="onAddVisualisation()">
+                                            <fa-icon [icon]='["fas", "plus"]'></fa-icon> Visualisation
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

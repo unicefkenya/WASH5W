@@ -1,0 +1,63 @@
+
+<!-- Confirming -->
+<div *ngIf="page == 'confirming'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5>
+            <fa-icon [icon]='["fas", "stopwatch"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Confirming</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p class="text-center processing">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+</div>
+
+<!-- Confirmed -->
+<div *ngIf="page == 'confirmed'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5 class="text-success">
+            <fa-icon [icon]='["fas", "check-circle"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Confirmed</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p class="text-center text-success">
+            <strong>Your account has been successfully confirmed</strong>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group mt-4 mb-0 text-center">
+                <a class="btn btn-button-bg-color-1" href="javascript:void(0);" (click)="login()">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Failed -->
+<div *ngIf="page == 'failed'" class="d-flex flex-column justify-content-center bd-highlight mb-3">
+    <div class="pt-2 bd-highlight text-center">
+        <h5 class="text-danger">
+            <fa-icon [icon]='["fas", "times-circle"]'></fa-icon>
+        </h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <h5>Failed</h5>
+    </div>
+    <div class="pt-2 bd-highlight text-center">
+        <p>{{error.message}}. {{error.suggestion}}</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group mt-4 mb-0 text-center">
+                <a class="btn btn-button-bg-color-1" href="javascript:void(0);" (click)="quit()">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>

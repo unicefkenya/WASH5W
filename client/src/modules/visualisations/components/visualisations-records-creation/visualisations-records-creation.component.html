@@ -1,0 +1,122 @@
+<div class="card-body m-0 p-0">
+
+    <h5 class="card-title">Basic Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please enter the visualisation's basic details</h6>
+
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>
+
+    <form [formGroup]="visualisationsForm">
+
+
+        <!-- Type -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Type</label>
+                    </div>
+                    <select class="custom-select" id="formatId" formControlName="formatId">
+                        <option [ngValue]="null" disabled>Select visualisation type</option>
+                        <option *ngFor="let visualisationFormat of visualisationsFormatsDataService.getVisualisationsFormats$() | async"
+                            [ngValue]="visualisationFormat.id">
+                            {{visualisationFormat.data?.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="visualisationsForm.get('formatId')?.invalid && (visualisationsForm.get('formatId')?.dirty || visualisationsForm.get('formatId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationsForm.get('formatId')?.errors.required">
+                        Visualisation Type is required
+                    </div>
+                </div>
+            </div>
+
+        </div> 
+
+        <!-- Subtype -->
+        <div *ngIf="this.getVisualisationFormatId()" class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Subtype</label>
+                    </div>
+                    <select class="custom-select" id="typeId" formControlName="typeId">
+                        <option [ngValue]="null" disabled>Select visualisation subtype</option>
+                        <option *ngFor="let visualisationType of visualisationsTypesDataService.getVisualisationsTypesByParentId$(this.getVisualisationFormatId()) | async"
+                            [ngValue]="visualisationType.id">
+                            {{visualisationType.data?.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="visualisationsForm.get('typeId')?.invalid && (visualisationsForm.get('typeId')?.dirty || visualisationsForm.get('typeId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationsForm.get('typeId')?.errors.required">
+                        Subtype is required
+                    </div>
+                </div>
+            </div>
+
+        </div>        
+
+        <!-- Data -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Data Type</label>
+                    </div>
+                    <select class="custom-select" id="dataTypeId" formControlName="dataTypeId">
+                        <option [ngValue]="null" disabled>Select visualisation's data type</option>
+                        <option *ngFor="let visualisationDataType of visualisationsDataTypesDataService.getVisualisationsDataTypes$() | async"
+                            [ngValue]="visualisationDataType.id">
+                            {{visualisationDataType.data?.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="visualisationsForm.get('dataTypeId')?.invalid && (visualisationsForm.get('dataTypeId')?.dirty || visualisationsForm.get('dataTypeId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationsForm.get('dataTypeId')?.errors.required">
+                        Data Type is required
+                    </div>
+                </div>
+            </div>
+
+        </div>        
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter visualisation's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="visualisationsForm.get('name')?.invalid && (visualisationsForm.get('name')?.dirty || visualisationsForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationsForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="visualisationsForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="visualisationsForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="visualisationsForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+
+</div>

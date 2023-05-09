@@ -1,0 +1,199 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="data-form-field" [ngClass]="{'odd': odd, 'even': !odd}">
+        <div class="data-form-field-content ">
+            <div class="row">
+                <div class="col-12 col-md-6 mb-1 mb-md-0 field-label">
+                    <label>
+                        {{dataFormField?.data.title}} <span class="asterisk"
+                            *ngIf="dataFormField?.data.required">*</span>
+                    </label>
+                    <p *ngIf="dataFormField?.data.described" (click)="toggleDescriptionCollapse()"
+                        [ngClass]="{'elastic': dataFormField?.data.description.length > 200}">
+                        <span
+                            *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormField?.data.description,[200])}}</span>
+                        <span *ngIf="!descriptionCollapsed">{{dataFormField?.data.description}}</span>
+                    </p>
+                </div>
+                <div class="col-12 col-md-6 field">
+                    <ng-container [ngSwitch]="dataFormField?.data.typeId">
+                        <!--Integer-->
+                        <ng-container *ngSwitchCase="3">
+                            <ng-container *ngTemplateOutlet="integerDecimalShortTextValue"></ng-container>
+                        </ng-container>
+
+                        <!--Decimal-->
+                        <ng-container *ngSwitchCase="4">
+                            <ng-container *ngTemplateOutlet="integerDecimalShortTextValue"></ng-container>
+                        </ng-container>
+
+                        <!--Short Text-->
+                        <ng-container *ngSwitchCase="5">
+                            <ng-container *ngTemplateOutlet="integerDecimalShortTextValue"></ng-container>
+                        </ng-container>
+
+                        <!--Long Text-->
+                        <ng-container *ngSwitchCase="6">
+                            <ng-container *ngTemplateOutlet="longTextValue"></ng-container>
+                        </ng-container>
+
+                        <!--Date-->
+                        <ng-container *ngSwitchCase="7">
+                            <ng-container *ngTemplateOutlet="dateValue"></ng-container>
+                        </ng-container>
+
+                        <!--Single Selection-->
+                        <ng-container *ngSwitchCase="8">
+                            <ng-container *ngTemplateOutlet="singleSelectValue"></ng-container>
+                        </ng-container>
+
+                        <!--Multi Selection-->
+                        <ng-container *ngSwitchCase="9">
+                            <ng-container *ngTemplateOutlet="multiSelectValue"></ng-container>
+                        </ng-container>
+
+                        <!--Dropdown-->
+                        <ng-container *ngSwitchCase="10">
+                            <ng-container *ngTemplateOutlet="dropDownValue"></ng-container>
+                        </ng-container>
+
+                        <!--File-->
+                        <ng-container *ngSwitchCase="11">
+                            <ng-container *ngTemplateOutlet="fileValue"></ng-container>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #integerDecimalShortTextValue>
+
+        <input type="text" class="form-control" [id]="'field' + dataFormField?.id + 'Value'"
+            [placeholder]="getPlaceholder()" [disabled]="mode == 'actual' && disabled ? '' : null" [(ngModel)]="value"
+            (ngModelChange)="onValueChange($event)" />
+        <small *ngIf="error" class="form-text text-muted">
+            {{error}}
+        </small>
+
+    </ng-template>
+
+    <ng-template #longTextValue>
+
+        <textarea class="form-control" rows="2" [id]="'field' + dataFormField?.id + 'Value'"
+            [placeholder]="getPlaceholder()" [disabled]="mode == 'actual' && disabled ? '' : null" [(ngModel)]="value"
+            (ngModelChange)="onValueChange($event)">
+        </textarea>
+        <small *ngIf="error" class="form-text text-muted">
+            {{error}}
+        </small>
+
+    </ng-template>
+
+    <ng-template #dateValue>
+
+        <input type="date" class="form-control" [id]="'field' + dataFormField?.id + 'Value'"
+            [disabled]="mode == 'actual' && disabled ? '' : null" [(ngModel)]="value"
+            (ngModelChange)="onValueChange($event)" />
+        <small *ngIf="error" class="form-text text-muted">
+            {{error}}
+        </small>
+
+    </ng-template>
+
+    <ng-template #singleSelectValue>
+
+        <div *ngFor="let option of options" class="custom-control custom-radio">
+            <input class="custom-control-input" type="radio" [id]="'field' + dataFormField?.id + 'Option' + option.id"
+                [value]="option.id" [name]="'field' + dataFormField?.id" [value]="option.id"
+                [disabled]="mode == 'actual' && disabled ? '' : null" [(ngModel)]="value"
+                (ngModelChange)="onValueChange(option.id)">
+            <label class="custom-control-label" [for]="'field' + dataFormField?.id + 'Option' + option.id">
+                {{option.data.name}}
+            </label>
+        </div>
+        <small *ngIf="error" class="form-text text-muted">
+            {{error}}
+        </small>
+
+    </ng-template>
+
+    <ng-template #multiSelectValue>
+
+        <div *ngFor="let option of options" class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" [value]="option.id"
+                [id]="'field' + dataFormField?.id + 'Option' + option.id" [name]="'field' + dataFormField?.id + 'value'"
+                [value]="option.id" [checked]="value?.includes(option.id)"
+                [disabled]="mode == 'actual' && disabled ? '' : null" (change)="onValueChange(option.id, $event)">
+            <label class="custom-control-label" [for]="'field' + dataFormField?.id + 'Option' + option.id">
+                {{option.data.name}}
+            </label>
+        </div>
+        <small *ngIf="error" class="form-text text-muted">
+            {{error}}
+        </small>
+
+    </ng-template>
+
+    <ng-template #dropDownValue>
+
+        <select class="custom-select" [id]="'field' + dataFormField?.id" [name]="'field' + dataFormField?.id + 'value'"
+            [disabled]="mode == 'actual' && disabled ? '' : null" [(ngModel)]="value"
+            (ngModelChange)="onValueChange($event)">
+            <option [ngValue]="null">Select Option</option>
+            <option *ngFor="let option of options" [ngValue]="option.id">{{option.data.name}}</option>
+        </select>
+        <small *ngIf="error" class="form-text text-muted">
+            {{error}}
+        </small>
+
+    </ng-template>
+
+    <ng-template #fileValue>
+
+        <div class="d-flex bd-highlight">
+            <div class="m-0 p-0 flex-grow-1 bd-highlight">
+                <input id="fileInput" type="file" style="display:none" (change)="onAttachFile($event.target.files)">
+
+                <div class="input-group">
+                    <input type="text" class="form-control" [value]="value" placeholder="Attach File" disabled>
+                    <div class="input-group-append">
+                        <span *ngIf="!value" class="input-group-text" [ngClass]="{'disabled': ((processing$ | async) || (mode == 'actual' && disabled))}" title="Attach File" onclick="document.getElementById('fileInput').click()">
+                            <fa-icon [icon]='["fas", "paperclip"]'></fa-icon>
+                        </span>
+                        <span *ngIf="value" class="input-group-text" [ngClass]="{'disabled': ((processing$ | async) || (mode == 'actual' && disabled))}" title="Delete Attached File" (click)="deleteFile()">
+                            <fa-icon [icon]='["fas", "trash"]'></fa-icon>
+                        </span>                
+                        <span *ngIf="value" class="input-group-text" [ngClass]="{'disabled': (processing$ | async)}" title="Download Attached File" (click)="downloadFile()">
+                            <fa-icon [icon]='["fas", "download"]'></fa-icon>
+                        </span>               
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="processing$ | async" class="m-0 p-1 bd-highlight">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+            </div>
+          </div>
+        <small *ngIf="error" class="form-text text-muted">
+            {{error}}
+        </small>
+
+
+
+
+    </ng-template>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

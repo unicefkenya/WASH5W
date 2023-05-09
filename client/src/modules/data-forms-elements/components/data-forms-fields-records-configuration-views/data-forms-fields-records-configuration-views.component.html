@@ -1,0 +1,308 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="data-form-field d-none d-md-block" [ngClass]="{'odd': odd, 'even': !odd}">
+        <div class="data-form-field-title">
+            <h6 [ngClass]="{'collapsed': !isExpanded(dataFormElement), 'expanded': isExpanded(dataFormElement)}">
+                <span class="row align-middle">
+                    <span class="col-1 align-middle icon">
+                        <ngContainer [ngSwitch]="dataFormElementType?.id">
+                            <span *ngSwitchCase="3" class="lead"><strong>0</strong></span>
+                            <span *ngSwitchCase="4" class="lead"><strong>0.0</strong></span>
+                            <fa-icon *ngSwitchDefault [icon]='["fas", dataFormElementType?.data?.icon]'></fa-icon>
+                        </ngContainer>
+                    </span>
+                    <span class="col-9 text">
+                        <label>{{dataFormElement?.data?.title}}</label>
+                    </span>
+                    <span class="col-2 actions">
+                        <span class="d-flex flex-row-reverse">
+                            <sb-button *ngIf="isExpanded(dataFormElement)" action="collapse" entity="Data Form Field"
+                                id="{{dataFormElement?.id}}" (collapse)="onCollapse(dataFormElement)"
+                                tooltip="Close to hide more details">
+                            </sb-button>
+                            <sb-button *ngIf="isCollapsed(dataFormElement)" action="expand" entity="Data Form Field"
+                                id="{{dataFormElement?.id}}" (expand)="onExpand(dataFormElement)"
+                                tooltip="Open to reveal more details">
+                            </sb-button>
+                            <sb-button action="update" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                                (update)="onUpdateDataFormElement($event, dataFormElement?.data?.categoryId)"
+                                tooltip="Update {{dataFormElement?.data?.title}}">
+                            </sb-button>
+                            <sb-button action="delete" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                                (delete)="onDeleteDataFormElement($event, dataFormElement?.data?.categoryId)"
+                                tooltip="Delete {{dataFormElement?.data?.title}}">
+                            </sb-button>
+                            <sb-button action="copy" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                                (copy)="onCopyField($event)" tooltip="Copy {{dataFormElement?.data?.title}}">
+                            </sb-button>
+                            <sb-button action="order" entity="Data Form Element" id="{{dataFormElement?.id}}" 
+                                [disabled]="reordering$ | async" (moveUp)="onMoveUpField(dataFormElement)" 
+                                (moveDown)="onMoveDownField(dataFormElement)">
+                            </sb-button>                             
+                        </span>
+                    </span>
+                </span>
+            </h6>
+        </div>
+        <div *ngIf="isExpanded(dataFormElement)" class="data-form-field-content ">
+            <div *ngIf="dataFormElement?.data?.described" class="row align-middle">
+                <div class="col-1 align-middle">
+                    <label>Description</label>
+                </div>
+                <div class="col-11 align-middle">
+                    <p (click)="toggleDescriptionCollapse()"
+                        [ngClass]="{'elastic': dataFormElement?.data.description.length > 125}">
+                        <span
+                            *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[125])}}</span>
+                        <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="row align-middle">
+                <div class="col-1 align-middle">
+                    <label>Type</label>
+                </div>
+                <div class="col-11 align-middle">
+                    <p>{{dataFormElementType?.data?.name}}</p>
+                </div>
+            </div>
+            <div *ngIf="isOptionable(dataFormElementType?.id)" class="row align-middle">
+                <div class="col-1 align-middle">
+                    <label>Options</label>
+                </div>
+                <div class="col-11 align-middle">
+                    <ul class="list-inline">
+                        <li *ngFor="let option of options" class="list-inline-item">{{option.data?.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngIf="dataFormElement?.data?.validated" class="row align-middle">
+                <div class="col-1 align-middle">
+                    <label>Validation</label>
+                </div>
+                <div class="col-11 align-middle">
+                    <ul class="list-inline">
+                        <li *ngFor="let validationRule of validationRules" class="list-inline-item">
+                            {{getOperator(validationRule.operatorId)?.data?.name}} {{validationRule.value}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row align-middle">
+                <div class="col-1 align-middle">
+                    <label>Relevancy</label>
+                </div>
+                <div class="col-11 align-middle">
+                    <p *ngIf="!dataFormElement?.data?.conditionallyRelevant">Always</p>
+                    <p *ngIf="dataFormElement?.data?.conditionallyRelevant">Conditionally</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-form-field d-md-none" [ngClass]="{'odd': odd, 'even': !odd}">
+        <div class="data-form-field-title">
+            <h6 [ngClass]="{'collapsed': !isExpanded(dataFormElement), 'expanded': isExpanded(dataFormElement)}">
+                <span class="row text-center align-middle">
+                    <span class="col-12 icon">
+                        <ngContainer [ngSwitch]="dataFormElementType?.id">
+                            <span *ngSwitchCase="3" class="lead"><strong>0</strong></span>
+                            <span *ngSwitchCase="4" class="lead"><strong>0.0</strong></span>
+                            <fa-icon *ngSwitchDefault [icon]='["fas", dataFormElementType?.data?.icon]'></fa-icon>
+                        </ngContainer>
+                    </span>
+                    <span class="col-12 text">
+                        <label>
+                            {{dataFormElement?.data?.title}}
+                        </label>
+                    </span>
+                    <span class="col-12 actions">
+                        <span class="d-flex justify-content-center">
+                            <sb-button action="order" entity="Data Form Element" id="{{dataFormElement?.id}}" 
+                                [disabled]="reordering$ | async" (moveUp)="onMoveUpField(dataFormElement)" 
+                                (moveDown)="onMoveDownField(dataFormElement)">
+                            </sb-button>                           
+                            <sb-button action="copy" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                                (copy)="onCopyField($event)" tooltip="Copy {{dataFormElement?.data?.title}}">
+                            </sb-button>
+                            <sb-button action="delete" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                                (delete)="onDeleteDataFormElement($event, dataFormElement?.data?.categoryId)"
+                                tooltip="Delete {{dataFormElement?.data?.title}}">
+                            </sb-button>
+                            <sb-button action="update" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                                (update)="onUpdateDataFormElement($event, dataFormElement?.data?.categoryId)"
+                                tooltip="Update {{dataFormElement?.data?.title}}">
+                            </sb-button>
+                            <sb-button *ngIf="isCollapsed(dataFormElement)" action="expand" entity="Data Form Field"
+                                id="{{dataFormElement?.id}}" (expand)="onExpand(dataFormElement)"
+                                tooltip="Open to reveal more details">
+                            </sb-button>
+                            <sb-button *ngIf="isExpanded(dataFormElement)" action="collapse" entity="Data Form Field"
+                                id="{{dataFormElement?.id}}" (collapse)="onCollapse(dataFormElement)"
+                                tooltip="Close to hide more details">
+                            </sb-button>
+                        </span>
+                    </span>
+                </span>
+            </h6>
+        </div>
+        <div *ngIf="isExpanded(dataFormElement)" class="data-form-field-content ">
+            <div *ngIf="dataFormElement?.data?.described" class="row align-middle">
+                <div class="col-12 text-center align-middle">
+                    <label>Description</label>
+                </div>
+                <div class="col-12 text-center align-middle">
+                    <p (click)="toggleDescriptionCollapse()"
+                        [ngClass]="{'elastic': dataFormElement?.data.description.length > 50}">
+                        <span
+                            *ngIf="descriptionCollapsed">{{textUtilService.truncate(dataFormElement?.data.description,[50])}}</span>
+                        <span *ngIf="!descriptionCollapsed">{{dataFormElement?.data.description}}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="row align-middle">
+                <div class="col-12 text-center align-middle">
+                    <label>Type</label>
+                </div>
+                <div class="col-12 text-center align-middle">
+                    <p>{{dataFormElementType?.data?.name}}</p>
+                </div>
+            </div>
+            <div *ngIf="isOptionable(dataFormElementType?.id)" class="row align-middle">
+                <div class="col-12 text-center align-middle">
+                    <label>Options</label>
+                </div>
+                <div class="col-12 text-center align-middle">
+                    <ul class="list-inline">
+                        <li *ngFor="let option of options" class="list-inline-item">{{option.data?.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngIf="dataFormElement?.data?.validated" class="row align-middle">
+                <div class="col-12 text-center align-middle">
+                    <label>Validation</label>
+                </div>
+                <div class="col-12 text-center align-middle">
+                    <ul class="list-inline">
+                        <li *ngFor="let validationRule of validationRules" class="list-inline-item">
+                            {{getOperator(validationRule.operatorId)?.data?.name}} {{validationRule.value}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row align-middle">
+                <div class="col-12 text-center align-middle">
+                    <label>Relevancy</label>
+                </div>
+                <div class="col-12 text-center align-middle">
+                    <p *ngIf="!dataFormElement?.data?.conditionallyRelevant">Always</p>
+                    <p *ngIf="dataFormElement?.data?.conditionallyRelevant">Conditionally</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="false" class="m-0 mb-2 p-0 wrapper">
+
+        <table class="table m-0" style="width:100%">
+            <tr>
+                <td class="col-1 pl-4 align-middle bg-light">
+                    <ngContainer [ngSwitch]="dataFormElementType?.id">
+                        <span *ngSwitchCase="3" class="lead"><strong>0</strong></span>
+                        <span *ngSwitchCase="4" class="lead"><strong>0.0</strong></span>
+                        <fa-icon *ngSwitchDefault [icon]='["fas", dataFormElementType?.data?.icon]'></fa-icon>
+                    </ngContainer>
+                </td>
+                <td class="col-9 text-left align-middle bg-light">
+                    {{dataFormElement?.data?.title}}
+                </td>
+                <td class="col-2 text-center align-middle bg-light">
+                    <span class="d-flex flex-row-reverse">
+                        <sb-button *ngIf="isExpanded(dataFormElement)" action="collapse" entity="Data Form Field"
+                            id="{{dataFormElement?.id}}" (collapse)="onCollapse(dataFormElement)"
+                            tooltip="Close to hide more details">
+                        </sb-button>
+                        <sb-button *ngIf="isCollapsed(dataFormElement)" action="expand" entity="Data Form Field"
+                            id="{{dataFormElement?.id}}" (expand)="onExpand(dataFormElement)"
+                            tooltip="Open to reveal more details">
+                        </sb-button>
+                        <sb-button action="update" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                            (update)="onUpdateDataFormElement($event, dataFormElement?.data?.categoryId)"
+                            tooltip="Update {{dataFormElement?.data?.title}}">
+                        </sb-button>
+                        <sb-button action="delete" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                            (delete)="onDeleteDataFormElement($event, dataFormElement?.data?.categoryId)"
+                            tooltip="Delete {{dataFormElement?.data?.title}}">
+                        </sb-button>
+                        <sb-button action="copy" entity="Data Form Element" id="{{dataFormElement?.id}}"
+                            (copy)="onCopyField($event)" tooltip="Copy {{dataFormElement?.data?.title}}">
+                        </sb-button>
+                    </span>
+                </td>
+            </tr>
+            <tr *ngIf="isExpanded(dataFormElement) && dataFormElement?.data?.described">
+                <td class="col-1 pl-4 align-middle title">
+                    Description
+                </td>
+                <td colspan="2">
+                    {{dataFormElement?.data?.description}}
+                </td>
+            </tr>
+            <tr *ngIf="isExpanded(dataFormElement)">
+                <td class="col-1 pl-4 align-middle title">
+                    Type
+                </td>
+                <td colspan="2">
+                    {{dataFormElementType?.data?.name}}
+                </td>
+            </tr>
+            <tr *ngIf="isExpanded(dataFormElement) && isOptionable(dataFormElementType?.id)">
+                <td class="col-1 pl-4 align-middle title">
+                    Options
+                </td>
+                <td colspan="2">
+                    <ul class="list-inline mb-0">
+                        <li *ngFor="let option of options" class="list-inline-item">{{option.data?.name}}
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr *ngIf="isExpanded(dataFormElement) && dataFormElement?.data?.validated">
+                <td class="col-1 pl-4 align-middle title">
+                    Validations
+                </td>
+                <td colspan="2">
+                    <ul class="list-inline mb-0">
+                        <li *ngFor="let validationRule of validationRules" class="list-inline-item">
+                            {{getOperator(validationRule.operatorId)?.data?.name}} {{validationRule.value}}
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr *ngIf="isExpanded(dataFormElement)">
+                <td class="col-1 pl-4 align-middle title">
+                    Relevancy
+                </td>
+                <td colspan="2">
+                    <span *ngIf="!dataFormElement?.data?.conditionallyRelevant">Always</span>
+                    <span *ngIf="dataFormElement?.data?.conditionallyRelevant">Conditionally</span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</ng-container>
+
+<ng-template #initialising>
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

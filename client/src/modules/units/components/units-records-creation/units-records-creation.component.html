@@ -1,0 +1,76 @@
+<div class="card-body m-0 p-0">
+
+    <h5 class="card-title">Basic Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please enter the unit's basic details</h6>
+
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>
+
+    <form [formGroup]="unitsForm">
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter unit's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="unitsForm.get('name')?.invalid && (unitsForm.get('name')?.dirty || unitsForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="unitsForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="unitsForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="unitsForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="unitsForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Abbreviation -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Abbreviation</label>
+                    </div>
+                    <input type="text" class="form-control" id="abbreviation" placeholder="Enter unit's abbreviation"
+                        formControlName="abbreviation">
+                </div>
+                <div *ngIf="unitsForm.get('abbreviation')?.invalid && (unitsForm.get('abbreviation')?.dirty || unitsForm.get('abbreviation')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="unitsForm.get('abbreviation')?.errors.required">
+                        Abbreviation is required
+                    </div>
+                    <div *ngIf="unitsForm.get('abbreviation')?.errors.minlength">
+                        Abbreviation should be at least 1 characters long
+                    </div>
+                    <div *ngIf="unitsForm.get('abbreviation')?.errors.maxlength">
+                        Abbreviation cannot be more than 50 characters long
+                    </div>
+                    <div *ngIf="unitsForm.get('abbreviation')?.errors.exists">
+                        Abbreviation should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+
+</div>

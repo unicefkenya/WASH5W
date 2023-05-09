@@ -1,0 +1,26 @@
+form
+  .d-flex.flex-column.mb-3
+    .p-2
+      sb-search((searched)='onSearchTermChange($event)')
+    .p-2
+      sb-loading-animation
+  .row
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-sm-11.text-left.align-middle(scope='col') Name 
+            th.col-sm-1.text-center.align-middle(scope='col') Select
+        ng-container(body='')
+          tr(*ngfor='let option of optionsDataService.options$ | async')
+            td.text-left.align-middle
+              | {{option.data?.name}}
+            td.text-center.align-middle
+              span.d-flex.justify-content-center
+                div(*ngif='selectionMode === "single"; else multi')
+                  sb-button(action='select', entity='Option', id='{{option.id}}', name='option', [selected]='isSelected(option.id)', [disabled]='isSelected(option.id) && disableSelectedOptionIdsTreatment', (select)='onSelect($event)')
+                ng-template(#multi='')
+                  sb-button(action='check', entity='Option', id='{{option.id}}', name='option', [checked]='isChecked(option.id)', [disabled]='isChecked(option.id) && disableSelectedOptionIdsTreatment', (check)='onCheck($event)', (uncheck)='onUncheck($event)')
+  .row
+    .col
+      sb-pagination(type='modal', (pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')

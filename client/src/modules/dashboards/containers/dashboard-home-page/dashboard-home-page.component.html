@@ -1,0 +1,144 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <sb-header [title]="(title$ | async)" [subtitle]="(subtitle$ | async)" [hideBreadcrumbs]="true"></sb-header>
+
+    <div class="mx-4 pl-1 pr-1" style="margin-top: -100px;">
+
+        <!-- Tabbed Home -->
+        <ng-container *ngIf="(pageTabs.length > 0)">
+
+            <!-- Header - Hide on screens smaller than md -->
+            <div class="d-none d-md-block custom-page-tabs-container mt-0 ml-2 mr-2 shadow border-top">
+                <ul class="nav nav-tabs custom-page-tabs">
+                    <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                </ul>
+            </div>
+
+            <!-- Header - Hide on screens wider than md -->
+            <div class="d-md-none custom-page-pills-container mt-0 ml-2 mr-2">
+                <ul class="nav flex-column nav-pills custom-page-pills">
+                    <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                </ul>
+            </div>
+
+            <!-- Header Templates -->
+            <ng-template #navItems>
+
+                <li *ngFor="let tab of pageTabs" class="nav-item">
+
+                    <ng-container *ngIf="tab.id == activePageTab?.id; else inactive">
+                        <a class="nav-link active" href="javascript:void(0);">
+                            {{tab.data.navTitle}}
+                        </a>
+                    </ng-container>
+
+                    <ng-template #inactive>
+                        <a class="nav-link" (click)="onChangeTab(tab)">
+                            {{tab.data.navTitle}}
+                        </a>
+                    </ng-template>
+                </li>
+
+            </ng-template>
+
+            <!-- Contents -->
+            <div class="custom-page-contents-container shadow ml-2 mr-2 pt-3">
+                <ng-container *ngTemplateOutlet="content"></ng-container>
+            </div>
+
+        </ng-container>
+
+        <!-- Plain Home -->
+        <ng-container *ngIf="!(pageTabs.length > 0)">
+            <sb-card>
+                <div class="card-body">
+                    <ng-container *ngTemplateOutlet="content"></ng-container>
+                </div>
+            </sb-card>
+        </ng-container>
+
+    </div>
+
+    <ng-template #content>
+
+        <ng-container *ngIf="!placeholder; else message">
+
+            <div class="row d-md-none">
+                <div class="col-12" *ngFor="let visualisation of visualisations">
+
+                    <ng-container *ngIf="isChart(visualisation)">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                {{visualisation.data.name}}
+                            </div>
+                            <div class="card-body">
+                                <sb-charts [visualisation]="visualisation"></sb-charts>
+
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="isMap(visualisation)">
+                        <div class="card mb-4">
+                            <sb-maps [visualisation]="visualisation"></sb-maps>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="isTable(visualisation)">
+                        <div class="card mb-4">
+                            <sb-tables [visualisation]="visualisation"></sb-tables>
+                        </div>
+                    </ng-container>
+
+                </div>
+            </div>
+
+            <div class="card-deck" *ngFor="let row of visualisationsMapping.keys()">
+                <ng-container *ngFor="let visualisation of visualisationsMapping.get(row)">
+                    <ng-container *ngIf="isChart(visualisation)">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                {{visualisation.data.name}}
+                            </div>
+                            <div class="card-body">
+                                <sb-charts [visualisation]="visualisation"></sb-charts>
+
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="isMap(visualisation)">
+                        <div class="card mb-4">
+                            <sb-maps [visualisation]="visualisation"></sb-maps>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="isTable(visualisation)">
+                        <div class="card border-0 mb-4">
+                            <sb-tables [visualisation]="visualisation"></sb-tables>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+        </ng-container>
+
+        <ng-template #message>
+                <img src="assets/img/undraw_under_construction.svg" style="height: 300px;" class="card-img-top"
+                    alt="...">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Under Construction</h5>
+                </div>
+        </ng-template>
+
+    </ng-template>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

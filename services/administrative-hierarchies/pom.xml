@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>administrative-hierarchies</artifactId>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
+        </configuration>
+        <executions>
+          <execution>
+            <configuration>
+              <skip>${skip.integration.tests}</skip>
+            </configuration>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <id>pre-integration-test</id>
+          </execution>
+          <execution>
+            <configuration>
+              <skip>${skip.integration.tests}</skip>
+            </configuration>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+            <id>post-integration-test</id>
+          </execution>
+        </executions>
+        <groupId>org.springframework.boot</groupId>
+
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>${skip.unit.tests}</skipTests>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <skipTests>${skip.integration.tests}</skipTests>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-help-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+
+    <!-- spring framework-->
+    <dependency>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+
+
+    <!-- data -->
+    <dependency>
+      <artifactId>postgresql</artifactId>
+      <groupId>org.postgresql</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>rxjava</artifactId>
+      <groupId>io.reactivex.rxjava2</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>rxjava2-jdbc</artifactId>
+      <groupId>com.github.davidmoten</groupId>
+      <version>${davidmoten.rxjava2.jdbc.version}</version>
+    </dependency>
+
+    <!-- api -->
+    <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-webflux-ui -->
+    <dependency>
+      <artifactId>springdoc-openapi-webflux-ui</artifactId>
+      <groupId>org.springdoc</groupId>
+      <version>${springdoc.openapi.webflux.ui.version}</version>
+    </dependency>
+
+    <!-- tests -->
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>reactor-test</artifactId>
+      <groupId>io.projectreactor</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>mockito-core</artifactId>
+      <groupId>org.mockito</groupId>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <artifactId>junit-jupiter</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <scope>test</scope>
+      <version>${testcontainers.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>postgresql</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <scope>test</scope>
+      <version>${testcontainers.version}</version>
+    </dependency>
+
+    <!-- utilities-->
+    <dependency>
+      <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <artifactId>guava-mini</artifactId>
+      <groupId>com.github.davidmoten</groupId>
+      <version>${davidmoten.guava.mini.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-devtools</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>runtime</scope>
+    </dependency>
+
+  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>${spring.cloud.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <description>AdministrativeHierarchies Microservice</description>
+
+  <groupId>ke.co.miles</groupId>
+  <licenses>
+    <license>
+      <name>Mozilla Public License, Version 2.0</name>
+      <url>http://www.mozilla.org/MPL/2.0/index.txt</url>
+    </license>
+  </licenses>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>administrativeHierarchies</name>
+
+  <organization>
+    <name>Second Mile</name>
+    <url>https://miles.co.ke</url>
+  </organization>
+
+  <packaging>jar</packaging>
+
+
+  <parent>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <relativePath/>
+    <version>2.5.5</version>
+  </parent>
+
+
+  <profiles>
+
+    <!-- Development Profile -->
+    <profile>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>dev</value>
+        </property>
+      </activation>
+      <id>dev</id>
+      <properties>
+        <skip.integration.tests>true</skip.integration.tests>
+        <skip.unit.tests>false</skip.unit.tests>
+      </properties>
+    </profile>
+
+    <!-- Test Profile -->
+    <profile>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>test</value>
+        </property>
+      </activation>
+      <id>test</id>
+      <properties>
+        <skip.integration.tests>false</skip.integration.tests>
+        <skip.unit.tests>true</skip.unit.tests>
+      </properties>
+    </profile>
+
+    <!-- Production Profile -->
+    <profile>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>prod</value>
+        </property>
+      </activation>
+      <id>prod</id>
+      <properties>
+        <skip.integration.tests>true</skip.integration.tests>
+        <skip.unit.tests>true</skip.unit.tests>
+      </properties>
+    </profile>
+  </profiles>
+
+  <properties>
+    <davidmoten.guava.mini.version>0.1.4</davidmoten.guava.mini.version>
+    <davidmoten.rxjava2.jdbc.version>0.2.10</davidmoten.rxjava2.jdbc.version>
+    <java.version>11</java.version>
+    <skip.integration.tests>true</skip.integration.tests>
+    <skip.unit.tests>false</skip.unit.tests>
+    <spring.cloud.version>Greenwich.RELEASE</spring.cloud.version>
+    <springdoc.openapi.webflux.ui.version>1.6.8</springdoc.openapi.webflux.ui.version>
+    <testcontainers.version>1.17.1</testcontainers.version>
+  </properties>
+
+
+  <version>0.0.1</version>
+
+</project>

@@ -1,0 +1,23 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-administrative-structures-records-selection [selectionMode]="selectionMode" [desired]="desired"
+            [undesired]="undesired" [selected]="selected" (select)="onSelect($event)" (check)="onCheck($event)"
+            (uncheck)="onUncheck($event)">
+        </sb-administrative-structures-records-selection>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <sb-button action="done" entity="Administrative Structure" tooltip="Close Selector" guarded="false"
+            (done)="onDone()"></sb-button>
+
+    </ng-container>
+
+</sb-modal>

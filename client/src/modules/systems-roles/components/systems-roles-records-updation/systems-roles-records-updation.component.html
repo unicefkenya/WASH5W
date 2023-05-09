@@ -1,0 +1,142 @@
+<div class="card-body m-0 p-0">
+
+    <form [formGroup]="systemsRolesForm">
+
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Please enter the role's basic details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-1 mb-3 p-0 ">
+        </div>
+
+        <!-- Code -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Code</label>
+                    </div>
+                    <input type="text" class="form-control" id="code" placeholder="Enter the system role's code"
+                        formControlName="code">
+                </div>
+                <div *ngIf="systemsRolesForm.get('code')?.invalid && (systemsRolesForm.get('code')?.dirty || systemsRolesForm.get('code')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsRolesForm.get('code')?.errors.required">
+                        Code is required
+                    </div>
+                    <div *ngIf="systemsRolesForm.get('code')?.errors.minlength">
+                        Code should be at least 2 characters long
+                    </div>
+                    <div *ngIf="systemsRolesForm.get('code')?.errors.maxlength">
+                        Code should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="systemsRolesForm.get('code')?.errors.exists">
+                        Code should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter the system role's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="systemsRolesForm.get('name')?.invalid && (systemsRolesForm.get('name')?.dirty || systemsRolesForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsRolesForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="systemsRolesForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="systemsRolesForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="systemsRolesForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <h5 class="card-title mt-4">Additional Details</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Optionally provide the roles's miscellaneous details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-1 mb-3 p-0 ">
+        </div>
+
+
+        <!-- Description -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Description</label>
+                    </div>
+                    <textarea class="form-control" id="description" formControlName="description"></textarea>
+                </div>
+                <div *ngIf="systemsRolesForm.get('description')?.invalid && (systemsRolesForm.get('description')?.dirty || systemsRolesForm.get('description')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsRolesForm.get('description')?.errors.maxlength">
+                        Description cannot be more than 500 characters long
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Default Home -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Homepage</label>
+                    </div>
+                    <select class="custom-select" id="typeId" formControlName="homeId">
+                        <option [ngValue]="null" disabled>Select the role's default page on successful login</option>
+                        <option [ngValue]="1">Dashboard</option>
+                        <option [ngValue]="2">Reports</option>
+                    </select>
+                </div>
+                <div *ngIf="systemsRolesForm.get('homeId')?.invalid && (systemsRolesForm.get('homeId')?.dirty || systemsRolesForm.get('homeId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="systemsRolesForm.get('homeId')?.errors.required">
+                        Homepage is required
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Flags -->
+        <div *ngIf="isDevelopmentEnvironment()" class="d-flex flex-column bd-highlight mt-2">
+
+            <!-- Conditionally customise permissions for the current deployment -->
+            <div class="bd-highlight p-2">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="validated" [checked]="isCustomisable()"
+                        (change)="toggleCustomisability($event)">
+                    <label class="custom-control-label" for="validated">Customisable</label>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>

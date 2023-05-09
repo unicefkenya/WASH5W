@@ -1,0 +1,94 @@
+<div *ngIf='displayMode == "tabular"' class="row m-0 p-0">
+    <div class="col m-0 p-0">
+        <table class="table">
+            <tbody>
+                <ng-container *ngFor="let dataFormElementType of dataFormsElementsTypesDataService.getDataFormsElementsTypesByCategoryId$(2) | async">
+                    <tr>
+                        <td class="col-2 text-center align-middle">
+                            <span class="d-flex justify-content-center">
+
+                                <div *ngIf='selectionMode === "single"; else multi'>
+                                    <sb-button action="select" entity="Data Form"
+                                        id="{{dataFormElementType.id}}" name="dataFormElement"
+                                        [selected]="isSelected(dataFormElementType)"
+                                        (select)="onSelect(dataFormElementType)">
+                                    </sb-button>
+                                </div>
+
+                                <ng-template #multi>
+                                    <sb-button action="check" entity="Data Form" id="{{dataFormElementType.id}}"
+                                        name="dataFormElement" [checked]="isChecked(dataFormElementType)"
+                                        (check)="onCheck(dataFormElementType)"
+                                        (uncheck)="onUncheck(dataFormElementType)">
+                                    </sb-button>
+                                </ng-template>
+                            </span>
+                        </td>                        
+                        <td class="col-2 text-center align-middle">
+                            <ngContainer [ngSwitch]="dataFormElementType.id">
+                                <span *ngSwitchCase="3" class="text-center"><strong>0</strong></span>
+                                <span *ngSwitchCase="4" class="text-center"><strong>0.0</strong></span>
+                                <fa-icon *ngSwitchDefault [icon]='["fas", dataFormElementType.data.icon]'>
+                                </fa-icon>
+                            </ngContainer>
+                        </td>
+                        <td class="col-8 align-middle">
+                            {{dataFormElementType.data?.name}}
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div *ngIf='displayMode == "thumbnails"' class="row row-cols-3 mr-1 ml-1">
+
+    <ng-container *ngFor="let dataFormElementType of dataFormsElementsTypesDataService.getDataFormsElementsTypesByCategoryId$(2) | async">
+
+            <div class="card m-0 p-0">
+
+                <!--For Middle-Sized Devices Upwards-->
+                <button type="button" class="btn big rounded-0 d-none d-md-block"
+                    [ngClass]="isSelected(dataFormElementType) ? 'btn-success' : 'btn-secondary' "
+                    data-toggle="button"
+                    [attr.aria-pressed]="isSelected(dataFormElementType) ? true : false"
+                    (click)="onSelect(dataFormElementType)" 
+                    style="width:153.333px; height: 77.6px;">
+                    <span class="d-flex flex-column bd-highlight">
+                        <span class="p-0 bd-highlight">
+                            <ngContainer [ngSwitch]="dataFormElementType.id">
+                                <span *ngSwitchCase="3" class="text-center"><strong>0</strong></span>
+                                <span *ngSwitchCase="4" class="text-center"><strong>0.0</strong></span>
+                                <fa-icon *ngSwitchDefault
+                                    [icon]='["fas", dataFormElementType.data.icon]'>
+                                </fa-icon>
+                            </ngContainer>
+                        </span>
+                        <span class="p-0 bd-highlight">
+                            {{dataFormElementType.data?.name}}
+                        </span>
+                    </span>
+                </button>
+
+
+                <!--For Small Devices-->
+                <button type="button" class="btn small rounded-0 d-md-none"
+                    [ngClass]="isSelected(dataFormElementType) ? 'btn-success' : 'btn-secondary' "
+                    data-toggle="button"
+                    [attr.aria-pressed]="isSelected(dataFormElementType) ? true : false"
+                    title="{{dataFormElementType.data?.name}}"
+                    (click)="onSelect(dataFormElementType)">
+                    <ngContainer [ngSwitch]="dataFormElementType.id">
+                        <span *ngSwitchCase="3" class="text-center"><strong>0</strong></span>
+                        <span *ngSwitchCase="4" class="text-center"><strong>0.0</strong></span>
+                        <fa-icon *ngSwitchDefault [icon]='["fas", dataFormElementType.data.icon]'>
+                        </fa-icon>
+                    </ngContainer>
+                </button>
+
+
+            </div>
+    </ng-container>
+</div>

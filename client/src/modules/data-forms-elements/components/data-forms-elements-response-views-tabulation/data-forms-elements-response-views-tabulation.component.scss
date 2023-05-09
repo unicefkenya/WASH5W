@@ -1,0 +1,11 @@
+
+        .dropdown-toggle::before {
+            display: none !important;
+        }
+
+        div.wrapper {
+            border: 1px solid #dee2e6;
+            border-top: none;
+            /*border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;*/
+        }

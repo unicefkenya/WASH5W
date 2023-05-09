@@ -1,0 +1,101 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <div class="card-body m-0 p-0" *ngIf='page == "default"'>
+        <form [formGroup]="quantitiesObservationsForm">
+
+            <!-- Date -->
+            <div class="d-flex flex-column bd-highlight">
+
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Date</label>
+                        </div>
+                        <input type="date" class="form-control" id="date" formControlName="date"
+                            placeholder="yyyy-mm-dd">
+                    </div>
+                    <div *ngIf="quantitiesObservationsForm.get('date')?.invalid && (quantitiesObservationsForm.get('date')?.dirty || quantitiesObservationsForm.get('date')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="quantitiesObservationsForm.get('date')?.errors.required">
+                            Date is required
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--Location -->
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text" id="locationName">Location</label>
+                    </div>
+                    <ng-container formGroupName="location">
+                        <input type="text" class="form-control input-group-input pl-3" id="locationName" placeholder=""
+                            formControlName="locationName" disabled>
+                    </ng-container>
+                    <div class="input-group-append pb-0">
+                        <button type="button" class="btn btn-button-bg-color-1" data-toggle="tooltip"
+                            data-placement="top" title="Choose Location" (click)="openLocationSelector()">
+                            <fa-icon [icon]='["fas", "bullseye"]'></fa-icon>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="quantitiesObservationsForm.get('location.locationId')?.invalid && (quantitiesObservationsForm.get('location.locationId')?.dirty || quantitiesObservationsForm.get('location.locationId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="quantitiesObservationsForm.get('location.locationId')?.errors.required">
+                        Location is required
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amount -->
+            <div class="d-flex flex-column bd-highlight">
+
+                <div class="bd-highlight">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="input-group-prepend pb-0">
+                            <label class="input-group-text">Amount</label>
+                        </div>
+                        <input type="text" class="form-control" id="amount" placeholder="Enter Amount"
+                            formControlName="amount">
+                    </div>
+                    <div *ngIf="quantitiesObservationsForm.get('amount')?.invalid && (quantitiesObservationsForm.get('amount')?.dirty || quantitiesObservationsForm.get('amount')?.touched)"
+                        class="alert alert-danger mt-3">
+                        <div *ngIf="quantitiesObservationsForm.get('amount')?.errors.required">
+                            Amount is required
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+
+
+
+    <ng-container *ngIf='page == "locations"' class="p-0 m-0">
+
+        <div class="d-flex flex-column">
+            <div class="p-2">
+                <sb-administrative-hierarchies-records-selection [selected]="getSelectedLocations()"
+                    (select)="onSelectAdministrativeHierarchyElement($event)">
+                </sb-administrative-hierarchies-records-selection>
+            </div>
+        </div>
+
+    </ng-container>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

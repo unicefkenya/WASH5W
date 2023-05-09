@@ -1,0 +1,28 @@
+<ng-container *ngIf="initialised; else initialising">
+    <div class="d-flex flex-column justify-content-center bd-highlight mb-3">
+        <div class="pt-2 bd-highlight text-center">
+            <h5 [ngClass]="iconClasses">
+                <fa-icon [icon]='["fas", "question-circle"]'></fa-icon>
+            </h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <h5>Confirming</h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <p>
+                Are you sure you want to close the <span class="font-weight-bold">{{getFormattedTimePeriod()}}</span>
+                Reporting Period? This <span class="font-weight-bold">cannot</span> be undone
+            </p>            
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #initialising>
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

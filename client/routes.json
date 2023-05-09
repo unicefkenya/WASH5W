@@ -1,0 +1,8 @@
+{
+  "/api/v1/entities_types/*": "/$1",
+  "/api/v1/entities/*": "/$1",
+  "/api/v1/accountabilities_hierarchies/*": "/$1",
+  "/api/v1/accountabilities_types/*": "/$1",
+  "/api/v1/accountabilities/*": "/$1",
+  "/api/v1/*": "/$1"
+}

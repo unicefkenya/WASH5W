@@ -1,0 +1,26 @@
+form
+  .d-flex.flex-column.mb-3
+    .p-2
+      sb-search((searched)='onSearchTermChange($event)')
+    .p-2
+      sb-loading-animation
+  .row
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-sm-11.text-left.align-middle(scope='col') Name 
+            th.col-sm-1.text-center.align-middle(scope='col') Select
+        ng-container(body='')
+          tr(*ngfor='let organisation of organisationsDataService.organisations$ | async')
+            td.text-left.align-middle
+              | {{organisation.data?.name}}
+            td.text-center.align-middle
+              span.d-flex.justify-content-center
+                div(*ngif='selectionMode === "single"; else multi')
+                  sb-button(action='select', entity='Organisation', id='{{organisation.id}}', name='organisation', [selected]='isSelected(organisation.id)', [disabled]='isSelected(organisation.id) && disableSelectedOrganisationIdsTreatment', (select)='onSelect($event)')
+                ng-template(#multi='')
+                  sb-button(action='check', entity='Organisation', id='{{organisation.id}}', name='organisation', [checked]='isChecked(organisation.id)', [disabled]='isChecked(organisation.id) && disableSelectedOrganisationIdsTreatment', (check)='onCheck($event)', (uncheck)='onUncheck($event)')
+  .row
+    .col
+      sb-pagination(type='modal', (pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')

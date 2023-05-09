@@ -1,0 +1,143 @@
+<!-- Display the data form -->
+<div class="card-body m-0 p-0">
+    <form [formGroup]="organisationsTypesForm">
+
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please enter the organisation type's basic details</h6>
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <!-- Singular Name -->
+        <div class="d-flex flex-column bd-highlight">
+    
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Singular Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter organisation type's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="organisationsTypesForm.get('name')?.invalid && (organisationsTypesForm.get('name')?.dirty || organisationsTypesForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="organisationsTypesForm.get('name')?.errors.required">
+                        Singular Name is required
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('name')?.errors.minlength">
+                        Singular Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('name')?.errors.maxlength">
+                        Singular Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('name')?.errors.exists">
+                        Singular Name should be unique
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    
+        <!-- Plural Name-->
+        <div class="d-flex flex-column bd-highlight">
+    
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Plural Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="plural" placeholder="Enter organisation type's plural name"
+                        formControlName="plural">
+                </div>
+                <div *ngIf="organisationsTypesForm.get('plural')?.invalid && (organisationsTypesForm.get('plural')?.dirty || organisationsTypesForm.get('plural')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="organisationsTypesForm.get('plural')?.errors.required">
+                        Plural Name is required
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('plural')?.errors.minlength">
+                        Plural Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('plural')?.errors.maxlength">
+                        Plural Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('plural')?.errors.exists">
+                        Plural Name should be unique
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    
+        <!-- Abbreviation -->
+        <div class="d-flex flex-column bd-highlight">
+    
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Abbreviation</label>
+                    </div>
+                    <input type="text" class="form-control" id="abbreviation" placeholder="Enter organisation type's abbreviation"
+                        formControlName="abbreviation">
+                </div>
+                <div *ngIf="organisationsTypesForm.get('abbreviation')?.invalid && (organisationsTypesForm.get('abbreviation')?.dirty || organisationsTypesForm.get('abbreviation')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="organisationsTypesForm.get('abbreviation')?.errors.required">
+                        Abbreviation is required
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('abbreviation')?.errors.minlength">
+                        Abbreviation should be at least 1 character long.
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('abbreviation')?.errors.maxlength">
+                        Abbreviation cannot be more than 50 characters long
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('abbreviation')?.errors.exists">
+                        Abbreviation should be unique
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+
+        <h5 class="card-title mt-3">Visual Representation</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please assign a colour code to the organisation type</h6>
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+        
+        <!-- Colour Code -->
+        <div class="d-flex flex-column bd-highlight">
+    
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Colour Code</label>
+                    </div>
+                    <input type="color" class="form-control" id="colourCode" placeholder="Select organisation type's colour code" title="Click to select the organisation type's colour code"
+                        formControlName="colourCode">
+                </div>
+                <div *ngIf="organisationsTypesForm.get('colourCode')?.invalid && (organisationsTypesForm.get('colourCode')?.dirty || organisationsTypesForm.get('colourCode')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="organisationsTypesForm.get('colourCode')?.errors.required">
+                        Colour Code is required
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('colourCode')?.errors.minlength">
+                        Colour Code should be 7 characters long
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('colourCode')?.errors.maxlength">
+                        Colour Code should be 7 characters long
+                    </div>
+                    <div *ngIf="organisationsTypesForm.get('colourCode')?.errors.exists">
+                        Colour Code should be unique
+                    </div>
+                </div>
+            </div>
+    
+        </div>    
+    
+    </form>    
+</div>
+
+
+

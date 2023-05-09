@@ -1,0 +1,29 @@
+<ngContainer [ngSwitch]="workflow">
+
+    <!-- Display a loading screen if the workflow hasn't been initialised -->
+    <sb-loading-animation *ngSwitchCase="workflow == undefined"></sb-loading-animation>
+
+    <!-- Display an error message if the workflow has been initialised to null -->
+    <div *ngSwitchCase="workflow == null" class="jumbotron">
+        <h1 class="display-4">Oops</h1>
+        <p class="lead">We are sorry we cannot display the Workflow's deletion form at this moment</p>
+        <hr class="my-4">
+        <p>Please try again in a little while</p>
+    </div>    
+
+    <!-- Display the confirmation panel if the workflow has been initialised to a valid value -->
+    <div *ngSwitchDefault class="d-flex flex-column justify-content-center bd-highlight mb-3">
+        <div class="pt-2 bd-highlight text-center">
+            <h5 [ngClass]="iconClasses">
+                <fa-icon [icon]='["fas", "question-circle"]'></fa-icon>
+            </h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <h5>Confirming</h5>
+        </div>
+        <div class="pt-2 bd-highlight text-center">
+            <p>Are you sure you want to delete the <span class="font-weight-bold">{{workflow?.data?.name}}</span> Workflow?</p>
+        </div>
+    </div>
+    
+</ngContainer>

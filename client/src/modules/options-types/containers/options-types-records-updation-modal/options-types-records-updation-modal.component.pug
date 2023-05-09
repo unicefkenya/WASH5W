@@ -1,0 +1,34 @@
+sb-modal(shadow='false')
+  ng-container(title='')
+    | {{title}}
+  ng-container(body='')
+    sb-optionsTypes-records-updation([id]='id', (succeeded)='onSucceeded()', (failed)='onFailed($event)')
+    ngcontainer([ngswitch]='(status$ | async)')
+      // Saving Overlay
+      sb-message-overlay(*ngswitchcase="'saving'", activity='updating', status='saving')
+      // Saving Suceeded Overlay
+      sb-message-overlay(*ngswitchcase="'succeeded'", activity='updating', status='succeeded')
+      // Saving Failed Overlay
+      sb-message-overlay(*ngswitchcase="'failed'", activity='updating', status='failed')
+      // Saving Re-Trial Delay Overlay
+      sb-countdown-overlay(*ngswitchcase="'retrying'", crosshead='Retrying in', (completed)='onSave()')
+      // Done Overlay
+      sb-message-overlay(*ngswitchcase="'done'", activity='updating', status='done')
+  ng-container(footer='')
+    ngcontainer([ngswitch]='(status$ | async)')
+      // Ready State Buttons
+      sb-button(*ngswitchcase="'ready' || 'invalid'", action='save', entity='OptionType', (save)='onSave()')
+      // Invalid  State Buttons
+      sb-button(*ngswitchcase="'invalid'", action='save', entity='OptionType', (save)='onSave()')
+      // Saving State Buttons
+      sb-button(*ngswitchcase="'saving'", action='save', entity='OptionType', disabled='true')
+      // Succeeded State Buttons
+      sb-button(*ngswitchcase="'succeeded'", action='save', entity='OptionType', disabled='true')
+      // Failed State Buttons
+      sb-button(*ngswitchcase="'failed'", action='yes', entity='OptionType', (yes)='onRetry()')
+      sb-button(*ngswitchcase="'failed'", action='no', entity='OptionType', guarded='false', (no)='onQuit()')
+      // Retrying State Buttons
+      sb-button(*ngswitchcase="'retrying'", action='yes', entity='OptionType', disabled='true')
+      sb-button(*ngswitchcase="'retrying'", action='no', entity='OptionType', disabled='true')
+      // Done Buttons
+      sb-button(*ngswitchcase="'done'", action='done', entity='OptionType', guarded='false', (done)='onDone()')

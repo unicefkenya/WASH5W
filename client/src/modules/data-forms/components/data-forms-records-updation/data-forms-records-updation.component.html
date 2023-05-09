@@ -1,0 +1,103 @@
+<!-- Display the data form -->
+<div class="card-body m-0 p-0">
+
+    <form [formGroup]="dataFormsForm">
+
+        <h5 class="card-title">Basic Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Please enter the data form's basic details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter the data form's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="dataFormsForm.get('name')?.invalid && (dataFormsForm.get('name')?.dirty || dataFormsForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="dataFormsForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="dataFormsForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="dataFormsForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="dataFormsForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Workflow -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Workflow</label>
+                    </div>
+                    <select class="custom-select" id="workflowId" formControlName="workflowId"
+                        (change)="onWorkflowChange()">
+                        <option [ngValue]="null" disabled class="text-muted">Select the desired workflow</option>
+                        <option *ngFor="let workflow of workflowsDataService.workflows$  | async"
+                            [ngValue]="workflow.id">
+                            {{workflow.data?.name}}
+                        </option>
+                    </select>
+                </div>
+                <div *ngIf="dataFormsForm.get('workflowId')?.invalid && (dataFormsForm.get('workflowId')?.dirty || dataFormsForm.get('workflowId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="dataFormsForm.get('workflowId')?.errors.required">
+                        Workflow is required
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <h5 class="card-title mt-3">Additional Details</h5>
+        <h6 class="card-subtitle mb-3 text-muted">Optionally enter the data form's miscellaneous details</h6>
+
+        <!-- Separator -->
+        <div class="bd-highlight">
+            <hr class="m-0 mt-2 mb-3 p-0 ">
+        </div>
+
+        <!-- Description -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Description</label>
+                    </div>
+                    <textarea class="form-control" id="description" formControlName="description"></textarea>
+                </div>
+                <div *ngIf="dataFormsForm.get('description')?.invalid && (dataFormsForm.get('description')?.dirty || dataFormsForm.get('description')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="dataFormsForm.get('description')?.errors.maxlength">
+                        Description cannot be more than 500 characters long
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

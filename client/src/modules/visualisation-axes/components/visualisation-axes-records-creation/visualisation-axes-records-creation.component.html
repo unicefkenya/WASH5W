@@ -1,0 +1,76 @@
+<div class="card-body m-0 p-0">
+
+    <h5 class="card-title">Basic Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please enter the visualisation axis' basic details</h6>
+
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>
+
+    <form [formGroup]="visualisationAxesForm">
+
+        <!-- Type -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Axis</label>
+                    </div>
+                    <select class="custom-select" id="typeId" formControlName="typeId">
+                        <option [ngValue]="null" disabled>Select axis</option>
+                        <option
+                            *ngFor="let visualisationAxisType of visualisationsAxesTypesDataService.getVisualisationsAxesTypes$() | async"
+                            [ngValue]="visualisationAxisType.id">
+                            {{visualisationAxisType.data?.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="visualisationAxesForm.get('typeId')?.invalid && (visualisationAxesForm.get('typeId')?.dirty || visualisationAxesForm.get('typeId')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationAxesForm.get('typeId')?.errors.required">
+                        Axis is required
+                    </div>
+                    <div *ngIf="visualisationAxesForm.get('typeId')?.errors.exists">
+                        Axis should be unique
+                    </div>                    
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Label -->
+        <div class="d-flex flex-column bd-highlight">
+
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Label</label>
+                    </div>
+                    <input type="text" class="form-control" id="label" placeholder="Enter axis' label"
+                        formControlName="label">
+                </div>
+                <div *ngIf="visualisationAxesForm.get('label')?.invalid && (visualisationAxesForm.get('label')?.dirty || visualisationAxesForm.get('label')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="visualisationAxesForm.get('label')?.errors.required">
+                        Label is required
+                    </div>
+                    <div *ngIf="visualisationAxesForm.get('label')?.errors.exists">
+                        Label should be unique
+                    </div>  
+                    <div *ngIf="visualisationAxesForm.get('label')?.errors.minlength">
+                        Label should be at least 1 characters long
+                    </div>
+                    <div *ngIf="visualisationAxesForm.get('label')?.errors.maxlength">
+                        Label should not be more than 250 characters long
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+
+</div>

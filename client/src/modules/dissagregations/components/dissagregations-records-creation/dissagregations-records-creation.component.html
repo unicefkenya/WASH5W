@@ -1,0 +1,60 @@
+<!-- Display the dissagregation -->
+<form [formGroup]="dissagregationsForm">
+
+    <!-- Type -->
+    <div class="d-flex flex-column bd-highlight">
+
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text">Type</label>
+                </div>
+                <select class="custom-select" id="typeId" formControlName="typeId">
+                    <dissagregation [ngValue]="null" disabled>Select Dissagregation Type</dissagregation>
+                    <dissagregation
+                        *ngFor="let dissagregationType of dissagregationsTypesDataService.dissagregationsTypes$ | async"
+                        [ngValue]="dissagregationType.id">
+                        {{dissagregationType.data?.name}}</dissagregation>
+                </select>
+            </div>
+            <div *ngIf="dissagregationsForm.get('typeId')?.invalid && (dissagregationsForm.get('typeId')?.dirty || dissagregationsForm.get('typeId')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="dissagregationsForm.get('typeId')?.errors.required">
+                    Type is required
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Name -->
+    <div class="d-flex flex-column bd-highlight">
+
+        <div class="bd-highlight">
+            <div class="input-group flex-nowrap mb-2">
+                <div class="input-group-prepend pb-0">
+                    <label class="input-group-text">Name</label>
+                </div>
+                <input type="text" class="form-control" id="name" placeholder="Enter Dissagregation's Name"
+                    formControlName="name">
+            </div>
+            <div *ngIf="dissagregationsForm.get('name')?.invalid && (dissagregationsForm.get('name')?.dirty || dissagregationsForm.get('name')?.touched)"
+                class="alert alert-danger mt-3">
+                <div *ngIf="dissagregationsForm.get('name')?.errors.required">
+                    Name is required
+                </div>
+                <div *ngIf="dissagregationsForm.get('name')?.errors.minlength">
+                    Name should be at least 2 characters long
+                </div>
+                <div *ngIf="dissagregationsForm.get('name')?.errors.maxlength">
+                    Name should not be more than 250 characters long
+                </div>
+                <div *ngIf="dissagregationsForm.get('name')?.errors.exists">
+                    Name should be unique
+                </div>
+            </div>
+        </div>
+
+    </div>  
+
+</form>

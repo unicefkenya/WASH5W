@@ -1,0 +1,57 @@
+form
+  sb-search(placeholder='Search by logical structures names', (searched)='onSearchTermChange($event)')
+  sb-loading-animation
+  // For Small-Sized Devices Only
+  .row.d-md-none
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-sm-1.text-center.align-middle(scope='col') #
+            th.col-sm-9.text-left.align-middle(scope='col') Name
+            th.col-sm-2.text-center.align-middle(scope='col') Actions
+        ng-container(body='')
+          tr(*ngfor='let logicalStructure of logicalStructuresDataService.logicalStructures$ | async; index as i', [attr.data-index]='i')
+            td.text-center.align-middle
+              | {{i + 1 + getPaginationOffset()}}
+            td.text-left.align-middle
+              | {{logicalStructure.data?.name}}
+            td.text-center.align-middle
+              span.d-flex.flex-row-reverse
+                sb-button(action='delete', entity='Logical Structure', id='{{logicalStructure.id}}', (delete)='onDeleteLogicalStructure($event)', tooltip='Delete {{logicalStructure.data?.name}}')
+                sb-button(action='update', entity='Logical Structure', id='{{logicalStructure.id}}', (update)='onUpdateLogicalStructure($event)', tooltip='Update {{logicalStructure.data?.name}}')
+        ng-container(footer='')
+          tr
+            td.align-middle(scope='col', colspan='3')
+              span.d-flex.flex-row.flex-row-reverse
+                sb-button(action='add', entity='Logical Structure', (add)='onAddLogicalStructure()')
+  // For Middle-Sized Devices Upwards
+  .row.d-none.d-md-block
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-md-1.text-center.align-middle(scope='col') #
+            th.col-md-5.text-left.align-middle(scope='col') Name
+            th.col-md-5.text-left.align-middle(scope='col') Plural
+            th.col-md-1.text-center.align-middle(scope='col') Actions
+        ng-container(body='')
+          tr(*ngfor='let logicalStructure of logicalStructuresDataService.logicalStructures$ | async; index as i', [attr.data-index]='i')
+            td.text-center.align-middle
+              | {{i + 1 + getPaginationOffset()}}
+            td.text-left.align-middle
+              | {{logicalStructure.data?.name}}
+            td.text-left.align-middle
+              | {{logicalStructure.data?.plural}}
+            td.text-center.align-middle
+              span.d-flex.flex-row-reverse
+                sb-button(action='delete', entity='Logical Structure', id='{{logicalStructure.id}}', (delete)='onDeleteLogicalStructure($event)', tooltip='Delete {{logicalStructure.data?.name}}')
+                sb-button(action='update', entity='Logical Structure', id='{{logicalStructure.id}}', (update)='onUpdateLogicalStructure($event)', tooltip='Update {{logicalStructure.data?.name}}')
+        ng-container(footer='')
+          tr
+            td.align-middle(scope='col', colspan='4')
+              span.d-flex.flex-row.flex-row-reverse
+                sb-button(action='add', entity='Logical Structure', (add)='onAddLogicalStructure()')
+  .row
+    .col
+      sb-pagination((pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')

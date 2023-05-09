@@ -1,0 +1,47 @@
+# Default values for the Microservice's Helm Chart.
+# This is a YAML-formatted file.
+
+# MICROSERVICE
+# ----------------------------------------------------------------------------------------
+microservice:
+
+  # Ingress
+  ingress:
+    name: systemsModules
+    class: traefik
+    rules:
+      host: cloud.miles.co.ke
+      http:
+        path: /api/v1/systemsModules
+        backend:
+          service:
+            name: systemsModules
+            port:
+              number: 80
+
+  # Service
+  service:
+    name: systemsModules
+    port:
+      default: 80
+      target: 8080
+
+  # Deployment
+  deployment:
+    name: systemsModules
+
+  # Application / Application Replicas
+  application:
+    name: systemsModules
+    version: 0.0.1
+    image:
+      id: cloud.miles.co.ke:5043/systemsModules
+      tag: 0.0.1
+      pull:
+        policy: Always
+        secret: regcred
+    environment:
+      postgres:
+        host: bitnami-postgres-postgresql
+    replicas: 1
+

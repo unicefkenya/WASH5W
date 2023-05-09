@@ -1,0 +1,11 @@
+.d-flex.flex-column.justify-content-center.bd-highlight.mb-3
+  .pt-2.bd-highlight.text-center
+    h5([ngclass]='iconClasses')
+      fa-icon([icon]='["fas", "question-circle"]')
+  .pt-2.bd-highlight.text-center
+    h5 Confirming
+  .pt-2.bd-highlight.text-center
+    p
+      | Are you sure you want to delete the 
+      span.font-weight-bold {{workflowStatus?.data?.name}}
+      |  WorkflowStatus?

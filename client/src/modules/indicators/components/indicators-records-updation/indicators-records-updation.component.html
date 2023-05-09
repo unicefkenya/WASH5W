@@ -1,0 +1,397 @@
+<ng-container *ngIf="initialised; else initialising">
+
+
+    <ng-container *ngIf='page == "default"'>
+
+        <!-- Display the data form -->
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">General</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Enter basic indicator details</h6>
+            <form [formGroup]="defaultForm">
+
+                <div class="d-flex flex-column bd-highlight">
+
+                    <!-- Element -->
+                    <div *ngIf="logical" class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text" id="truncatedLogicalElementName">Parent</label>
+                            </div>
+                            <ng-container formGroupName="logicalElement">
+                                <input type="text" class="form-control input-group-input"
+                                    id="truncatedLogicalElementName" placeholder=""
+                                    formControlName="truncatedLogicalElementName" disabled="">
+                            </ng-container>
+                            <div class="input-group-append pb-0">
+                                <button type="button" class="btn btn-button-bg-color-1 selector-button" data-toggle="tooltip"
+                                    data-placement="top" title="Select Parent Logical Element"
+                                    (click)="openLogicalElementSelector()">
+                                    <fa-icon *ngIf="!getLogicalElementId()" [icon]='["fas", "circle-dot"]'></fa-icon>
+                                    <fa-icon *ngIf="getLogicalElementId()" [icon]='["fas", "circle-dot"]'>
+                                    </fa-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="defaultForm.get('logicalElement.logicalElementId')?.invalid && (defaultForm.get('logicalElement.logicalElementId')?.dirty || defaultForm.get('logicalElement.logicalElementId')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="defaultForm.get('logicalElement.logicalElementId')?.errors.required">
+                                Logical parent is required
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Number -->
+                    <div *ngIf="numbered" class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">No.</label>
+                            </div>
+                            <input type="text" class="form-control" id="no" placeholder="Enter Indicator's Number"
+                                formControlName="no">
+                        </div>
+                        <div *ngIf="defaultForm.get('no')?.invalid && (defaultForm.get('no')?.dirty || defaultForm.get('no')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="defaultForm.get('no')?.errors.required">
+                                No. is required
+                            </div>
+                            <div *ngIf="defaultForm.get('no')?.errors.minlength">
+                                No. should be at least 1 characters long
+                            </div>
+                            <div *ngIf="defaultForm.get('no')?.errors.maxlength">
+                                No. cannot be more than 50 characters long
+                            </div>
+                            <div *ngIf="defaultForm.get('no')?.errors.exists">
+                                No. should be unique
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Name</label>
+                            </div>
+                            <input type="text" class="form-control" id="name" placeholder="Enter Indicator's Name"
+                                formControlName="name">
+                        </div>
+                        <div *ngIf="defaultForm.get('name')?.invalid && (defaultForm.get('name')?.dirty || defaultForm.get('name')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="defaultForm.get('name')?.errors.required">
+                                Name is required
+                            </div>
+                            <div *ngIf="defaultForm.get('name')?.errors.minlength">
+                                Name should be at least 2 characters long
+                            </div>
+                            <div *ngIf="defaultForm.get('name')?.errors.maxlength">
+                                Name should not be more than 250 characters long
+                            </div>
+                            <div *ngIf="defaultForm.get('name')?.errors.exists">
+                                Name should be unique
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Unit -->
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Unit</label>
+                            </div>
+                            <ng-container formGroupName="unit">
+                                <select class="custom-select" id="unitId" formControlName="unitId"
+                                    (change)="onUnitChange()">
+                                    <option [ngValue]="null" disabled class="text-muted">Select Unit</option>
+                                    <option *ngFor="let unit of unitsDataService.units$  | async" [ngValue]="unit.id">
+                                        {{unit.data?.name}}
+                                    </option>
+                                </select>
+                            </ng-container>
+                        </div>
+                        <div *ngIf="defaultForm.get('unit.unitId')?.invalid && (defaultForm.get('unit.unitId')?.dirty || defaultForm.get('unit.unitId')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="defaultForm.get('unit.unitId')?.errors.required">
+                                Unit is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flags -->
+                    <div class="bd-highlight mt-3 mb-3">
+
+                        <div class="d-flex flex-column bd-highlight">
+                            <div class="bd-highlight p-2">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="describe"
+                                        [checked]="isCumulative()"
+                                        (change)="toggleIsCumulative($event)">
+                                    <label class="custom-control-label" for="describe">Entered values are cumulative</label>
+                                </div>
+                            </div>                        
+                            <div class="bd-highlight p-2 border-top">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="describe"
+                                        [checked]="subindicatorsFilled()"
+                                        (change)="toggleIsFilledThroughSubindicators($event)">
+                                    <label class="custom-control-label" for="describe">Autofill using aggregated
+                                        subindicators values</label>
+                                </div>
+                            </div>
+                            <div class="bd-highlight p-2 border-top">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="conditional"
+                                        [checked]="formFilled()"
+                                        (change)="toggleIsFilledThroughFormFields($event)">
+                                    <label class="custom-control-label" for="conditional">Autofill using aggregated form
+                                        fields values</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </ng-container>
+
+    <ng-container *ngIf='page == "logicalElements"' class="p-0 m-0">
+
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">Logical Parent</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Select the indicator's logical parent</h6>
+            <sb-logical-hierarchies-records-selection [selectionMode]="'single'"
+                [selected]="getLogicalElementId()? [getLogicalElementId()]: []"
+                (select)="onSelectLogicalHierarchyElement($event)">
+            </sb-logical-hierarchies-records-selection>
+
+            <div *ngIf="errors.get('logicalElement')" class="alert alert-danger mb-2" role="alert">
+                {{errors.get('logicalParent')}}
+            </div>
+        </div>
+
+
+
+    </ng-container>
+
+
+    <ng-container *ngIf='page == "subindicators"' class="p-0 m-0">
+
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">Subindicators</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Select the subindicators that will be used to fill the indicator
+            </h6>
+            <sb-indicators-records-selection [contextId]="getContextId()" selectionMode="multi"
+                [selected]="getSelectedSubindicatorsIds()" [undesired]="[indicator?.id]" (check)="onSelectSubindicator($event)"
+                (uncheck)="onDeselectSubindicator($event)">
+            </sb-indicators-records-selection>
+
+            <div *ngIf="errors.get('subindicators')" class="alert alert-danger mb-2" role="alert">
+                {{errors.get('subindicators')}}
+            </div>
+        </div>
+
+
+
+    </ng-container>
+
+
+    <ng-container *ngIf='page == "formFields"' class="p-0 m-0">
+
+        <div class="card-body m-0 p-0">
+            <h5 class="card-title">Form Fields</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Select the form field that will be used to fill the indicator</h6>
+            <sb-data-forms-fields-records-selection [contextId]="getContextId()" selectionMode="single"
+                [selected]="getSelectedFormFields()" (select)="onSelectFormField($event)">
+            </sb-data-forms-fields-records-selection>
+
+            <div *ngIf="errors.get('formFields')" class="alert alert-danger mb-2" role="alert">
+                {{errors.get('formFields')}}
+            </div>
+        </div>
+
+    </ng-container>
+
+
+    <ng-container *ngIf='page == "autoFillingRule"' class="p-0 m-0">
+
+        <div class="card-body m-0 p-0">
+
+            <h5 class="card-title">Aggregation Rule</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Specify how values should be aggregated to fill the indicator</h6>
+
+            <form [formGroup]="rulesForm">
+
+                <div *ngIf="subindicatorsFilled()" class="d-flex flex-column bd-highlight">
+
+                    <ng-container *ngTemplateOutlet="numericValueAggregation"></ng-container>
+
+                </div>
+
+                <div *ngIf="formFilled()" class="d-flex flex-column bd-highlight">
+
+                    <ng-container [ngSwitch]="getFormFieldTypeId()">
+
+                        <!--Integer-->
+                        <ng-container *ngSwitchCase="3">
+                            <ng-container *ngTemplateOutlet="numericValueAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--Decimal-->
+                        <ng-container *ngSwitchCase="4">
+                            <ng-container *ngTemplateOutlet="numericValueAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--Short Text-->
+                        <ng-container *ngSwitchCase="5">
+                            <ng-container *ngTemplateOutlet="unsupportedAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--Long Text-->
+                        <ng-container *ngSwitchCase="6">
+                            <ng-container *ngTemplateOutlet="unsupportedAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--Date-->
+                        <ng-container *ngSwitchCase="7">
+                            <ng-container *ngTemplateOutlet="unsupportedAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--Single Selection-->
+                        <ng-container *ngSwitchCase="8">
+                            <ng-container *ngTemplateOutlet="selectableValueAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--Multi Selection-->
+                        <ng-container *ngSwitchCase="9">
+                            <ng-container *ngTemplateOutlet="selectableValueAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--Dropdown-->
+                        <ng-container *ngSwitchCase="10">
+                            <ng-container *ngTemplateOutlet="selectableValueAggregation"></ng-container>
+                        </ng-container>
+
+                        <!--File-->
+                        <ng-container *ngSwitchCase="11">
+                            <ng-container *ngTemplateOutlet="unsupportedAggregation"></ng-container>
+                        </ng-container>
+
+                    </ng-container>
+
+                </div>
+
+                <ng-template #numericValueAggregation>
+
+                    <!-- Aggregation -->
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Aggregation</label>
+                            </div>
+                            <select class="custom-select" id="aggregationId" formControlName="aggregationId">
+                                <option [ngValue]="null" disabled class="text-muted">Select Desired Aggregation</option>
+                                <option [ngValue]="1">Sum</option>
+                                <option [ngValue]="3">Average</option>
+                                <option [ngValue]="4">Percentage Average</option>
+                            </select>
+                        </div>
+                        <div *ngIf="rulesForm.get('aggregationId')?.invalid && (rulesForm.get('aggregationId')?.dirty || rulesForm.get('aggregationId')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="rulesForm.get('aggregationId')?.errors.required">
+                                Aggregation specification is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Value -->
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Value</label>
+                            </div>
+                            <select class="custom-select" id="optionId" formControlName="optionId">
+                                <option [ngValue]="null" disabled class="text-muted">All</option>
+                            </select>
+                        </div>
+                        <div *ngIf="rulesForm.get('optionId')?.invalid && (rulesForm.get('optionId')?.dirty || rulesForm.get('optionId')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="rulesForm.get('optionId')?.errors.required">
+                                Option specification is required
+                            </div>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template #selectableValueAggregation>
+
+                    <!-- Aggregation -->
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Aggregation</label>
+                            </div>
+                            <select class="custom-select" id="aggregationId" formControlName="aggregationId">
+                                <option [ngValue]="null" disabled class="text-muted">Select Desired Aggregation</option>
+                                <option [ngValue]="2">Count</option>
+                                <option [ngValue]="3">Average</option>
+                                <option [ngValue]="4">Percentage Average</option>
+                            </select>
+                        </div>
+                        <div *ngIf="rulesForm.get('aggregationId')?.invalid && (rulesForm.get('aggregationId')?.dirty || rulesForm.get('aggregationId')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="rulesForm.get('aggregationId')?.errors.required">
+                                Aggregation specification is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Value -->
+                    <div class="bd-highlight">
+                        <div class="input-group flex-nowrap mb-2">
+                            <div class="input-group-prepend pb-0">
+                                <label class="input-group-text">Value</label>
+                            </div>
+                            <select class="custom-select" id="optionId" formControlName="optionId">
+                                <option [ngValue]="null" disabled class="text-muted">Select Target Optional Value
+                                </option>
+                                <option *ngFor="let option of getOptions$(getFormFieldOptionIds())  | async"
+                                    [ngValue]="option.id">
+                                    {{option.data?.name}}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="rulesForm.get('optionId')?.invalid && (rulesForm.get('optionId')?.dirty || rulesForm.get('optionId')?.touched)"
+                            class="alert alert-danger mt-3">
+                            <div *ngIf="rulesForm.get('optionId')?.errors.required">
+                                Option specification is required
+                            </div>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template #unsupportedAggregation>
+                    <p>Unsupported Aggregation</p>
+                </ng-template>
+
+            </form>
+        </div>
+
+    </ng-container>
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

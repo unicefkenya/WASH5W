@@ -1,0 +1,26 @@
+form
+  .d-flex.flex-column.mb-3
+    .p-2
+      sb-search((searched)='onSearchTermChange($event)')
+    .p-2
+      sb-loading-animation
+  .row
+    .col
+      sb-table
+        ng-container(header='')
+          tr
+            th.col-sm-11.text-left.align-middle(scope='col') Name 
+            th.col-sm-1.text-center.align-middle(scope='col') Select
+        ng-container(body='')
+          tr(*ngfor='let administrativeUnit of administrativeUnitsDataService.administrativeUnits$ | async')
+            td.text-left.align-middle
+              | {{administrativeUnit.data?.name}}
+            td.text-center.align-middle
+              span.d-flex.justify-content-center
+                div(*ngif='selectionMode === "single"; else multi')
+                  sb-button(action='select', entity='AdministrativeUnit', id='{{administrativeUnit.id}}', name='administrativeUnit', [selected]='isSelected(administrativeUnit.id)', [disabled]='isSelected(administrativeUnit.id) && disableSelectedAdministrativeUnitIdsTreatment', (select)='onSelect($event)')
+                ng-template(#multi='')
+                  sb-button(action='check', entity='AdministrativeUnit', id='{{administrativeUnit.id}}', name='administrativeUnit', [checked]='isChecked(administrativeUnit.id)', [disabled]='isChecked(administrativeUnit.id) && disableSelectedAdministrativeUnitIdsTreatment', (check)='onCheck($event)', (uncheck)='onUncheck($event)')
+  .row
+    .col
+      sb-pagination(type='modal', (pagechanged)='onPageChange($event)', (pagesizechanged)='onPageSizeChange($event)')

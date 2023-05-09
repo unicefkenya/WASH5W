@@ -1,0 +1,325 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <form *ngIf='page == "default"' [formGroup]="dataFormResponsesForm">
+
+        <!-- Hide on screens smaller than md -->
+        <div class="d-none d-md-block row">
+            <div class="col">
+                <table class="table table-bordered border-dark filter ">
+                    <tr>
+                        <td class="col-1 align-middle text-left p-2 pl-3">
+                            Form
+                        </td>
+                        <td class="col-11" class="align-middle p-2">
+                            <div class="input-group flex-nowrap">
+                                <ng-container formGroupName="dataForm">
+                                    <input type="text" class="form-control input-group-input" id="dataFormName"
+                                        placeholder="" formControlName="dataFormNameLong" disabled="">
+                                </ng-container>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                        data-toggle="tooltip" data-placement="top" title="Select Data Form"
+                                        (click)="onOpenDataFormSelector()">
+                                        <fa-icon [icon]='["fas", "circle-dot"]'></fa-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-1 align-middle text-left p-2 pl-3">
+                            Period
+                        </td>
+                        <td class="col-11 align-middle p-2">
+                            <div class="input-group big-input-group flex-nowrap">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="background-color: #e9ecef;">
+                                        <fa-icon class="text-success" *ngIf="activeReportingPeriod?.data?.open"
+                                            [icon]='["fas", "lock-open"]'>
+                                        </fa-icon>
+                                        <fa-icon class="text-danger" *ngIf="!activeReportingPeriod?.data?.open"
+                                            [icon]='["fas", "lock"]'>
+                                        </fa-icon>
+                                    </span>
+                                </div>
+                                <ng-container formGroupName="reportingPeriod">
+                                    <input type="text" class="form-control input-group-input" id="reportingPeriodName"
+                                        placeholder="" formControlName="reportingPeriodNameLong" disabled="">
+                                </ng-container>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                        data-toggle="tooltip" data-placement="top" title="Select Reporting Period"
+                                        (click)="onOpenReportingPeriodSelector()">
+                                        <fa-icon [icon]='["fas", "circle-dot"]'></fa-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Header - Hide on screens wider than md -->
+        <div class="row d-md-none">
+            <div class="col">
+                <table class="table table-bordered border-dark filter">
+                    <tr>
+                        <td class="align-middle text-left p-2 pl-3">
+                            Form
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle p-2">
+                            <div class="input-group flex-nowrap">
+                                <ng-container formGroupName="dataForm">
+                                    <input type="text" class="form-control input-group-input" id="dataFormName"
+                                        placeholder="" formControlName="dataFormNameShort" disabled="">
+                                </ng-container>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                        data-toggle="tooltip" data-placement="top" title="Select Data Form"
+                                        (click)="onOpenDataFormSelector()">
+                                        <fa-icon [icon]='["fas", "circle-dot"]'></fa-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle text-left p-2 pl-3">
+                            Period
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-11" class="align-middle p-2">
+
+                            <div class="input-group small-input-group flex-nowrap">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="background-color: #e9ecef;">
+                                        <fa-icon class="text-success" *ngIf="activeReportingPeriod?.data?.open"
+                                            [icon]='["fas", "lock-open"]'>
+                                        </fa-icon>
+                                        <fa-icon class="text-danger" *ngIf="!activeReportingPeriod?.data?.open"
+                                            [icon]='["fas", "lock"]'>
+                                        </fa-icon>
+                                    </span>
+                                </div>
+                                <ng-container formGroupName="reportingPeriod">
+                                    <input type="text" class="form-control input-group-input" id="reportingPeriodName"
+                                        placeholder="" formControlName="reportingPeriodNameShort" disabled="">
+                                </ng-container>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-button-bg-color-1 selector-button"
+                                        data-toggle="tooltip" data-placement="top" title="Select Reporting Period"
+                                        (click)="onOpenReportingPeriodSelector()">
+                                        <fa-icon [icon]='["fas", "circle-dot"]'></fa-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+
+    <hr *ngIf='page == "default"' class="border-1 mt-1 mb-3" />
+
+    <div *ngIf='page == "default"' class="row">
+        <div class="col">
+            <div class="d-flex bd-highlight">
+                <div class="w-100 bd-highlight">
+                    <sb-search placeholder="Search" (searched)="onSearchTermChange($event)"></sb-search>
+                </div>
+                <div class="flex-shrink-1 bd-highlight">
+                    <sb-loading-animation type="bars"></sb-loading-animation>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf='page == "default"' class="row">
+        <div class="col">
+            <!-- Tabbed Home -->
+            <ng-container *ngIf="(tabs.length > 0)">
+
+                <!-- Header - Hide on screens smaller than md -->
+                <div class="d-none d-md-block custom-page-tabs-container mt-0 ml-2 mr-2 shadow border-top">
+                    <ul class="nav nav-tabs custom-page-tabs">
+                        <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                    </ul>
+                </div>
+
+                <!-- Header - Hide on screens wider than md -->
+                <div class="d-md-none custom-page-pills-container mt-0 ml-2 mr-2">
+                    <ul class="nav flex-column nav-pills custom-page-pills">
+                        <ng-container *ngTemplateOutlet="navItems"></ng-container>
+                    </ul>
+                </div>
+
+                <!-- Header Templates -->
+                <ng-template #navItems>
+
+                    <li *ngFor="let tab of tabs" class="nav-item">
+
+                        <ng-container *ngIf="tab.index == activeTab?.index; else inactive">
+                            <a class="nav-link active tab-link" href="javascript:void(0);">
+                                {{tab.title}}
+                            </a>
+                        </ng-container>
+
+                        <ng-template #inactive>
+                            <a class="nav-link tab-link" (click)="onChangeTab(tab)">
+                                {{tab.title}}
+                            </a>
+                        </ng-template>
+                    </li>
+
+                </ng-template>
+
+                <!-- Contents -->
+                <div class="custom-page-contents-container shadow ml-2 mr-2 pt-3">
+                    <ng-container *ngTemplateOutlet="content"></ng-container>
+                </div>
+
+            </ng-container>
+
+            <!-- Plain Home -->
+            <ng-container *ngIf="!(tabs.length > 0)">
+                <sb-card>
+                    <div class="card-body">
+                        <ng-container *ngTemplateOutlet="content"></ng-container>
+                    </div>
+                </sb-card>
+            </ng-container>
+
+
+        </div>
+    </div>
+
+    <div class="p-0">
+        <div *ngIf='page == "form"' class="row m-1 p-1">
+            <div class="col-10 m-0 p-0">
+                <label
+                    class="text-uppercase small mt-3 d-none d-md-block">{{filterService.filter.activeDataForm?.data.name}}</label>
+                <label
+                    class="text-uppercase small mt-3 d-md-none">{{textUtilService.truncate(filterService.filter.activeDataForm?.data.name,
+                    [25, "..."])}}</label>
+            </div>
+            <div class="col-2 m-0 p-0">
+                <span class="d-flex flex-row-reverse">
+                    <button type="button" class="btn btn-sm btn-button-bg-color-1 custom-btn" data-toggle="tooltip"
+                        data-placement="top" title="Close Form" (click)="onCloseDataFormResponse()">
+                        Close
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div *ngIf='page == "form"' class="row odd m-1 p-0">
+            <div class="col-12 col-md-2 border-sm-bottom">
+                <label class="text-uppercase small mt-2 d-none d-md-block">Reporter</label>
+                <label class="text-uppercase small mt-2 font-weight-bold d-md-none">Reporter</label>
+            </div>
+            <div class="col-12 col-md-10">
+                <label class="text-uppercase small mt-2">
+                    <ng-container [ngSwitch]="getResponseClassification(dataFormResponse)">
+                        <ng-container *ngSwitchCase="1">
+                            {{dataFormResponse.data?.respondent?.name}},
+                            {{dataFormResponse.data?.entity?.name}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="3">
+                            {{dataFormResponse.data?.respondent?.name}},
+                            {{dataFormResponse.data?.organisations[0]?.name}}
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                            {{dataFormResponse.data?.respondent?.name}}
+                        </ng-container>
+                    </ng-container>
+                </label>
+            </div>
+        </div>
+        <div *ngIf='page == "form"' class="row odd m-1 mb-3 p-0">
+            <div class="col-12 col-md-2 border-sm-bottom">
+                <label class="text-uppercase small mt-2 d-none d-md-block">Location</label>
+                <label class="text-uppercase small mt-2 font-weight-bold d-md-none">Location</label>
+            </div>
+            <div class="col-12 col-md-10">
+                <label class="text-uppercase small mt-2">{{dataFormResponse.data?.location[0]?.name}}</label>
+            </div>
+        </div>
+        <hr class="m-1 p-1" />
+        <div *ngIf='page == "form"' class="row m-1 mt-2 p-0">
+            <div class="col-12 m-0 p-0">
+                <sb-data-forms-elements-response-views-tabulation mode="actual"
+                    [initialDataFormFieldsResponses]="getDataFormFieldsResponsesCopy()"
+                    [disabled]="!isEditable(dataFormResponse)"
+                    (updatedDataFormFieldsResponses)="onDataFormFieldsResponsesUpdation($event)">
+                </sb-data-forms-elements-response-views-tabulation>
+            </div>
+        </div>
+        <div *ngIf='page == "form" && isEditable(dataFormResponse) && isCumulative()' class="row m-1 p-1">
+            <div class="col-12 m-0 p-0">
+                <div class="d-flex justify-content-end align-middle">
+                    <div class="custom-control custom-switch mt-2 mr-1">
+                        <input type="checkbox" class="custom-control-input" id="required" [checked]="isRequired()"
+                            (change)="toggleRequireability($event)">
+                        <label class="custom-control-label" for="required">Carry reported results in to the next
+                            reporting period</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf='page == "form" && getPermissibleTransitions(workflowTransitionsDataService.workflowTransitions$ | async).length > 0'
+            class="row m-1 p-1">
+            <div class="col-12 m-0 p-0">
+                <div class="d-flex justify-content-end align-middle">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Data Form Elements Creation Tools">
+                        <div class="btn-group mr-1" role="group" aria-label="State Transition Tools">
+                            <ng-container
+                                *ngFor="let transition of getPermissibleTransitions(workflowTransitionsDataService.workflowTransitions$ | async)">
+                                <button type="button" [title]="transition.data.verb + 'form'"
+                                    class="btn btn-button-bg-color-1" (click)="processTransition(transition)">
+                                    {{transition.data.verb }}
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</ng-container>
+
+<ng-template #initialising>
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>
+
+<ng-template #content>
+
+    <ng-container *ngIf="loaded; else loading">
+
+        <sb-dataFormsResponses-records-tabulation [activeTab]="activeTab"
+            [activeContextSystemUserRights]="activeContextSystemUserRights"
+            (searchTermChanged)="onSearchTermChange($event)" (pageChanged)="onPageChange($event)"
+            (pageSizeChanged)="onPageSizeChange($event)" (opened)="onOpenDataFormResponse($event)">
+        </sb-dataFormsResponses-records-tabulation>
+    </ng-container>
+
+    <ng-template #loading>
+        <div class="d-flex justify-content-center m-1">
+            <p class="text-center processing mb-5">
+                <span>.</span><span>.</span><span>.</span>
+            </p>
+        </div>
+    </ng-template>
+
+</ng-template>

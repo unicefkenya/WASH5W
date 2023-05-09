@@ -1,0 +1,93 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-systems-users-rights-records-creation [systemUserId]="systemUserId"
+            (openedLocationSelector)="onOpenLocationSelector()" (closedLocationSelector)="onCloseLocationSelector()"
+            (openedOrganisationSelector)="onOpenOrganisationSelector()"
+            (closedOrganisationSelector)="onCloseOrganisationSelector()" (openedEntitySelector)="onOpenEntitySelector()"
+            (closedEntitySelector)="onCloseEntitySelector()" (succeeded)="onSucceeded()" (failed)="onFailed($event)">
+        </sb-systems-users-rights-records-creation>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Saving Overlay -->
+            <sb-message-overlay *ngSwitchCase="'saving'" activity="creating" status="saving"></sb-message-overlay>
+
+            <!-- Saving Suceeded Overlay -->
+            <sb-message-overlay *ngSwitchCase="'succeeded'" activity="creating" status="succeeded"></sb-message-overlay>
+
+            <!-- Saving Failed Overlay -->
+            <sb-message-overlay *ngSwitchCase="'failed'" activity="creating" status="failed"></sb-message-overlay>
+
+            <!-- Saving Re-Trial Delay Overlay -->
+            <sb-countdown-overlay *ngSwitchCase="'retrying'" crosshead="Retrying in" (completed)="onSave()">
+            </sb-countdown-overlay>
+
+            <!-- Done Overlay -->
+            <sb-message-overlay *ngSwitchCase="'done'" activity="creating" status="done"></sb-message-overlay>
+
+        </ngContainer>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Ready State Buttons -->
+            <sb-button *ngSwitchCase="'ready'" action="save" entity="System User Right" (save)="onSave()"></sb-button>
+
+            <!-- Invalid  State Buttons -->
+            <sb-button *ngSwitchCase="'invalid'" action="save" entity="System User Right" (save)="onSave()"></sb-button>
+
+            <!-- Saving State Buttons -->
+            <sb-button *ngSwitchCase="'saving'" action="save" entity="System User Right" disabled="true"></sb-button>
+
+            <!-- Succeeded State Buttons -->
+            <sb-button *ngSwitchCase="'succeeded'" action="yes" entity="System User Right" guarded="false"
+                (yes)="onContinue()"></sb-button>
+            <sb-button *ngSwitchCase="'succeeded'" action="no" entity="System User Right" guarded="false"
+                (no)="onQuit()"></sb-button>
+
+            <!-- Failed State Buttons -->
+            <sb-button *ngSwitchCase="'failed'" action="yes" entity="System User Right" (yes)="onRetry()"></sb-button>
+            <sb-button *ngSwitchCase="'failed'" action="no" entity="System User Right" guarded="false" (no)="onQuit()">
+            </sb-button>
+
+            <!-- Retrying State Buttons -->
+            <sb-button *ngSwitchCase="'retrying'" action="yes" entity="System User Right" disabled="true"></sb-button>
+            <sb-button *ngSwitchCase="'retrying'" action="no" entity="System User Right" disabled="true"></sb-button>
+
+            <!-- Done Buttons -->
+            <sb-button *ngSwitchCase="'done'" action="done" entity="System User Right" guarded="false"
+                (done)="onDone()"></sb-button>
+
+            <!-- Locations Selections Buttons -->
+            <ng-container *ngSwitchCase="'locations-selections'">
+                <sb-button action="previous" entity="Entity" tooltip="Load previous screen" guarded="false"
+                    (previous)="closeLocationSelector()"></sb-button>
+            </ng-container>
+
+            <!-- Organisations Selections Buttons -->
+            <ng-container *ngSwitchCase="'organisations-selections'">
+                <sb-button action="previous" entity="Entity" tooltip="Load previous screen" guarded="false"
+                    (previous)="closeOrganisationSelector()"></sb-button>
+            </ng-container>
+
+            <!-- Entities Selections Buttons -->
+            <ng-container *ngSwitchCase="'entities-selections'">
+                <sb-button action="previous" entity="Entity" tooltip="Load previous screen" guarded="false"
+                    (previous)="closeEntitySelector()"></sb-button>
+            </ng-container>
+
+
+        </ngContainer>
+
+    </ng-container>
+
+</sb-modal>

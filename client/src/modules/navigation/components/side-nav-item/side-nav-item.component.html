@@ -1,0 +1,27 @@
+<ng-container *ngIf="sideNavItem.outlet; else primary">
+    <a class="nav-link" style="cursor: pointer;" [routerLink]="['/contents', getSecondaryOutletLink(sideNavItem.outlet, sideNavItem.link)]" (click)="onClick()" [ngClass]="{active: isActive, collapsed: !expanded}">
+        <ng-container *ngTemplateOutlet="contents"></ng-container> 
+    </a>
+</ng-container>
+
+<ng-template #primary>
+    <a class="nav-link" style="cursor: pointer;" [routerLink]="sideNavItem.link" (click)="expanded = !expanded" [ngClass]="{active: isActive, collapsed: !expanded}">
+        <ng-container *ngTemplateOutlet="contents"></ng-container> 
+    </a>
+</ng-template>
+
+<ng-template #contents>
+    <div class="sb-nav-link-icon" *ngIf="sideNavItem.icon">
+        <fa-icon [icon]='["fas", sideNavItem.icon]'></fa-icon>
+    </div>
+    {{sideNavItem.text}}
+    <div class="sb-sidenav-collapse-arrow">
+        <fa-icon class="ml-auto" *ngIf="sideNavItem.submenu" [icon]="['fas', 'angle-down']"></fa-icon>
+    </div>
+</ng-template>
+
+
+<nav class="sb-sidenav-menu-nested nav" *ngIf="sideNavItem.submenu &amp;&amp; expanded">
+    <sb-side-nav-item class="submenu" *ngFor="let submenuItem of sideNavItem.submenu" [sideNavItem]="submenuItem">
+    </sb-side-nav-item>
+</nav>

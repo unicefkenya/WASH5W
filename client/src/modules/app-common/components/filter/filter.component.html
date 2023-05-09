@@ -1,0 +1,75 @@
+<form>
+    <div class="d-flex justify-content-center flex-column flex-md-row mb-1">
+
+        <div class="p-2 flex-fill">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="emergencyId">Emergency</label>
+                </div>
+                <select id="emergencySelect" formControlName="emergencyId" class="custom-select"
+                    (change)="onEmergencyChange($event)">
+                    <option value="-1" disabled>Select Emergency</option>
+                    <option *ngFor="let emergency of emergencies$ | async" value="emergency.id">
+                        {{emergency.label}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="p-2 flex-fill">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="iterationId">Iteration</label>
+                </div>
+                <select id="iterationSelect" formControlName="iterationId" class="custom-select"
+                    (change)="onIterationChange($event)">
+                    <option value="-1" disabled>Select Iteration</option>
+                    <option *ngFor="let iteration of iterations$ | async" value="iteration.id">
+                        {{iteration.label}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="p-2 flex-fill">
+
+            <div class="input-group">
+
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="periodId">Period</label>
+                </div>
+
+                <input type="text" id="periodId" class="form-control" placeholder="Period" aria-label="Change Period"
+                    aria-describedby="change-period-button" value="Kenya" disabled />
+
+
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="change-period-button">Change</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class=" p-2 flex-fill">
+
+            <div class="input-group">
+
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="partyId">Location</label>
+                </div>
+
+                <input type="text" id="partyId" class="form-control" placeholder="Location" aria-label="Change Location"
+                    aria-describedby="change-location-button" value="Kenya" disabled />
+
+
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="change-location-button">Change</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</form>

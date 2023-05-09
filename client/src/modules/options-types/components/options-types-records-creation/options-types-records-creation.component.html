@@ -1,0 +1,46 @@
+<div class="card-body m-0 p-0">
+
+    <h5 class="card-title">Basic Details</h5>
+    <h6 class="card-subtitle mb-3 text-muted">Please enter the option type's basic details</h6>
+
+    <!-- Separator -->
+    <div class="bd-highlight">
+        <hr class="m-0 mt-2 mb-3 p-0 ">
+    </div>
+
+    <form [formGroup]="optionsTypesForm">
+
+        <!-- Name -->
+        <div class="d-flex flex-column bd-highlight">
+    
+            <div class="bd-highlight">
+                <div class="input-group flex-nowrap mb-2">
+                    <div class="input-group-prepend pb-0">
+                        <label class="input-group-text">Name</label>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Enter option type's name"
+                        formControlName="name">
+                </div>
+                <div *ngIf="optionsTypesForm.get('name')?.invalid && (optionsTypesForm.get('name')?.dirty || optionsTypesForm.get('name')?.touched)"
+                    class="alert alert-danger mt-3">
+                    <div *ngIf="optionsTypesForm.get('name')?.errors.required">
+                        Name is required
+                    </div>
+                    <div *ngIf="optionsTypesForm.get('name')?.errors.minlength">
+                        Name should be at least 2 characters long
+                    </div>
+                    <div *ngIf="optionsTypesForm.get('name')?.errors.maxlength">
+                        Name should not be more than 250 characters long
+                    </div>
+                    <div *ngIf="optionsTypesForm.get('name')?.errors.exists">
+                        Name should be unique
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    
+    </form>
+
+
+</div>

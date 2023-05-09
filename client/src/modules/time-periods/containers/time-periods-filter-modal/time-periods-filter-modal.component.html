@@ -1,0 +1,24 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-time-periods-filter (succeeded)="onSucceeded()" (failed)="onFailed($event)"></sb-time-periods-filter>  
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <sb-button action="apply" entity="Time Period Filter" tooltip="Close Selector" guarded="false"
+            (apply)="onApply()">
+        </sb-button>        
+        <sb-button action="done" entity="Time Period Filter" tooltip="Close Selector" guarded="false"
+            (done)="onDone()">
+        </sb-button>
+
+    </ng-container>
+
+</sb-modal>

@@ -1,0 +1,107 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-workflow-transitions-records-creation [workflowId]="workflowId"
+            (openedWorkflowSelector)="onOpenWorkflowSelector()" (closedWorkflowSelector)="onCloseWorkflowSelector()"
+            (openedFromWorkflowStatusSelector)="onOpenFromWorkflowStatusSelector()"
+            (closedFromWorkflowStatusSelector)="onCloseFromWorkflowStatusSelector()"
+            (openedToWorkflowStatusSelector)="onOpenToWorkflowStatusSelector()"
+            (closedToWorkflowStatusSelector)="onCloseToWorkflowStatusSelector()" 
+            (openedPermissionSelector)="onOpenPermissionSelector()" (closedPermissionSelector)="onClosePermissionSelector()"
+            (succeeded)="onSucceeded()" (failed)="onFailed($event)">
+        </sb-workflow-transitions-records-creation>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Saving Overlay -->
+            <sb-message-overlay *ngSwitchCase="'saving'" activity="creating" status="saving"></sb-message-overlay>
+
+            <!-- Saving Suceeded Overlay -->
+            <sb-message-overlay *ngSwitchCase="'succeeded'" activity="creating" status="succeeded"></sb-message-overlay>
+
+            <!-- Saving Failed Overlay -->
+            <sb-message-overlay *ngSwitchCase="'failed'" activity="creating" status="failed"></sb-message-overlay>
+
+            <!-- Saving Re-Trial Delay Overlay -->
+            <sb-countdown-overlay *ngSwitchCase="'retrying'" crosshead="Retrying in" (completed)="onSave()">
+            </sb-countdown-overlay>
+
+            <!-- Done Overlay -->
+            <sb-message-overlay *ngSwitchCase="'done'" activity="creating" status="done"></sb-message-overlay>
+
+        </ngContainer>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Ready State Buttons -->
+            <sb-button *ngSwitchCase="'ready'" action="save" entity="Workflow Transition" (save)="onSave()">
+            </sb-button>
+
+            <!-- Invalid  State Buttons -->
+            <sb-button *ngSwitchCase="'invalid'" action="save" entity="Workflow Transition" (save)="onSave()">
+            </sb-button>
+
+            <!-- Saving State Buttons -->
+            <sb-button *ngSwitchCase="'saving'" action="save" entity="Workflow Transition" disabled="true">
+            </sb-button>
+
+            <!-- Succeeded State Buttons -->
+            <sb-button *ngSwitchCase="'succeeded'" action="yes" entity="Workflow Transition" guarded="false"
+                (yes)="onContinue()"></sb-button>
+            <sb-button *ngSwitchCase="'succeeded'" action="no" entity="Workflow Transition" guarded="false"
+                (no)="onQuit()"></sb-button>
+
+            <!-- Failed State Buttons -->
+            <sb-button *ngSwitchCase="'failed'" action="yes" entity="Workflow Transition" (yes)="onRetry()">
+            </sb-button>
+            <sb-button *ngSwitchCase="'failed'" action="no" entity="Workflow Transition" guarded="false"
+                (no)="onQuit()"></sb-button>
+
+            <!-- Retrying State Buttons -->
+            <sb-button *ngSwitchCase="'retrying'" action="yes" entity="Workflow Transition" disabled="true">
+            </sb-button>
+            <sb-button *ngSwitchCase="'retrying'" action="no" entity="Workflow Transition" disabled="true">
+            </sb-button>
+
+            <!-- Done Buttons -->
+            <sb-button *ngSwitchCase="'done'" action="done" entity="Workflow Transition" guarded="false"
+                (done)="onDone()"></sb-button>
+
+            <!-- Workflows Selections Buttons -->
+            <ng-container *ngSwitchCase="'workflows-selections'">
+                <sb-button action="previous" entity="Workflow Transition" tooltip="Load previous screen"
+                    guarded="false" (previous)="closeWorkflowSelector()"></sb-button>
+            </ng-container>
+
+            <!-- From Statuses Selections Buttons -->
+            <ng-container *ngSwitchCase="'from-statuses-selections'">
+                <sb-button action="previous" entity="Workflow Transition" tooltip="Load previous screen"
+                    guarded="false" (previous)="closeFromWorkflowStatusSelector()"></sb-button>
+            </ng-container>
+
+            <!-- To Statuses Selections Buttons -->
+            <ng-container *ngSwitchCase="'to-statuses-selections'">
+                <sb-button action="previous" entity="Workflow Transition" tooltip="Load previous screen"
+                    guarded="false" (previous)="closeToWorkflowStatusSelector()"></sb-button>
+            </ng-container>
+
+            <!-- Permissions Selections Buttons -->
+            <ng-container *ngSwitchCase="'permissions-selections'">
+                <sb-button action="previous" entity="Permission Transition" tooltip="Load previous screen"
+                    guarded="false" (previous)="closePermissionSelector()"></sb-button>
+            </ng-container>            
+
+        </ngContainer>
+
+    </ng-container>
+
+</sb-modal>

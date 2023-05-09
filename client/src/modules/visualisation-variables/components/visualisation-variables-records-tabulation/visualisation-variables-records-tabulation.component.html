@@ -1,0 +1,182 @@
+<ng-container *ngIf="initialised; else initialising">
+
+        <form [formGroup]="visualisationVariablesForm">
+
+            <div class="row">
+                <div class="col">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td class="col-1 align-middle text-left p-2 pl-3">
+                                Visualisation
+                            </td>
+                            <td class="col-11 align-middle p-2">
+                                <select class="custom-select" id="typeId" formControlName="visualisationId"
+                                    (change)="onVisualisationChange()">
+                                    <option [ngValue]="null" disabled>Select visualisation</option>
+                                    <option
+                                        *ngFor="let visualisation of visualisations$ | async"
+                                        [ngValue]="visualisation.id">
+                                        {{visualisation.data?.name}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <!--For Small-Sized Devices Only-->
+            <div class="row d-md-none">
+                <div class="col">
+                    <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true"
+                        [hoverable]="true" [bordered]="true">
+                        <ng-container header>
+                            <tr>
+                                <th scope="col" class="col-sm-5 text-left align-middle">Label</th>
+                                <th scope="col" class="col-sm-5 text-left align-middle">Category</th>
+                                <th scope="col" class="col-sm-2 text-center align-middle">Actions</th>
+                            </tr>
+                        </ng-container>
+
+                        <ng-container body>
+
+                            <ng-container
+                                *ngFor="let visualisationVariable of visualisationsVariables$ | async; index as i">
+                                <tr>
+
+                                    <td class="text-left align-middle">
+                                        {{visualisationVariable.data?.label}}
+                                    </td>
+
+                                    <td class="text-left align-middle">
+                                        {{visualisationVariable.data?.dimension}}
+                                    </td>                                    
+
+                                    <td class="text-center align-middle">
+                                        <span class="d-flex flex-row-reverse">
+                                            <sb-button action="delete" entity="Visualisation Variable"
+                                                id="{{visualisationVariable.id}}"
+                                                (delete)="onDeleteVisualisationVariable($event)"
+                                                tooltip="Delete {{visualisationVariable.data?.label}}">
+                                            </sb-button>
+                                            <sb-button action="update" entity="Visualisation Variable"
+                                                id="{{visualisationVariable.id}}"
+                                                (update)="onUpdateVisualisationVariable($event)"
+                                                tooltip="Update {{visualisationVariable.data?.label}}">
+                                            </sb-button>
+                                        </span>
+                                    </td>
+
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container footer>
+                            <tr>
+                                <td scope="col" colspan="3" class="align-middle">
+                                    <span class="d-flex flex-row flex-row-reverse">
+                                        <sb-button action="add" entity="Visualisation Variable"
+                                            (add)="onAddVisualisationVariable()">
+                                        </sb-button>
+                                    </span>
+
+                                </td>
+                            </tr>
+                        </ng-container>
+
+                    </sb-table>
+                </div>
+            </div>
+
+            <!--For Middle-Sized Devices Upwards-->
+            <div class="row d-none d-md-block">
+                <div class="col">
+                    <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true"
+                        [hoverable]="true" [bordered]="true">
+                        <ng-container header>
+                            <tr>
+                                <th scope="col" class="col-md-1 text-center align-middle">#</th>
+                                <th scope="col" class="col-md-4 text-left align-middle">Label</th>
+                                <th scope="col" class="col-md-4 text-left align-middle">Category</th>
+                                <th scope="col" class="col-md-2 text-left align-middle">Colour</th>
+                                <th scope="col" class="col-md-1 text-center align-middle">Actions</th>
+                            </tr>
+                        </ng-container>
+
+                        <ng-container body>
+
+                            <ng-container
+                                *ngFor="let visualisationVariable of visualisationsVariables$ | async; index as i">
+
+                                <tr>
+
+                                    <td class="text-center align-middle">
+                                        {{i + 1}}
+                                    </td>
+
+                                    <td class="text-left align-middle">
+                                        {{visualisationVariable.data?.label}}
+                                    </td>
+
+
+                                    <td class="text-left align-middle">
+                                        {{visualisationVariable.data?.dimension}}
+                                    </td>
+
+
+                                    <td class="text-left align-middle">
+                                        {{visualisationVariable.data?.color}}
+                                    </td>
+
+                                    <td class="text-center align-middl">
+                                        <span class="d-flex flex-row-reverse">
+                                            <sb-button action="delete" entity="Visualisation Variable"
+                                                id="{{visualisationVariable.id}}"
+                                                (delete)="onDeleteVisualisationVariable($event)"
+                                                tooltip="Delete {{visualisationVariable.data?.label}}">
+                                            </sb-button>
+                                            <sb-button action="update" entity="Visualisation Variable"
+                                                id="{{visualisationVariable.id}}"
+                                                (update)="onUpdateVisualisationVariable($event)"
+                                                tooltip="Update {{visualisationVariable.data?.label}}">
+                                            </sb-button>
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            </ng-container>
+
+                        </ng-container>
+
+
+                        <ng-container footer>
+                            <tr>
+                                <td scope="col" colspan="5" class="align-middle p-2">
+                                    <span class="d-flex flex-row flex-row-reverse">
+                                        <sb-button action="add" entity="Visualisation Variable"
+                                            (add)="onAddVisualisationVariable()">
+                                        </sb-button>
+                                    </span>
+
+                                </td>
+                            </tr>
+                        </ng-container>
+
+                    </sb-table>
+                </div>
+            </div>
+
+        </form>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

@@ -1,0 +1,132 @@
+<sb-modal shadow="false">
+
+    <ng-container title>
+        {{title}}
+    </ng-container>
+
+    <ng-container body>
+
+        <sb-data-forms-fields-records-updation [id]="id" 
+            (succeeded)="onSucceeded()" (failed)="onFailed($event)"
+            (loadedStandalonePage)="onLoadStandalonePage()" (loadedFirstPage)="onLoadFirstPage()"
+            (loadedNestedPage)="onLoadNestedPage()" (loadedLastPage)="onLoadLastPage()" 
+            (openedFieldTypeSelector)="onOpenFieldTypeSelector()"
+            (closedFieldTypeSelector)="onCloseFieldTypeSelector()"
+            (openedFieldSelector)="onOpenFieldSelector()"
+            (closedFieldSelector)="onCloseFieldSelector()">
+        </sb-data-forms-fields-records-updation>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Saving Overlay -->
+            <sb-message-overlay *ngSwitchCase="'saving'" activity="updating" status="saving"></sb-message-overlay>
+
+            <!-- Saving Suceeded Overlay -->
+            <sb-message-overlay *ngSwitchCase="'succeeded'" activity="updating" status="succeeded"></sb-message-overlay>
+
+            <!-- Saving Failed Overlay -->
+            <sb-message-overlay *ngSwitchCase="'failed'" activity="updating" status="failed"></sb-message-overlay>
+
+            <!-- Saving Re-Trial Delay Overlay -->
+            <sb-countdown-overlay *ngSwitchCase="'retrying'" crosshead="Retrying in" (completed)="onSave()">
+            </sb-countdown-overlay>
+
+            <!-- Done Overlay -->
+            <sb-message-overlay *ngSwitchCase="'done'" activity="updating" status="done"></sb-message-overlay>
+
+        </ngContainer>
+
+    </ng-container>
+
+    <ng-container footer>
+
+        <ngContainer [ngSwitch]="(status$ | async)">
+
+            <!-- Standalone Page State Buttons -->
+            <ng-container *ngSwitchCase="'standalone'">
+                <sb-button action="save" entity="Data Form Element" (save)="onSave()"></sb-button>
+            </ng-container>
+
+
+            <!-- First Page State Buttons -->
+            <ng-container *ngSwitchCase="'first'">
+                <sb-button action="next" entity="Data Form Element" (next)="onNext()"></sb-button>
+            </ng-container>
+
+
+            <!-- Nested Page State Buttons -->
+            <ng-container *ngSwitchCase="'nested'">
+                <sb-button *ngIf="false && getPage() == 'validity'" action="add" entity="Rule" text=" Rule" (add)="onAddValidationRule()"></sb-button>
+                <sb-button action="previous" entity="Data Form Element" (previous)="onPrevious()"></sb-button>
+                <sb-button action="next" entity="Data Form Element" (next)="onNext()"></sb-button>
+            </ng-container>
+
+
+            <!-- Last Page State Buttons -->
+            <ng-container *ngSwitchCase="'last'">
+                <sb-button *ngIf="false && getPage() == 'validity'" action="add" entity="Rule" text=" Rule" (add)="onAddValidationRule()"></sb-button>
+                <sb-button action="previous" entity="Data Form Element" (previous)="onPrevious()"></sb-button>
+                <sb-button action="save" entity="Data Form Element" (save)="onSave()"></sb-button>
+            </ng-container>
+
+
+            <!-- Invalid State Buttons -->
+            <ng-container *ngSwitchCase="'invalid'">
+                <sb-button *ngIf="false && getPage() == 'validity'" action="add" entity="Rule" text=" Rule" (add)="onAddValidationRule()"></sb-button>
+                <sb-button *ngIf="previous != 'standalone'" action="previous" entity="Data Form Element" (previous)="onPrevious()"></sb-button>
+                <sb-button action="save" entity="Data Form Element" (save)="onSave()"></sb-button>
+            </ng-container>
+
+
+            <!-- Saving State Buttons -->
+            <ng-container *ngSwitchCase="'saving'">
+                <sb-button *ngIf="false && getPage() == 'validity'" action="add" entity="Rule" text=" Rule" disabled=""></sb-button>
+                <sb-button *ngIf="previous != 'standalone'" action="previous" entity="Data Form Element" disabled="true"></sb-button>
+                <sb-button action="save" entity="Data Form Element" disabled="true"></sb-button>
+            </ng-container>
+
+
+            <!-- Succeeded State Buttons -->
+            <ng-container *ngSwitchCase="'succeeded'">
+                <sb-button action="yes" entity="Data Form Element" guarded="false" (yes)="onContinue()"></sb-button>
+                <sb-button action="no" entity="Data Form Element" guarded="false" (no)="onQuit()"></sb-button>
+            </ng-container>
+
+
+            <!-- Failed State Buttons -->
+            <ng-container *ngSwitchCase="'failed'">
+                <sb-button action="yes" entity="Data Form Element" (yes)="onRetry()"></sb-button>
+                <sb-button action="no" entity="Data Form Element" guarded="false" (no)="onQuit()"></sb-button>
+            </ng-container>
+
+
+            <!-- Retrying State Buttons -->
+            <ng-container *ngSwitchCase="'retrying'">
+                <sb-button action="yes" entity="Data Form Element" disabled="true"></sb-button>
+                <sb-button action="no" entity="Data Form Element" disabled="true"></sb-button>
+            </ng-container>
+
+
+            <!-- Done Buttons -->
+            <ng-container *ngSwitchCase="'done'">
+                <sb-button action="done" entity="Data Form Element" guarded="false" (done)="onDone()"></sb-button>
+            </ng-container>
+
+
+            <!-- Field Types Selections Buttons -->
+            <ng-container *ngSwitchCase="'fields-types-selections'">
+                <sb-button action="previous" entity="Data Form Element" tooltip="Load previous screen" guarded="false" (previous)="closeFieldTypeSelector()"></sb-button>
+            </ng-container>            
+            
+
+            <!-- Field Selections Buttons -->
+            <ng-container *ngSwitchCase="'fields-selections'">
+                <sb-button action="previous" entity="Data Form Element" tooltip="Load previous screen" guarded="false" (previous)="closeFieldSelector()"></sb-button>
+            </ng-container>
+            
+
+        </ngContainer>
+
+    </ng-container>
+
+</sb-modal>

@@ -1,0 +1,156 @@
+<form>
+
+    <div class="d-flex bd-highlight">
+        <div class="w-100 bd-highlight">
+            <sb-search placeholder="Search by systems roles names" (searched)="onSearchTermChange($event)"></sb-search>
+        </div>
+        <div class="flex-shrink-1 bd-highlight">
+            <sb-loading-animation type="bars"></sb-loading-animation>
+        </div>
+    </div>
+
+    <!--For Small-Sized Devices Only-->
+    <div class="row d-md-none">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-sm-10 text-left align-middle">Name</th>
+                        <th scope="col" class="col-sm-2 text-center align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+                    <tr *ngFor="let systemRole of systemsRolesDataService.systemsRoles$ | async; index as i">
+
+                        <td class="text-left align-middle">
+                            {{systemRole.data?.name}}
+                        </td>
+
+                        <td class="text-center align-middle">
+                            <span *ngIf="isProductionEnvironment()" class="d-flex flex-row-reverse">
+                                <sb-button action="delete" entity="System Role" id="{{systemRole.id}}"
+                                    (delete)="onDeleteSystemRole($event)" tooltip="Delete {{systemRole.data?.name}}"
+                                    [disabled]="!(systemRole.data.customisable)"></sb-button>
+                                <sb-button action="update" entity="System Role" id="{{systemRole.id}}"
+                                    (update)="onUpdateSystemRole($event)" tooltip="Update {{systemRole.data?.name}}"
+                                    [disabled]="!(systemRole.data.customisable)"></sb-button>
+                            </span>
+                            <span *ngIf="isDevelopmentEnvironment()" class="d-flex flex-row-reverse">
+                                <sb-button action="delete" entity="System Role" id="{{systemRole.id}}"
+                                    (delete)="onDeleteSystemRole($event)" tooltip="Delete {{systemRole.data?.name}}">
+                                </sb-button>
+                                <sb-button action="update" entity="System Role" id="{{systemRole.id}}"
+                                    (update)="onUpdateSystemRole($event)" tooltip="Update {{systemRole.data?.name}}">
+                                </sb-button>
+                            </span>
+                        </td>
+
+                    </tr>
+                </ng-container>
+
+                <ng-container footer>
+                    <tr>
+                        <td scope="col" colspan="3" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="System Role" (add)="onAddSystemRole()"></sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <!--For Middle-Sized Devices Upwards-->
+    <div class="row d-none d-md-block">
+        <div class="col">
+            <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                <ng-container header>
+                    <tr>
+                        <th scope="col" class="col-md-1 text-center align-middle">#</th>
+                        <th scope="col" class="col-md-2 text-left align-middle">Code</th>
+                        <th scope="col" class="col-md-2 text-left align-middle">Name</th>
+                        <th scope="col" class="col-md-4 text-left align-middle">Description</th>
+                        <th scope="col" class="col-md-1 text-left align-middle">Home</th>
+                        <th scope="col" class="col-md-1 text-center align-middle">Customisable</th>
+                        <th scope="col" class="col-md-1 text-center align-middle">Actions</th>
+                    </tr>
+                </ng-container>
+
+                <ng-container body>
+
+                    <tr *ngFor="let systemRole of systemsRolesDataService.systemsRoles$ | async; index as i">
+
+                        <td class="text-center align-middle">
+                            {{i + 1 + paginationOffset}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{systemRole.data?.code}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{systemRole.data?.name}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{systemRole.data?.description}}
+                        </td>
+
+                        <td class="text-left align-middle">
+                            {{systemRole.data?.homeId == 1 ? "Dashboard" : (systemRole.data?.homeId == 2 ? "Reports" : "")}}
+                        </td>                        
+
+                        <td class="text-center align-middle">
+                            {{systemRole.data?.customisable? "Yes" : "No"}}
+                        </td>
+
+                        <td class="text-center align-middle">
+                            <span *ngIf="isProductionEnvironment()" class="d-flex flex-row-reverse">
+                                <sb-button action="delete" entity="System Role" id="{{systemRole.id}}"
+                                    (delete)="onDeleteSystemRole($event)" tooltip="Delete {{systemRole.data?.name}}"
+                                    [disabled]="!(systemRole.data.customisable)"></sb-button>
+                                <sb-button action="update" entity="System Role" id="{{systemRole.id}}"
+                                    (update)="onUpdateSystemRole($event)" tooltip="Update {{systemRole.data?.name}}"
+                                    [disabled]="!(systemRole.data.customisable)"></sb-button>
+                            </span>
+                            <span *ngIf="isDevelopmentEnvironment()" class="d-flex flex-row-reverse">
+                                <sb-button action="delete" entity="System Role" id="{{systemRole.id}}"
+                                    (delete)="onDeleteSystemRole($event)" tooltip="Delete {{systemRole.data?.name}}">
+                                </sb-button>
+                                <sb-button action="update" entity="System Role" id="{{systemRole.id}}"
+                                    (update)="onUpdateSystemRole($event)" tooltip="Update {{systemRole.data?.name}}">
+                                </sb-button>
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </ng-container>
+
+                <ng-container footer>
+                    <tr>
+                        <td scope="col" colspan="7" class="align-middle">
+                            <span class="d-flex flex-row flex-row-reverse">
+                                <sb-button action="add" entity="System Role" (add)="onAddSystemRole()"></sb-button>
+                            </span>
+
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </sb-table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <sb-pagination (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+            </sb-pagination>
+        </div>
+    </div>
+
+</form>

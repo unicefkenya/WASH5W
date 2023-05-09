@@ -1,0 +1,15 @@
+<ng-container *ngIf="initialised; else initialising">
+    <highcharts-chart [Highcharts]="chart" [options]="options" style="width: 100%; height: 400px; display: block;">
+    </highcharts-chart>
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

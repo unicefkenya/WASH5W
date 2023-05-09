@@ -1,0 +1,10 @@
+@import 'styles/variables.scss';
+
+/* hide the blue outline */
+.form-control:focus {
+    outline: 0 !important;
+    border-color: initial;
+    box-shadow: none;
+}
+
+

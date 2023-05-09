@@ -1,0 +1,174 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <form>
+
+        <div class="d-flex bd-highlight">
+            <div class="w-100 bd-highlight">
+                <sb-search placeholder="Search by workflow statuses names" (searched)="onSearchTermChange($event)">
+                </sb-search>
+            </div>
+            <div class="flex-shrink-1 bd-highlight">
+                <sb-loading-animation type="bars"></sb-loading-animation>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true"
+                    [hoverable]="true" [bordered]="true">
+                    <ng-container header>
+                        <tr>
+                            <th scope="col" class="col-sm-3 text-center align-middle">Select</th>
+                            <th scope="col" class="col-sm-9 text-left align-middle">Name </th>
+                        </tr>
+                    </ng-container>
+
+                    <ng-container body>
+
+                        <ng-container *ngIf="desired.length > 0; else desiredUnspecified">
+
+                            <ng-container
+                                *ngFor="let workflowStatus of workflowStatusesDataService.workflowStatuses$ | async">
+
+                                <tr *ngIf="isDesired(workflowStatus)">
+
+                                    <td class="text-center align-middle">
+                                        <span class="d-flex justify-content-center">
+
+                                            <div *ngIf='selectionMode === "single"; else multi'>
+                                                <sb-button action="select" entity="Workflow Status"
+                                                    id="{{workflowStatus.id}}" name="workflowStatus"
+                                                    [selected]="isSelected(workflowStatus)"
+                                                    (select)="onSelect(workflowStatus)">
+                                                </sb-button>
+                                            </div>
+
+                                            <ng-template #multi>
+                                                <sb-button action="check" entity="Workflow Status"
+                                                    id="{{workflowStatus.id}}" name="workflowStatus"
+                                                    [checked]="isChecked(workflowStatus)"
+                                                    (check)="onCheck(workflowStatus)"
+                                                    (uncheck)="onUncheck(workflowStatus)">
+                                                </sb-button>
+                                            </ng-template>
+
+                                        </span>
+                                    </td>
+
+                                    <td class="text-left align-middle">
+                                        {{workflowStatus.data?.name}}
+                                    </td>
+
+                                </tr>
+
+                            </ng-container>
+
+                        </ng-container>
+
+                        <ng-template #desiredUnspecified>
+
+                            <ng-container *ngIf="undesired.length > 0; else undesiredUnspecified">
+
+                                <ng-container
+                                    *ngFor="let workflowStatus of workflowStatusesDataService.workflowStatuses$ | async">
+
+                                    <tr *ngIf="!isUndesired(workflowStatus)">
+
+                                        <td class="text-center align-middle">
+                                            <span class="d-flex justify-content-center">
+
+                                                <div *ngIf='selectionMode === "single"; else multi'>
+                                                    <sb-button action="select" entity="Workflow Status"
+                                                        id="{{workflowStatus.id}}" name="workflowStatus"
+                                                        [selected]="isSelected(workflowStatus)"
+                                                        (select)="onSelect(workflowStatus)">
+                                                    </sb-button>
+                                                </div>
+
+                                                <ng-template #multi>
+                                                    <sb-button action="check" entity="Workflow Status"
+                                                        id="{{workflowStatus.id}}" name="workflowStatus"
+                                                        [checked]="isChecked(workflowStatus)"
+                                                        (check)="onCheck(workflowStatus)"
+                                                        (uncheck)="onUncheck(workflowStatus)">
+                                                    </sb-button>
+                                                </ng-template>
+
+                                            </span>
+                                        </td>
+
+                                        <td class="text-left align-middle">
+                                            {{workflowStatus.data?.name}}
+                                        </td>
+
+                                    </tr>
+
+                                </ng-container>
+
+                            </ng-container>
+
+                            <ng-template #undesiredUnspecified>
+
+                                <tr
+                                    *ngFor="let workflowStatus of workflowStatusesDataService.workflowStatuses$ | async">
+
+                                    <td class="text-center align-middle">
+                                        <span class="d-flex justify-content-center">
+
+                                            <div *ngIf='selectionMode === "single"; else multi'>
+                                                <sb-button action="select" entity="Workflow Status"
+                                                    id="{{workflowStatus.id}}" name="workflowStatus"
+                                                    [selected]="isSelected(workflowStatus)"
+                                                    (select)="onSelect(workflowStatus)">
+                                                </sb-button>
+                                            </div>
+
+                                            <ng-template #multi>
+                                                <sb-button action="check" entity="Workflow Status"
+                                                    id="{{workflowStatus.id}}" name="workflowStatus"
+                                                    [checked]="isChecked(workflowStatus)"
+                                                    (check)="onCheck(workflowStatus)"
+                                                    (uncheck)="onUncheck(workflowStatus)">
+                                                </sb-button>
+                                            </ng-template>
+
+                                        </span>
+                                    </td>
+
+                                    <td class="text-left align-middle">
+                                        {{workflowStatus.data?.name}}
+                                    </td>
+
+                                </tr>
+
+                            </ng-template>
+
+                        </ng-template>
+
+                    </ng-container>
+                </sb-table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <sb-pagination type="modal" (pageChanged)="onPageChange($event)"
+                    (pageSizeChanged)="onPageSizeChange($event)">
+                </sb-pagination>
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>

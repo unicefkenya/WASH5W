@@ -1,0 +1,200 @@
+<ng-container *ngIf='page == "default"'>
+
+    <div class="card-body m-0 p-0">
+
+        <form [formGroup]="defaultForm">
+
+            <div *ngIf="false" class="row m-0 p-0">
+                <div class="col m-0 p-0">
+                    <table class="table table-bordered border-dark filter">
+                        <tr>
+                            <td class="col-1 align-middle text-left p-2 pl-3">
+                                Parent
+                            </td>
+                            <td class="col-11" class="align-middle p-2">
+                                <div class="input-group flex-nowrap">
+                                    <ng-container formGroupName="logicalElement">
+                                        <input type="text" class="form-control input-group-input"
+                                            id="truncatedLogicalElementName" placeholder=""
+                                            formControlName="truncatedLogicalElementName" disabled="">
+                                    </ng-container>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-button-bg-color-1 selector-button" style="min-width: 42px" data-toggle="tooltip"
+                                            data-placement="top" title="Select Parent Logical Element"
+                                            (click)="openLogicalElementSelector()">
+                                            <fa-icon [icon]='["fas", "circle-dot"]'></fa-icon>
+                                        </button>
+                                    </div>
+                                    <div *ngIf="getLogicalElementId()" class="input-group-append">
+                                        <button type="button" class="btn btn-ciat-shade-1 selector-button" style="min-width: 42px" data-toggle="tooltip"
+                                            data-placement="top" title="Clear Selected Parent Logical Element"
+                                            (click)="clearLogicalElementSelector()">
+                                            <fa-icon [icon]='["fas", "trash"]'></fa-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        
+            <div class="d-flex bd-highlight">
+                <div class="w-100 bd-highlight">
+                    <sb-search placeholder="Search by indicators names" (searched)="onSearchTermChange($event)"></sb-search>
+                </div>
+                <div class="flex-shrink-1 bd-highlight">
+                    <sb-loading-animation type="bars"></sb-loading-animation>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col">
+                    <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                        <ng-container header>
+                            <tr>
+                                <th scope="col" class="col-2 text-center align-middle"></th>
+                                <th scope="col" class="col-10 text-left align-middle">Name </th>
+                            </tr>
+                        </ng-container>
+        
+                        <ng-container body>
+        
+                            <ng-container *ngIf="desired.length > 0; else desiredUnspecified">
+        
+                                <ng-container *ngFor="let indicator of indicatorsDataService.indicators$ | async">
+        
+                                    <tr *ngIf="isDesired(indicator)">
+        
+                                        <td class="text-center align-middle">
+                                            <span class="d-flex justify-content-center">
+        
+                                                <div *ngIf='selectionMode === "single"; else multi'>
+                                                    <sb-button action="select" entity="Indicator" id="{{indicator.id}}"
+                                                        name="indicator" [selected]="isSelected(indicator)"
+                                                        (select)="onSelect(indicator)">
+                                                    </sb-button>
+                                                </div>
+        
+                                                <ng-template #multi>
+                                                    <sb-button action="check" entity="Indicator" id="{{indicator.id}}"
+                                                        name="indicator" [checked]="isChecked(indicator)"
+                                                        (check)="onCheck(indicator)" (uncheck)="onUncheck(indicator)">
+                                                    </sb-button>
+                                                </ng-template>
+        
+                                            </span>
+                                        </td>
+
+                                        <td class="text-left align-middle">
+                                            {{indicator.data?.name}}
+                                        </td>                                        
+        
+                                    </tr>
+        
+                                </ng-container>
+        
+                            </ng-container>
+        
+                            <ng-template #desiredUnspecified>
+        
+                                <ng-container *ngIf="undesired.length > 0; else undesiredUnspecified">
+        
+                                    <ng-container
+                                        *ngFor="let indicator of indicatorsDataService.indicators$ | async">
+        
+                                        <tr *ngIf="!isUndesired(indicator)">
+        
+                                            <td class="text-center align-middle">
+                                                <span class="d-flex justify-content-center">
+        
+                                                    <div *ngIf='selectionMode === "single"; else multi'>
+                                                        <sb-button action="select" entity="Indicator"
+                                                            id="{{indicator.id}}" name="indicator"
+                                                            [selected]="isSelected(indicator)"
+                                                            (select)="onSelect(indicator)">
+                                                        </sb-button>
+                                                    </div>
+        
+                                                    <ng-template #multi>
+                                                        <sb-button action="check" entity="Indicator"
+                                                            id="{{indicator.id}}" name="indicator"
+                                                            [checked]="isChecked(indicator)" (check)="onCheck(indicator)"
+                                                            (uncheck)="onUncheck(indicator)">
+                                                        </sb-button>
+                                                    </ng-template>
+        
+                                                </span>
+                                            </td>
+
+                                            <td class="text-left align-middle">
+                                                {{indicator.data?.name}}
+                                            </td>                                            
+        
+                                        </tr>
+        
+                                    </ng-container>
+        
+                                </ng-container>
+        
+                                <ng-template #undesiredUnspecified>
+        
+                                    <tr *ngFor="let indicator of indicatorsDataService.indicators$ | async">
+        
+                                        <td class="text-center align-middle">
+                                            <span class="d-flex justify-content-center">
+        
+                                                <div *ngIf='selectionMode === "single"; else multi'>
+                                                    <sb-button action="select" entity="Indicator" id="{{indicator.id}}"
+                                                        name="indicator" [selected]="isSelected(indicator)"
+                                                        (select)="onSelect(indicator)">
+                                                    </sb-button>
+                                                </div>
+        
+                                                <ng-template #multi>
+                                                    <sb-button action="check" entity="Indicator" id="{{indicator.id}}"
+                                                        name="indicator" [checked]="isChecked(indicator)"
+                                                        (check)="onCheck(indicator)" (uncheck)="onUncheck(indicator)">
+                                                    </sb-button>
+                                                </ng-template>
+        
+                                            </span>
+                                        </td>
+
+                                        <td class="text-left align-middle">
+                                            {{indicator.data?.name}}
+                                        </td>                                        
+        
+                                    </tr>
+        
+                                </ng-template>
+        
+                            </ng-template>
+        
+                        </ng-container>
+                    </sb-table>
+                </div>
+            </div>
+        
+            <div class="row mt-2">
+                <div class="col">
+                    <sb-pagination type="modal" (pageChanged)="onPageChange($event)"
+                        (pageSizeChanged)="onPageSizeChange($event)">
+                    </sb-pagination>
+                </div>
+            </div>
+        
+        </form>
+    </div>
+
+</ng-container>
+
+
+<ng-container *ngIf='page == "logicalElements"' class="p-0 m-0">
+
+    <sb-logical-hierarchies-records-selection [selectionMode]="'single'"
+        [selected]="getLogicalElementId()? [getLogicalElementId()]: []"
+        (select)="onSelectLogicalHierarchyElement($event)">
+    </sb-logical-hierarchies-records-selection>
+
+</ng-container>

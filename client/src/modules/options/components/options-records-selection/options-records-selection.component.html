@@ -1,0 +1,99 @@
+<ng-container *ngIf="initialised; else initialising">
+
+    <form [formGroup]="optionsForm">
+
+        <div *ngIf="!desiredType" class="row m-0 p-0">
+            <div class="col m-0 p-0">
+                <table class="table table-bordered border-dark filter" style="width: 100%;">
+                    <tr>
+                        <td class="col-1 align-middle text-left p-2 pl-3">
+                            Type
+                        </td>
+                        <td class="col-11 align-middle p-2">
+                            <select class="custom-select" id="typeId" formControlName="typeId"
+                                (change)="onOptionTypeChange()">
+                                <option [ngValue]="null" disabled>Select Option Type</option>
+                                <option *ngFor="let optionType of optionsTypesDataService.optionsTypes$ | async"
+                                    [ngValue]="optionType.id">
+                                    {{optionType.data?.name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-flex bd-highlight">
+            <div class="bd-highlight">
+                <sb-search placeholder="Search by options names" (searched)="onSearchTermChange($event)">
+                </sb-search>
+            </div>
+            <div *ngIf="(optionsDataService.loading$ | async) == true" class="flex-shrink-1 bd-highlight">
+                <p class="text-center processing">
+                    <span>.</span><span>.</span><span>.</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <sb-table [captioned]="false" [headed]="true" [bodied]="true" [footed]="true" [stripped]="true" [hoverable]="true" [bordered]="true">
+                    <ng-container header>
+                        <tr>
+                            <th scope="col" class="col-2 text-center align-middle"></th>
+                            <th scope="col" class="col-10 text-left align-middle">Name </th>
+                        </tr>
+                    </ng-container>
+
+                    <ng-container body>
+
+                        <tr *ngFor="let option of optionsDataService.options$ | async">
+
+                            <td class="text-center align-middle">
+                                <ng-container *ngIf='selectionMode === "single"; else multi'>
+                                    <sb-button action="select" entity="Option" id="{{option.id}}" name="option"
+                                        [selected]="isSelected(option)" (select)="onSelect(option)">
+                                    </sb-button>
+                                </ng-container>
+
+                                <ng-template #multi>
+                                    <sb-button action="check" entity="Option" id="{{option.id}}" name="option"
+                                        [checked]="isChecked(option)" (check)="onCheck(option)"
+                                        (uncheck)="onUncheck(option)">
+                                    </sb-button>
+                                </ng-template>
+                            </td>
+
+                            <td class="text-left align-middle">
+                                {{option.data?.name}}
+                            </td>
+
+                        </tr>
+
+                    </ng-container>
+                </sb-table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <sb-pagination type="modal" (pageChanged)="onPageChange($event)"
+                    (pageSizeChanged)="onPageSizeChange($event)">
+                </sb-pagination>
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>
+
+<ng-template #initialising>
+
+
+    <div class="d-flex justify-content-center m-1">
+        <p class="text-center processing mb-5">
+            <span>.</span><span>.</span><span>.</span>
+        </p>
+    </div>
+
+</ng-template>
